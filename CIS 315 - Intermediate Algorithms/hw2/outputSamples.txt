@@ -1,0 +1,43 @@
+
+——————————————
+inSmall1.txt
+——————————————
+
+Total number of paths: 8
+Shortest path length: 1
+Longest path length: 4
+
+
+——————————————
+inSmall2.txt
+——————————————
+
+Total number of paths: 16
+Shortest path length: 4
+Longest path length: 8
+
+——————————————
+inSmall3.txt
+——————————————
+
+Total number of paths: 36
+Shortest path length: 6
+Longest path length: 8
+
+——————————————
+inLarge30.txt
+——————————————
+
+Total number of paths: 470184984576
+Shortest path length: 45
+Longest path length: 60
+
+
+——————————————
+inPath10k.txt
+——————————————
+
+Total number of paths: 1
+Shortest path length: 9999
+Longest path length: 9999
+

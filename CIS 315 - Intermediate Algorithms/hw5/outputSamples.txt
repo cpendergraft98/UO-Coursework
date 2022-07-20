@@ -1,0 +1,35 @@
+OUTPUT SAMPLES
+
+
+inSample.txt:
+
+target: 0, max coins: 0
+target: 3, max coins: 1
+target: 21, max coins: 3
+target: 22, max coins: 6
+target: 72, max coins: 12
+target: 104, not possible
+target: 105, max coins: 15
+target: 106, not possible
+
+
+inTest1.txt:
+
+target: 10000, not possible
+target: 11000, max coins: 10
+target: 11001, not possible
+target: 11002, max coins: 10
+target: 11003, not possible
+target: 11111, max coins: 11
+target: 15000, max coins: 14
+target: 16789, max coins: 17
+
+
+inTest2.txt:
+
+target: 6666, max coins: 40
+target: 7777, max coins: 45
+target: 8888, max coins: 50
+target: 10001, max coins: 55
+target: 20002, max coins: 90
+
