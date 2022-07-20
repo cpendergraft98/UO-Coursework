@@ -1,0 +1,10 @@
+directory structure	0
+source file		0
+header file		0
+compiles		0
+auto testing		1
+==============================
+Final	15
+
+segfaults due to save_output fopen having incorrect mode (i.e., "rw" - no such mode exists).
+There is also an issue with get_num_ints and fgets - sizeof() should not be there.
