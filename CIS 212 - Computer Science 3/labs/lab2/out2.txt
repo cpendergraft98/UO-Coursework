@@ -1,0 +1,6 @@
+flag: -r option: c
+0; wel ome to  is212,  omputer s ien e iii.
+1; the high-level obje tives of the  ourse are to develop profi ien y in working in linux, programming in the C language.
+2;  is212 is a required  ourse for  is major.
+3; this is a proje t-driven  lass. 
+4; the proje ts in this  lass will be hard work.

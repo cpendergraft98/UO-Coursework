@@ -1,0 +1,7 @@
+Cole Pendergraft
+
+DuckID: cpenderg
+
+Project completed solo
+
+I can happily say that I think this is the best code I have written for a project yet. I wouldn't claim that it is perfect, but compared to the nasty nested if statements that have taken up large chunks of previous projects, I was able to keep my if statements to a minimum which I think has improved the efficiency and cleanliness of my code significantly. I pass all the ./tscript tests when running them, and when I run valgrind on wordperline with the file "input" I am told that my heap blocks are all freed with no possibility of memory leaks. I'm sure that there are little effciencies I could furhter squeeze out of this code, but I am very happy with the state of what I am turning in and would consider this project complete.

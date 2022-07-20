@@ -1,0 +1,119 @@
+# CIS 314 Project 5, Part 1
+# Author: Cole Pendergraft
+# A Y86-64 implementation of bubbleSort
+
+
+# Execution begins at address 0
+    .pos 0
+    irmovq stack, %rsp  # Set up stack pointer
+    call main   # Execute main program
+    halt        # Terminate program after main executes
+
+# Create an array of at least 10 elements
+    .align 8
+array:
+    .quad 0xAAAAAAAAAAAA
+    .quad 0x999999999999
+    .quad 0x888888888888
+    .quad 0x777777777777
+    .quad 0x666666666666
+    .quad 0x555555555555
+    .quad 0x444444444444
+    .quad 0x333333333333
+    .quad 0x222222222222
+    .quad 0x111111111111
+
+swap:
+    mrmovq (%rdi), %r8
+    mrmovq (%rsi), %r9
+    rmmovq %r8, (%rsi)
+    rmmovq %r9, (%rdi)
+    ret
+
+main:
+    call sort
+
+sort:
+    irmovq $11, %rbx    # The decrement counter for the outer loop. When
+                        # %rbx stores 0, we are done. Starts at
+                        # 11 to account for first call to decrement in
+                        # the outer loop.
+
+.outer:
+    irmovq array, %rdi  # Rebuild the array for every outer loop iteration
+
+    rrmovq %rdi, %rsi   # Store a copy of array in %rsi
+
+    irmovq $10, %r10    # The decrement counter for inner loop. Reset at
+                        # every incrementation of outer loop so we do 10 inner
+                        # loop iterations for every 1 outer loop iteration.
+
+    isubq $1, %rbx  # Decrements outer loop counter. Sets ZF if we have done 10
+                    # outer loop iterations.
+
+    je .end  # If ZF was set above, then we should terminate.
+
+    jmp .inner  # If 10 outer loop iterations have not been done, go to
+                # inner loop.
+
+.inner:
+    isubq $1, %r10   # Decrements inner loop counter. Sets ZF if we
+                     # have done 10 inner loop iterations.
+
+    je .outer   # If ZF set from above, we need to decrement our outer loop
+                # counter, reset our array, and do another 10 inner
+                # loop iterations.
+
+    rrmovq %rsi, %rdi   # Replaces %rdi with %rsi.
+
+    iaddq $8, %rsi  # Moves %rsi over 1 element.
+
+    mrmovq (%rdi), %r11 # Store first element in a temp
+                        # register.
+
+    mrmovq (%rsi), %r12 # Store *second* element in a temp
+                        # register.
+
+    subq %r12, %r11 # Does %r11 - %r12. If %r11 > %r12, no flag is set, so
+                    # jl .inner does not execute and we proceed to swap.
+                    # If %r11 < %r12, SF is set, so we skip the swap.
+
+    jl .inner    # If arr[j] < arr[j+1], we are good so
+                 # we jump to the top of our loop without swapping
+
+    call swap    # If arr[j] > arr[j+1], we want to swap
+
+    jmp .inner   # Now we reset the loop after swapping
+
+.end:
+    ret # Terminate the sort method
+
+# Stack starts here and grows to lower addresses
+    .pos 0x200
+stack:
+
+
+# This big block of text is here purely for myself when I
+# inevitably review what I did here and get very confused.
+# Whoever is grading can ignore this.
+#
+# HOW THE INNER LOOP WORKS:
+# When we iterate the first time, %rdi and %rsi store the
+# original array. When iaddq $8, %rsi executes, %rsi
+# drops the first element in it. So now, %rdi stores the orig
+# array, and %rsi stores the same array without the first element,
+# meaning the value at the "front" of %rsi is the second element of
+# the original array. We then execute mrmovq (%rdi), %r11 which
+# stores the value at the "front" of %rdi (the first element in
+# the original array) in %r11. When mrmovq (%rsi), %r12 executes,
+# the value at the "front" of %rsi (the SECOND element of the original
+# array) is stored in %r12. We then perform checks on %r11 and %r12
+# to determine if swap needs to be called. We then run the inner loop
+# again, where j is incremented by 1. We then run rrmovq %rsi, %rdi
+# again, which this time updates %rdi to be the same array as %rsi
+# (the one that has the SECOND element at the front). iaddq $8, %rsi
+# executes again, so now %rsi stores an array where the first element
+# is the THIRD element of the original array. Now we do our comparisons
+# again, this time looking at the second and third elements of the
+# original array. Rinse and repeat until isubq $1, 10 sets ZF (We have
+# iterated 10 times, the size of our array).

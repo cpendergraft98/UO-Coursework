@@ -1,0 +1,7 @@
+Cole Pendergraft
+
+cpenderg
+
+Project Attempted Solo
+
+This project was a sleeper agent, on the surface it looked like it would be pretty straightforward, but in practice there was a lot more to consider than I had initially planned on. Writing the code to properly track the frequency of each word was especially difficult, but I eventually figured it out and was very excited. It took me a while to figure out how to implement sort, but after some experimenting that became clear as well; I just had to bring over and manipulate some functions from sorttest.c, and then all the pieces started falling into place. Now I have code that passes all the tscript testing and has no memory leaks at the end!

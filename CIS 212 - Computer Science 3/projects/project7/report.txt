@@ -1,0 +1,34 @@
+Cole Pendergraft
+
+DuckID: cpenderg
+
+Project completed solo
+
+I'm very proud of my exerciseQueue.c. After I did so poorly on project 6, I decided to take the time to do the whole thing again and get it right this time, and I'm so glad I did because that experience was invaluable for this project. Establishing exerciseQueue.c was relatively straightforward as it is essentially exerciseStack.c just with some of the methods changed to work with a Queue, and a handful of lines changed to accompany enqueue and dequeue instead of push and pop. Working with the iterator for the print function was light years easier than trying to do printStack without and iterator, my eyes have definitely been opened to the power of the iterator adt. I also managed to free or destroy elements along the way rather than waiting until the end to scour my code for mem leaks, so the first time I ran valgrind on my exerciseQueue.c I had 0 memory leaks.
+
+llistqueue.c was definitely trickier than exerciseQueue.c. They vast majority of llistqueue.c comes straight from the lab, but the big issue I had was that when using a llistqueue instead of the generic queue ADT I would get outputs in reverse, meaning that if this was the correct output:
+
+Empty
+1 2
+1
+2
+QueueError
+
+I would get:
+
+Empty
+2 1
+2
+1
+QueueError
+
+My dequeue seemed to work as intended; in both scenarios the queue is dequeued from the head first and then the tail, so I figured my error must be that I am enqueueing into the head of the queue rather than the tail. Turns out it was a simple fix, I only needed to change two lines (66 and 67) in llistqueue.c to
+
+qd -> tail -> next = new;
+qd -> tail = new;
+
+and that solved the problem! Unfortunately, when it comes to llistqueue.c, I do happen to have some mem leaks. Using valgrind I was able to determine that these leaks were a result of the code I had written for newQueue in llistqueue.c, but none of my attempts to patch these leaks were successful. At this point I'm still unsure what is being left unfreed, the only thing I could think of is that 
+
+QData *qd = (QData *)malloc(sizeof(QData))
+
+is not being freed, but trying free(qd) or purge(qd, qd -> freeValue) within newQueue doesn't seem to solve the problem. I also checked enqueue, dequeue, clear, freeList, and destroy as potential sources of this bug, but still no luck.

@@ -1,0 +1,5 @@
+0; welcome to cis212, computer science iii.
+1; the high-level objectives of the course are to develop proficiency in working in linux, programming in the C language.
+2; cis212 is a required course for cis major.
+3; this is a project-driven class. 
+4; the projects in this class will be hard work.

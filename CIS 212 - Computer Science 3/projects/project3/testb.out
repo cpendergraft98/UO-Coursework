@@ -1,0 +1,47 @@
+\chapter{A beginner's guide to Linux}
+as Linux.
+Linux is open source, licensed under the GNU General Public License.
+The primary interface between a user and Linux is the terminal window - i.e., a window on the screen that emulates the 80x24 terminal windows found on earlier UNIX\textsuperscript{TM} systems.
+familiar; Linux systems do provide one or more graphical user interfaces that support the point-and-click mechanism
+Program development on Linux systems is nearly always performed using the command line interface provided
+Consider the following example:\footnote{You are encouraged to try these commands on your Linux system
+Linux provides you with a number of simple commands to manipulate files and your environment.
+Online manual pages for all of the commands in Linux are available over the Internet; it is a good idea to
+Depending upon how complete a Linux system you have, the man pages for most of your commands may also
+be available on your Linux system.  If so, you can display the manual page for \textit{command} by
+Information on Linux systems is stored in files.
+Most files in a Linux system do not require such formatting information - i.e., the content of the file is
+Every Linux system has several screen editors; the one you choose to use is a matter of personal taste.
+The Arch Linux image described in Appendix B comes with \texttt{nano}
+As we will describe in the next section, Linux stores a number of items of information about each
+Most operating systems, and Linux is no exception, have rules about creating legal filenames.
+restrictions; Linux restricts the length of a filename to 255 characters.
+Linux allows any character in a filename except for \texttt{/} and a null character; this does \emph{not}
+across \emph{all} POSIX-conformant systems\footnote{Linux is a POSIX-conformant system}:
+Linux provides several commands that can be used to display the contents of a file:
+Linux provides two commands that will show one screenful at a time, waiting for an action from
+a file. On Linux, this is done with the \texttt{mv} command:
+you consult the Linux man entry for \texttt{grep} for more discussion of these more powerful patterns.
+Now we need to understand how Linux organizes the file system.
+Linux provides a hierarchical file system of this type.
+\subsection{The Linux hierarchical file system structure}
+\label{sec:Linuxfilesystem}
+\index{Linux file system}
+Linux organizes all of the files in the system into a single hierarchy.
+There can be millions of files in the file system of a single Linux system; for the
+Arch Linux system used in this book, there are \textgreater{160,000} files and \textgreater{13,000} directories.
+For typical use of a Linux system, the most important directories are:
+\item there is a command available in Linux, \texttt{sudo}, that allows you to become the root user to
+\texttt{rm} to remove the copy) as if you were the root user; the Arch Linux virtual machine knows that
+Linux supports several different types of IPC that
+Linux provides an abstraction in the operating system
+Fortunately, with the standard programs available in Linux and with
+It is not uncommon to need to share an entire directory of files with another user, on a different machine.  The mechanism by which such inter-machine sharing is achieved is beyond the scope of this book.  The mechanism by which you package such files before you share them is an important aspect of Linux use, so we will cover the basics here.
+Note that we have used another Linux command, \texttt{column}, to pack the list of file and
+There are many other options supported by \verb!tar!.  See \verb!tar(1)! for more information.\footnote{This indicates that you should look at the man page for \texttt{tar} in section 1 of the Linux users manual. This can be achieved using a browser, as indicated earlier in the chapter, or by typing
+Files on a computer system often have a significant amount of redundancy in them, such that they occupy more space than is theoretically required to represent the contained information.  Linux provides tools for performing two styles of compression/inflation:
+Gzipped \verb!tar! archives are so prevalent in Linux systems that such an archive is usually named with
+While use of \verb!tar! to create compressed archives is the predominant method on Linux for creating compressed packages of files, there is another method which you may find useful, especially if you are exchanging packages with non-Linux systems.
+Linux provides the \verb!zip! and \verb!unzip! commands\footnote{The Arch Linux image described in the appendices does not have \texttt{zip} or \texttt{unzip} installed. If you need to use it, you need to execute \texttt{sudo pacman -S zip} and answer the question posed in the affirmative.} for creating ZIP archive files and extracting files from a ZIP archive, respectively.  The following dialog shows use of \verb!zip! and \verb!unzip! to create, list, extract to standard output, and extract the contents of an archive \verb!example.zip!.  It assumes that we have a directory named \verb!tmp! in the current working directory.
+This chapter has introduced you to the Linux system
+to develop software written in C for use on Linux

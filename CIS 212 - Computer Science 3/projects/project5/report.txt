@@ -1,0 +1,9 @@
+Cole Pendergraft
+
+cpenderg
+
+Project done solo
+
+I think this project went pretty smoothly, I'm pretty happy with the code I've written. As with all the code I write, I'm sure there are areas where I can make some format changes or simplify the code to improve efficiency, but overall I'm very pleased with how this came out. It accomplishes all the tasks it needs to as per the project specs. It also frees up all the memory when done, so valgrind returns no errors.
+
+I've also attempted the extra credit part, alreverse.c. I thought it was pretty straightforward, I copied over my code from reverse.c and re-tooled it to take an ArrayList and use ArrayList methods, and it seems to work just as well as my reverse.c, maybe even better. It only took me adjusting 3 or 4 lines in order to make the implementation work with the ArrayList ADT. Valgrind also tells me that all heap blocks are freed after running.

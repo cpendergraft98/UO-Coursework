@@ -1,0 +1,5 @@
+welcome to cis212, computer science iii.
+the high-level objectives of the course are to develop proficiency in working in linux, programming in the C language.
+cis212 is a required course for cis major.
+this is a project-driven class. 
+the projects in this class will be hard work.

@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# usage: ./tscript [test ...]
+#
+tests="a b c d e f g h i j k l m n o"
+if [[ "$#" != "0" ]]; then
+    tests="$*"
+fi
+for t in $tests; do
+    case "$t" in
+     a) echo "Starting test a"
+        echo "Tests that an error message is printed on stderr if no STRING argument"
+        echo "===== ./sgrep"
+        ./sgrep
+        echo "===== Stopping test a"
+        ;;
+     b) echo "Starting test b"
+        echo "Tests that it defaults to standard input if no filenames are specified"
+        echo "===== ./sgrep Linux <input2"
+        ./sgrep Linux <input2 | diff - testb.out | head
+        echo "===== Stopping test b"
+        ;;
+     c) echo "Starting test c"
+        echo "Tests that it handles case insensitivity for the lines in the files[s]"
+        echo "===== ./sgrep -i the input1"
+        ./sgrep -i the input1 | diff - testc.out | head
+        echo "===== Stopping test c"
+        ;;
+     d) echo "Starting test d"
+        echo "Tests that it handles case insensitivity for the STRING argument"
+        echo "===== ./sgrep -i This input1"
+        ./sgrep -i This input1 | diff - testd.out | head
+        echo "===== Stopping test d"
+        ;;
+     e) echo "Starting test e"
+        echo "Tests that the -c flag works for a single input file"
+        echo "===== ./sgrep -c archive input1"
+        ./sgrep -c archive input1 | diff - teste.out | head
+        echo "===== Stopping test e"
+        ;;
+     f) echo "Starting test f"
+        echo "Tests that -i and -c work together"
+        echo "===== ./sgrep -i -c this input1"
+        ./sgrep -i -c this input1 | diff - testf.out | head
+        echo "===== Stopping test f"
+        ;;
+     g) echo "Starting test g"
+        echo "Tests that -v works"
+        echo "===== ./sgrep -v grep input2"
+        ./sgrep -v grep input2 | diff - testg.out | head
+        echo "===== Stopping test g"
+        ;;
+     h) echo "Starting test h"
+        echo "Tests that -icv work together"
+        echo "===== ./sgrep -icv this input1"
+        ./sgrep -icv this input1 | diff - testh.out | head
+        echo "===== Stopping test h"
+        ;;
+     i) echo "Starting test i"
+        echo "Tests that the default behavior works with two input files"
+        echo "===== ./sgrep The input1 input2"
+        ./sgrep The input1 input2 | diff - testi.out | head
+        echo "===== Stopping test i"
+        ;;
+     j) echo "Starting test j"
+        echo "Tests that the -i flag works for multiple files"
+        echo "===== ./sgrep -i this input1 input2"
+        ./sgrep -i this input1 input2 | diff - testj.out | head
+        echo "===== Stopping test j"
+        ;;
+     k) echo "Starting test k"
+        echo "Tests that the -c flag works for multiple files"
+        echo "===== ./sgrep -c the input1 input2"
+        ./sgrep -c the input1 input2 | diff - testk.out | head
+        echo "===== Stopping test k"
+        ;;
+     l) echo "Starting test l"
+        echo "Tests that that the -v flag works for multiple files"
+        echo "===== ./sgrep -v the input1 input2"
+        ./sgrep -v the input1 input2 | diff - testl.out | head
+        echo "===== Stopping test l"
+        ;;
+     m) echo "Starting test m"
+        echo "Tests that all three flags work for multiple files"
+        echo "===== ./sgrep -i -c -v the input1 input2"
+        ./sgrep -i -c -v The input1 input2 | diff - testm.out | head
+        echo "===== Stopping test m"
+        ;;
+     n) echo "Starting test n"
+        echo "Tests that an error message is printed on stderr if a file cannot be opened"
+        echo "===== ./sgrep pattern this_file_does_not_exist"
+        ./sgrep pattern this_file_does_not_exist
+        echo "===== Stopping test n"
+        ;;
+     o) echo "Starting test o"
+        echo "Tests that an error message is printed on stderr if an illegal flag is encountered"
+        echo "===== ./sgrep -x pattern"
+        ./sgrep -x pattern
+        echo "===== Stopping test o"
+        ;;
+     *) echo $t - illegal test
+        ;;
+    esac
+done

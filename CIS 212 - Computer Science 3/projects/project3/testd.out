@@ -1,0 +1,142 @@
+the tool used to perform this transformation is called a \emph{compiler}, and the binary representation
+Do this until the program executes correctly; thus, the \emph{ECLE} cycle.
+This system has been adopted as part of Linux.
+\verb!gcc! has a large number of flags, only a few of which we will cover in this book.
+Of course, you could add \verb!.! to the front of \verb!PATH!, but this can sometimes cause trouble if
+you need to change one source file to resolve the current bug that the program is exhibiting; this only
+What does this mean? Let's look at each line in turn.
+\verb!CFLAGS!; if this is defined, it will use it in the \verb!gcc! command to compile a source file into
+In this case, there is only one; if there had been other files, the entire set would have been listed as
+is defined as \verb!prog.o!, this means that \verb!prog! depends upon \verb!prog.o!.
+This indicates that \verb!prog.o! depends upon \verb!prog.c!. The absence of a rule for updating
+in \verb!Makefile!; in this case, it would recreate \verb!prog! if necessary.
+This yields the following dependency graph between source files, object files, and program files.
+The following \verb!Makefile! captures this dependency graph along with any non-built-in rules needed
+\item this is followed by a dependency line for each object file, showing the dependency upon the
+There are many other things one can specify in the \verb!Makefile! which are beyond the scope of this
+This final section describes a couple of the more common things you will see in makefiles, and which you
+This is a slightly more complicated use case - we have two programs, \verb!prog1! and \verb!prog2!, that use
+be built by this \verb!Makefile!; we didn't have to do this, but it is good practice, especially as in the
+future there is every likelihood that you will add one or more new programs to this set;
+type \verb!make! or \verb!make all!, this will cause \verb!make! to check that all of the programs
+files and the makefile; note the \verb!-f! flag to \verb!rm! - this has the effect of preventing \verb!rm!
+Finally, there is often an \verb!install! target in makefiles; we will revisit this at the end of this chapter.
+The code below is a C version of this program.
+this converts a string representation of a number into an integer, just as the \verb!int()! built-in
+This is because C allows statements to span multiple lines, as well as allowing multiple statements
+\item all lower case: in this situation, if you have a variable name with two or more words, use the
+In this book, we will use mixed case/start lower and mixed case/start upper in our examples.
+\item \verb!char! - this is a single byte, capable of holding one character in the local character set;
+\item \verb!int! - this is an integer, typically reflecting the natural size of integers on the machine;
+\verb!long double! specifies extended-precision floating point; it is not often used, and will not be used in this book.
+We will discuss structures later in this chapter.
+You should convince yourself that this function works correctly if passed
+In this case, the compiler converts the integral value of \verb!N! to a
+increment \verb!n!; this leaves \verb!x! with a value of \verb!5!, and \verb!n!
+to \verb!y!; this leaves \verb!n! with a value of \verb!7!, and \verb!y! with a
+It is also used with pointers, which will be discussed later in this chapter.
+several variables in a single line; this statement is processed right to left -
+that assignment is the value of \verb!expression!, and this value is assigned to
+its returned value to \verb!status!; the value of this assignment is then
+We have seen this in Python with the \verb!+=! syntax.
+form \verb!variable op= expression!; this is equivalent to \verb!variable = (variable) op (expression)! except that \verb!variable! is only evaluated once.
+not covering bit manipulation in this book, they have not been mentioned
+in this section.}
+This is equivalent to
+This ambiguity is resolved by associating the \verb!else! with the closest
+In C, this is done as follows:
+Again, the trailing \verb!else! can be omitted, although this is not a
+Python enables this through its \verb!while! and \verb!for! statements.
+This cycle continues until \verb!expression! is zero, at which point execution
+This is equivalent to:
+In other words, this is how you should use it!
+This function does nothing and returns nothing.
+Code that is dependent upon this default behavior is very dangerous; good software
+function prototypes to declare the types of the function arguments and its return type, as this
+The calling function is free to ignore the returned value, although this is not good software engineering
+practice. \footnote{If you are explicitly ignoring the return value from a function, you should indicate this by casting (see Section \ref{typeconversions}) the return result to \texttt{(void)}.}
+In fact, if you simply delete the \textit{if (the line contains the pattern)} from this program,
+If you flag a parameter or variable with this attribute, \verb!gcc! will not issue the corresponding
+We could write a function to do this, and we will show this later.
+This can be easily done by asking your search engine to look for ``linux man string''; somewhere in the
+The keyword \verb!static!, if prefixed to external variable definitions, achieves this
+You may ask, why include the header file in the source? This guarantees that the file signature
+We no longer need to include \verb!<string.h>! here, since this code does not use \verb!strstr()!.
+Variables declared in this way hide any identically named variables in outer blocks, and remain in
+If the size of the array is omitted, as in this example, the compiler computes the length of the
+There are two common ways to do this:
+\item a more C-savvy way to do this is to use the \verb!sizeof! compile-time operator to define a
+the following code shows how to exploit this to yield a defined constant that is the size of \verb!days[]!:
+during this pass, the preprocessor replaces commands that it understands with other text,
+We have already encountered this earlier.
+until an \verb!#endif/#elif/#else! are processed; if zero, repeat this step;
+surrounds the actual contents with a conditional like this:
+This allows header files to include all other header files upon which it depends without having
+All of the standard header files (e.g., \verb!<stdio.h>!) do this; you should do this with your header
+Up to this point, it is not clear why C would be preferred over any other language.
+Pointers are constrained to point to a particular type of object - in this case, \verb!p! is a pointer
+This is because the function is swapping copies of the actual arguments, not the arguments themselves.
+This defines an integer array named \verb!a! of size \verb!10! - i.e., a block of \verb!10! consecutive
+There are several ramifications of this strong relationship between pointers and arrays:
+\item assign a pointer of one type to a pointer of another type.\footnote{It is possible to use an explicit cast to assign pointers of different types. This will be discussed in the following section.}
+As we shall see later in this chapter, pointers to structures act somewhat like object
+This is known as \emph{garbage collection}.
+We will discuss the \verb!valgrind! program later in this chapter which helps you find memory leaks.
+We discussed \verb!sizeof! earlier, as this compile-time expression is replaced by the number of
+What does this code do?
+There are two important aspects to this example:
+This example program also uses a number of other aspects of the language that we have discussed so far.
+You are encouraged to use \verb!strdup()! for this very common operation,
+A string literal is written as: \verb!"This is a string"!.
+\verb!char amsg[] = "this is a string";!\newline
+\verb!char *pmsg = "this is a string";!\newline
+\verb!amsg! is an array, just big enough to hold the sequence of characters and the 0-byte; this array
+As you may recall, \verb!argv! was declared as \verb!char *argv[]! - what does this mean?
+Let's see if this works.
+\verb!$ echo this is a test!\newline
+\verb!this is a test!\newline
+\verb!$ ./myecho this is a test!\newline
+\verb!./myecho this is a test!\newline
+\item if this is not the first time through the for loop (\verb!i > 1!), we want to put a single space; if
+By the way, \verb!argv[]! actually is terminated by \verb!NULL! in this way.
+This indicates that \verb!matrix! has 100 rows, each with 50 elements. The value in \verb!matrix! at the
+If the function prototype for \verb!sort()! has the following form, we can achieve this flexible
+What does this prototype tell us?
+function pointed to by \verb!comp!; this function takes two \verb!char *! arguments, and the return
+this defines a function named \verb!f! that returns a pointer to an integer, while
+enclosed in curly braces; the \verb!tag! is an optional name that can be used to refer to this
+This indicates that \verb!pp! is a pointer to structures of type \verb!struct point!.
+The code that solicited the string command from the user would call this routine, and then
+In C, as soon as the compiler has seen \verb!struct tag!, any subsequent code can refer to this tag;
+This particular style is extremely common - i.e., the tag for the structure starts with a lower-case
+while the synonym starts with an upper-case letter; in this example,
+This enables us to create instances of our structures on the heap using \verb!malloc()!.
+This example is for a singly-linked list, which we will see later in the textbook.
+The syntax is similar to that for structures. For this symbol table application:
+The tag identifier, in this case \verb!literalValue!, is optional.
+in the makefile. In this latter case, it will use the value defined in the
+an argument. By convention, an argument of this form indicates
+ordered by modification time. It is perfectly legal to invoke this as
+that, by convention, most programs support this approach.
+Sometimes an argument of this type requires an additional piece of information;
+From this discussion, you should infer that Linux \emph{strongly} discourages
+via an environment variable, this information should be obtained before
+consider this to be shorthand for \verb!standard input!.
+will depend upon this distinction.
+This section provides a brief introduction into the use of \verb!gdb!.
+This command simply starts up \verb!gdb!; section \ref{running under gdb}
+This runs the program - if there are no serious problems, the program
+The following dialog shows execution of this program using \verb!gdb!:
+\verb!const char *a = "This is a test string";!
+This command is \verb!bt! (for \textit{backtrace} -- \verb!backtrace! is also
+a legal command to obtain this functionality).
+For this simple example, the backtrace corroborates our logic above
+the program; this is done with a command of the form:
+In this case, we invoked the \verb!print! command to see what the value
+to obtain this functionality) command.
+This will execute \emph{just} the next line of code.
+This enables you to dive deep into a sequence of call frames to get to the
+We can clear a breakpoint by issuing the \verb!clear! command; this command
+This means that you can set watchpoints for global variables before running the
+This program shows the typical cause of these overrun problems -- forgetting
+Another common source of this problem is to allocate an array of

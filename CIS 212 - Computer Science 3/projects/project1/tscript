@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# usage: ./tscript [test ...]
+#
+tests="0 1 2 3 4"
+if [[ "$#" != "0" ]]; then
+    tests="$*"
+fi
+export LC_ALL=C
+for t in $tests; do
+    case "$t" in
+     0) echo "Testing that part0 works correctly"
+        echo "====="
+        sh part0 <input | diff - part0.out
+        echo "===== Stopping test 0"
+        ;;
+     1) echo "Testing that part1 works correctly"
+        echo "====="
+        sh part1 <input | diff - part1.out
+        echo "===== Stopping test 1"
+        ;;
+     2) echo "Testing that part2 works correctly"
+        echo "====="
+        sh part2 <input | diff - part2.out
+        echo "===== Stopping test 2"
+        ;;
+     3) echo "Testing that part3 works correctly"
+        echo "====="
+        sh part3 <input | diff - part3.out
+        echo "===== Stopping test 3"
+        ;;
+     4) echo "Testing that part4 works correctly"
+        echo "====="
+        sh part4 <input | diff - part4.out
+        echo "===== Stopping test 4"
+        ;;
+     *) echo $t - illegal test
+        ;;
+    esac
+done

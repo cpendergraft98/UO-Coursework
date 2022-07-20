@@ -1,0 +1,25 @@
+Cole Pendergraft
+
+duckID: cpenderg
+
+Project was completed solo without assistance from classmates.
+
+From my testing it seems that everything save for my wc.c does produce the correct results. I hesitate to say everything works perfectly because I am only human and it is very possible I missed some edge case that produces an error or some small detail in the code, but as of writing this report my testing has yielded correct results. There is, however, a bug in my code for wc.c. For some reason I can't generate a space between the character count in the output and the file name it comes from, meaning my outputs look something like:
+1			10			45text.txt
+1			6				32text2.txt
+2			166			77 Total
+
+instead of:
+
+1			10			45 text.txt
+1			6				32 text2.txt
+2			166			77 Total
+
+I was able to get the space between the character count of the total and the name Total, but when I used the same strategy to try and correct the other two counts it didn't work for reasons I don't totally understand. I want to keep debugging this, but the submission deadline is quickly approaching so it seems that I must unfortunately leave them in
+
+When I execute valgrind on my own test file (valgrind ./wc text.txt) I get the following ouputs:
+
+All heap blocks were freed -- no leaks are possible.
+ERROR SUMMARY: 0 errors fom 0 contexts (suppressed: 0 from 0)
+
+So from that I'm fairly confident I have no leaks. Again, I am only human, so it is very possible through the course of my own testing that I missed something, but based on the testing that I have done everything seems to work well.

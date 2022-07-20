@@ -1,0 +1,204 @@
+CIS 314 Lab 8
+Cole Pendergraft
+
+
+#1
+
+offset: address & 0x07
+
+set: (address >> 3) & 0x03
+
+tag: address >> 5
+
+tag set offset
+000 00  000
+
+## cache structure
+set v tag data
+00  0 000 empty
+01  0 000 empty
+10  0 000 empty
+11  0 000 empty
+
+## a
+0x02
+0b0000 0010
+
+tag set offset
+000 00  0010
+
+Cold miss
+
+set v tag data
+00  1 000 M[0-7]
+
+## b
+0x24
+0b0010 0100
+
+tag set offset
+001 00  100
+
+Conflict miss
+
+set v tag data
+00  1 001 M[32-39]
+
+## c
+0x07
+0b0000 0111
+
+tag set offset
+000 00  111
+
+Conflict miss
+
+set v tag data
+00  1 000 M[0-7]
+
+## d
+0x04
+0b0000 0100
+
+tag set offset
+000 00  100
+
+Hit!
+
+## e
+0x22
+0b0010 0010
+
+tag set offset
+001 00  010
+
+Conflict miss
+
+set v tag data
+00  1 001 M[32-39]
+
+## f
+0x06
+
+tag set offset
+000 00  110
+
+Conflict miss
+
+set v tag data
+0   1 000 M[0-7]
+
+## g
+0x02
+
+tag set offset
+000 00  010
+
+Hit!
+
+set v tag data
+0   1 000 M[0-7]
+
+
+#2
+
+offset: address & 0x0F
+
+set: (address >> 4) & 0x03
+
+tag: address >> 6
+
+tag set offset
+00  00  0000
+
+## cache structure
+set v tag data
+00  0 000 empty
+01  0 000 empty
+10  0 000 empty
+11  0 000 empty
+
+## a
+0x00
+
+tag set offset
+00  00  0000
+
+Cold miss
+
+set v tag data
+00  1 00  M[0-15]
+
+## b
+0x46
+0b0100 0110
+
+tag set offset
+01  00  0110
+
+Conflict miss
+
+set v tag data
+00  1 01  M[64-79]
+
+## c
+0x06
+0b0000 0110
+
+tag set offset
+00  00  0110
+
+Conflict miss
+
+set v tag data
+00  1 00  M[0-15]
+
+## d
+0x40
+0b0100 0000
+
+tag set offset
+01  00  0000
+
+Conflict miss
+
+set v tag data
+00  1 01  M[64-79]
+
+## e
+0x12
+0b0001 0010
+
+tag set offset
+00  01  0010
+
+cold miss
+
+set v tag data
+00  1 01  M[64-79]
+01  1 00  M[16-31]
+
+## f
+0x0c
+0b0000 1100
+
+tag set offset
+00  00  1100
+
+Conflict miss
+
+set v tag data
+00  1 00  M[0-15]
+01  1 00  M[16-31]
+
+## g
+0x00
+
+tag set offset
+00  00  0000
+
+Hit!
+
+set v tag data
+00  1 00  M[0-15]
+01  1 00  M[16-31]

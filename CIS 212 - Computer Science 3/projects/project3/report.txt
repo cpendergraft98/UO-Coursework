@@ -1,0 +1,7 @@
+Cole Pendergraft
+
+DuckID: cpenderg
+
+Thomas Joyce offered me a lot of help with bug testing, I had a few chronic issues in my code that I just couldn't solve and he did a really awesome job of helping me figure out what was wrong without just giving me the answer.
+
+Current State: My code as of now is imperfect and more than a little gross. I hesistate to say it works because I have only managed to get bits and pieces working the way I want. In my own testing with very simple text files it seemed that my -i, -c, -v, and -vc all worked correctly, but unfortunately they do not.

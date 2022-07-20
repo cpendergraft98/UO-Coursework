@@ -1,0 +1,6 @@
+#/usr/bin/bash
+
+./lab5 -s test.csv > out
+
+diff out expected
+

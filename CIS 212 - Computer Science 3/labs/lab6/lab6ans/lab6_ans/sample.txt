@@ -1,0 +1,9 @@
+Parker, J Peter
+freshman
+computer science, parker18 9597256
+Wayne, K Bruce
+junior
+physics, wayne17 9597393
+Kent, S Clark
+senior
+English, kent12 9597868

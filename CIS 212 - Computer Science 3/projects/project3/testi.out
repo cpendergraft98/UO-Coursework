@@ -1,0 +1,235 @@
+input1:\section{The edit-compile-link-execute (ECLE) cycle}
+input1:The GNU Compiler Collection is a compilation system that enables you to compile source files written in
+input1:The command needed to do so is:
+input1:The \verb!-c! flag tells \verb!gcc! to compile only (\verb!gcc! also performs the link task);
+input1:The presence of a \verb!.c! file in the argument list causes \verb!gcc! to first compile it into an object
+input1:There are a large number of flags to \verb!gcc! that control the reporting of warnings regarding your usage
+input1:Therefore, we strongly recommend that your compile command lines look like:
+input1:The next section describes a tool to help you with the ECLE cycle, automating the necessary recompiles and
+input1:The executable program file depends upon the constituent object files; if one of them changes, then the
+input1:The built-in rules for converting from a C source file to a C object file knows to look for a variable named
+input1:The first line says that \verb!prog! depends upon the definition of \verb!OBJECTS!; since \verb!OBJECTS!
+input1:This indicates that \verb!prog.o! depends upon \verb!prog.c!. The absence of a rule for updating
+input1:The lines starting with \verb!prog:! and \verb!prog.o:! define \emph{targets}.
+input1:The first command asks \verb!make! to compile \verb!prog.c! to produce \verb!prog.o! if \verb!prog.c! is newer than \verb!prog.o!.
+input1:The second command asks \verb!make! to link \verb!prog.o! to produce \verb!prog! if \verb!prog.o! is newer
+input1:The third command asks \verb!make! to produce the first target that it finds, top to bottom,
+input1:The following \verb!Makefile! captures this dependency graph along with any non-built-in rules needed
+input1:There are many other things one can specify in the \verb!Makefile! which are beyond the scope of this
+input1:The code below is a C version of this program.
+input1:The following describes these similarities and differences.
+input1:\item The beginning of the program is devoted to accessing functions and values from other files/modules.
+input1:The computation of \verb!sum! is identical to our Python code, except that each occurrence of \verb!x**y!
+input1:The \verb!return! is also identical.
+input1:The call to \verb!printf()! looks a bit strange; the first argument is like the string template upon
+input1:The subsequent pipeline executes \verb!approx_pi! with the same number of terms
+input1:The bare hyphen (\verb!-!) as an argument to \verb!diff! tells it to use its
+input1:The lack of output from \verb!diff! indicates that the two files are exactly the
+input1:The names of variables in C are made up of alphabetic letters, digits, and the underscore (\verb!_!)
+input1:The first character of a name must be a letter or an underscore;
+input1:The name \verb!int! can be omitted when using the \verb!short! or \verb!long! qualifiers.
+input1:There are standard header files, \verb!<limits.h>! and \verb!<float.h>!, that contain symbolic constants for
+input1:The following table indicates how to express constant integer values for different integer types.
+input1:The following table shows the legal escape sequence character constants.
+input1:The production version of \verb!strlen()!, along with many other useful
+input1:The last example above shows that one does not need to specify the size of
+input1:The qualifier \verb!const! can be applied to the declaration of any variable to
+input1:The binary operators \verb!+!, \verb!-!, \verb!*!, and \verb!/! are defined for
+input1:The relational and logical operators described below return 1 when the
+input1:The following comparison operators, when used with numeric types, generate boolean values:
+input1:The result of \textit{expression} is converted to \textit{type-name} using
+input1:The cast produces the value of \verb!N! of the proper type; \verb!N! itself is
+input1:The entire assignment statement is also an expression, and returns a value -
+input1:The first example above simply shows that one can assign the same value to
+input1:i.e., \verb!expression! is evaluated and assigned to \verb!var2!. The value of
+input1:The second example shows invocation of the function \verb!fetch()!, assigning
+input1:The operators \verb!+!, \verb!-!, \verb!*!, \verb!/!, and \verb!%! all have
+input1:assignment operator forms.\footnote{There are other binary operators, associated
+input1:The syntax for \verb!if-else! is
+input1:The expressions are evaluated in order; if any expression is true, the
+input1:The safest way to loop through code until a terminating conditions is reached
+input1:The syntax for the \verb!while! statement is as follows:
+input1:The \verb!break! statement in a \verb!while! loop causes execution to resume after
+input1:The syntax for the \verb!for! statement is as follows:
+input1:The comma operator can be used legally anywhere in your program,\footnote{While its use is legal anywhere, such use outside of the initialization and update fields of a \texttt{for} statement should be avoided, as it leads to potentially
+input1:The syntax for the \verb!switch! statement is as follows:
+input1:The \verb!break! statement enables us to escape from the innermost loop or
+input1:The scope of a label is the entire function.
+input1:The calling function is free to ignore the returned value, although this is not good software engineering
+input1:The main program falls neatly into three pieces:
+input1:The \textit{print the line} is simply a call to \verb!printf()!, defined in \verb!<stdio.h>!.
+input1:The \textit{while (there's another line)} is a call to a function \verb!fgets()! defined in \verb!<stdio.h>!.
+input1:The \emph{scope} of a name is the part of the program within which the name can be used.
+input1:The scope of an external variable or a function lasts from the point at which it is declared to the end
+input1:The keyword \verb!static!, if prefixed to external variable definitions, achieves this
+input1:The following example declarations
+input1:These variables can only be accessed by functions in the source file where these declarations occur.
+input1:to the defining function. The following example shows a typical use of an internal \verb!static!
+input1:The standard include files are very stable, and do not change.
+input1:There are two common ways to do this:
+input1:\subsection{The C preprocessor}
+input1:The preprocessor is the first pass of the compiler;
+input1:The commands that are understood are: \verb!#include!, \verb!#define!, \verb!#if!, and \verb!#ifdef!.
+input1:There are often several \verb!#include! lines at the beginning of a source file.
+input1:These include common \verb!#define! statements and extern declarations, or
+input1:The scope of \verb!name! is from the point of definition to the end of the source file being compiled.
+input1:Therefore,
+input1:There are a number of statements that are used to control preprocessing,
+input1:The expression \verb!defined(name)! is \verb!1/0! if \verb!name! is defined/not.
+input1:There is nothing special about using \verb!_HDR_H_! as the defined symbol to indicate that the
+input1:The \verb!#elif! construct is to enable a switch-like choice of lines to process, as in
+input1:The set of basic data types is sparse, and arrays are the only structured built-in type.
+input1:\verb!7!.\footnote{The linker decides where to place variables when linking the program together.}
+input1:Furthermore, we have a pointer to a character, \verb!p!, that is assigned to address \verb!N-6!. The figure assumes that a pointer occupies 4 bytes (a 32-bit architecture); if we were on a 64-bit architecture, it would occupy 8 bytes.
+input1:The unary operator \verb!&! gives the address of a variable, it is verbalized as ``address of''.
+input1:The unary operator \verb!*! is the indirection or dereferencing operator; when applied to a pointer,
+input1:The following artificial sequence of statements show the use of \verb!&! and \verb!*!.
+input1:The function can not only read the values passed, but can modify them; since they are copies, the caller's
+input1:The assignment \verb!pa = &a[0];! causes \verb!pa! to point to element zero of \verb!a! - i.e., \verb!pa!
+input1:The preceding statements are true regardless of the type or size of the variables in the array \verb!a!.
+input1:The meaning of ``add 1 to a pointer'', and by extension, all pointer arithmetic, is that \verb!pa + 1!
+input1:The value of a variable of type array is the address of the \verb!0!\textsuperscript{th} element of
+input1:There are several ramifications of this strong relationship between pointers and arrays:
+input1:There is a distinguished pointer value, \verb!NULL!, which means that the pointer does not point at
+input1:The following operations on pointers are \emph{invalid}:
+input1:The most common initial exposure to \verb!void *! pointers is through the dynamic memory allocation
+input1:The function prototypes for the routines in \verb!<stdlib.h>! are as follows:
+input1:\verb! *         NULL if the request cannot be satisfied. The space is uninitialized.!\newline
+input1:\verb! *         The space is initialized to zero bytes.!\newline
+input1:These prototypes use a type \verb!size_t!, which is also defined in \verb!<stdlib.h>!.
+input1:There are two important aspects to this example:
+input1:The following program reads up to the first 100 lines from standard input, stores those lines in
+input1:The value returned by \verb!strlen()! does not include the \verb!'\0'! that indicates the
+input1:The most common pointers that you will encounter are pointers to characters.
+input1:The literal is stored as an array of characters in \emph{read-only} memory, with the terminating 0-byte.
+input1:The first \verb!printf()! statement looks a bit weird, since it uses the ternary conditional.
+input1:This indicates that \verb!matrix! has 100 rows, each with 50 elements. The value in \verb!matrix! at the
+input1:One can initialize a multi-dimensional array. The following code shows how to do so for a small,
+input1:These can be assigned to pointer variables, placed in arrays, passed as arguments to functions, returned
+input1:The pseudocode for our \verb!main()! looks something like the following:
+input1:The function \verb!strcmp()! in \verb!<string.h>! is exactly such a function, and compares the
+input1:The following will do the trick.
+input1:The keyword \verb!struct! introduces a structure declaration, which is a list of variable declarations
+input1:The variables named in the declarations within the braces are called \emph{members}.
+input1:The right brace that terminates the list of members may be followed by a list of variable names, as in
+input1:The function \verb!mapKeyword()! maps from one of the string commands to an integer value.
+input1:The code that solicited the string command from the user would call this routine, and then
+input1:The type name \verb!Length! can be used in declarations, casts, etc. in exactly the same way that
+input1:The most common use of \verb!typedef! is with respect to structures.
+input1:The \verb!sizeof! compile time operator works with \verb!struct!'s just like it does for built-in
+input1:The call to \verb!malloc()! looks just like those we have seen before.
+input1:The value of a particular literal must be stored in a variable of the appropriate type, but it is
+input1:The syntax is similar to that for structures. For this symbol table application:
+input1:The tag identifier, in this case \verb!literalValue!, is optional.
+input1:The following two lines would do the trick:
+input1:The standard I/O library, defined in \verb!<stdio.h>!, provides the ANSI standard library of I/O functions.
+input1:The simplest input mechanism is to read one character at a time from \verb!stdin!, using \verb!getchar()!:
+input1:The function
+input1:The function \verb!scanf()! is the input analog to \verb!printf()!, providing many of the same
+input1:The next call to \verb!scanf()! resumes scanning standard input immediately after the last character
+input1:The \verb!scanf()! format string usually contains conversion specifications, which are used to
+input1:The basic \verb!scanf()! conversions are shown in the following table.
+input1:The function prototypes are as follow.
+input1:There are also versions of \verb!scanf()! and \verb!printf()! that work with characters buffers instead of
+input1:There are a variety of ways for providing information to programs that you
+input1:flags are specified in the command line. These flags come in two flavors:
+input1:argument - consider \verb!ls -lrt!. The \verb!-l! flag indicates that one should
+input1:to 50 columns on the output. The number of columns \verb!50! must follow the
+input1:character is another \verb!'-'!, it is a long flag. The processing of a flag
+input1:The GNU debugger, usually called GDB and named \verb!gdb! as an
+input1:The following dialog shows execution of this program using \verb!gdb!:
+input1:The real power of a debugger is that it lets you stop the execution of
+input1:\footnote{The boilerplate text from \texttt{gdb} will no longer be shown in
+input1:There are two forms of the single step functionality:
+input1:\item The next line of code is executed by specifying the \verb!step! command.
+input1:There are a multitude of other features provided by \verb!gdb!.
+input1:The previous sections have demonstrated how different types of memory misuse
+input1:The only time you should be satisfied that you have eliminated all problems
+input2:The very first interactive computers had a single ``console'' upon which output from programs was displayed
+input2:The input and output speeds on such consoles were maddeningly slow,
+input2:The console shown in the figure also had a paper tape reader, a very early form
+input2:they were recalled from the Multics Project\footnote{Elliott I. Organick. 1972. The Multics system: an examination of its structure. MIT Press, Cambridge, MA, USA.}.
+input2:The UNIX\textsuperscript{TM} kernel provided a complete set of system calls enabling processes to create and
+input2:These user-level CLI's have become known as ``shells'', since the very first such CLI was called the
+input2:\section{The user interface}
+input2:The primary interface between a user and Linux is the terminal window - i.e., a window on the screen that emulates the 80x24 terminal windows found on earlier UNIX\textsuperscript{TM} systems.
+input2:A command line interpreter, usually \emph{bash}\footnote{The name is an acronym for
+input2:\section{The command line interpreter - \texttt{bash}}
+input2:The prompt string can be customized, as will be shown later; until then, we will use the string ``\$ '' as
+input2:type \emph{ctl-u}\footnote{The expression \emph{ctl-x} means you should press the \texttt{x} key while
+input2:These examples demonstrate a number of features of \texttt{bash}.
+input2:\item The shell breaks up the line of input that you type into separate words; the words can be separated
+input2:\item The first word in a command (\texttt{echo} above) is the program to execute; we will discuss
+input2:\item The other words in the command are provided to the program as a list of words, for it to do with
+input2:The equals sign, \verb!=!, is another non-alphanumeric character that has no special meaning to \texttt{bash}.
+input2:The non-special nature of these characters enables these two flag conventions.
+input2:The command \texttt{ls} lists the files found in one or more directories; if
+input2:The examples below show both the short and long form of some of these flags.
+input2:There are other sorts of information that a command might need; for example, a program that
+input2:The wildcard character, \verb!*!, is often used in the shell to select a subset of files to be processed
+input2:The \verb!?! in a command argument indicates that it matches any single character at that point - e.g.,
+input2:The square brackets enable the specification of a range of characters to match at a particular location
+input2:There is also an introduction to the system at
+input2:The Arch Linux image described in Appendix B comes with \texttt{nano}
+input2:The POSIX specification\footnote{\url{http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html\#tag_03_280}} is quite clear on characters to use in filenames that are portable
+input2:\item The simplest program is \texttt{cat}, which simply prints the contents of each file argument on
+input2:The file \texttt{shopping.list} has been ``moved'' to a file named \texttt{Shopping.List}.
+input2:The old filename has disappeared, as evidenced by the output from \texttt{ls} and \texttt{cat}.
+input2:The number of lines in \texttt{shopping.list} is exactly what we need:
+input2:The first invocation tells \verb!tr! to replace all occurrences of `a' by
+input2:The second invocation indicates that \verb!tr! should delete all occurrences
+input2:The third invocation indicates that all upper-case characters on standard
+input2:The final invocation tells \verb!tr! to translate each horizontal white space
+input2:The default behavior for \verb!uniq! is to copy standard input to
+input2:The following show an original file for which there are \emph{no} sequences of
+input2:The command \texttt{grep}, which stands for \textbf{g}et \textbf{r}egular \textbf{e}xpression and \textbf{p}rint, will search the file arguments for lines that match a pattern.
+input2:The following shows us using \texttt{grep} to answer our question about apples.
+input2:The order can be changed using various flags which will be shown below.
+input2:Therefore, we change the quantity of tomatoes in \texttt{shopping.list} to 3 instead of 10, as shown below.
+input2:Therefore, we can rely upon comparison tools to help us out.
+input2:The first comparison program, \texttt{cmp}, compares the two files and reports the first difference that it finds.
+input2:The `3c3' line indicates that only line 3 of the two files are different;
+input2:\section{The file system}
+input2:The root of the tree has the name \texttt{/}, and the complete pathname for \texttt{shopping.list}, assuming that
+input2:The use of \verb!'..'! seems a little strange for referring to the parent of our current working
+input2:These entries were placed in the directory when the directory was created.
+input2:The last two examples are meant to show that you can introduce \verb!'.'! and \verb!'..'! as elements of a
+input2:pathname. The last example may seem strange, but later you will see a situation where using \verb!'./'!
+input2:There is also an \texttt{rmdir} command that can be used to remove a directory; this will only work \emph{if}
+input2:\subsection{The Linux hierarchical file system structure}
+input2:There can be millions of files in the file system of a single Linux system; for the
+input2:The command to type to see what is currently in the environment is \texttt{env}:
+input2:The easiest way to answer these questions is to show a number of examples.
+input2:The shell then waits for that program to finish before prompting the user for another command.
+input2:The shell sets up these standard channels for a program when it starts it in a process.
+input2:There are several things going on here that make this work:
+input2:terminal window. The man page for a particular command will indicated if a particular program interprets a bare '-' in this way.}
+input2:The ability to perform such redirection \emph{again} depends upon each program writing to standard
+input2:The shell also understands grouping commands to act as a single ``command'', such that you can redirect
+input2:The way that this is done is that the shell acts as if you had typed the following command:
+input2:The non-intuitive expression \verb!2>&1! means redirect standard error output onto the same stream
+input2:as the standard output (the \texttt{1} at the end of the expression).\footnote{The order of the two redirections is important here, as \texttt{bash} will process them from left to right; thus, in this case, it redirects standard output to
+input2:There's the problem that we have to choose a temporary
+input2:The program \texttt{tee} copies its standard input
+input2:Therefore, given a file \verb!document!, the following pipeline will produce
+input2:\item The pipeline above outputs the results according to the sort order of
+input2:It is not uncommon to need to share an entire directory of files with another user, on a different machine.  The mechanism by which such inter-machine sharing is achieved is beyond the scope of this book.  The mechanism by which you package such files before you share them is an important aspect of Linux use, so we will cover the basics here.
+input2:There are a number of ways that we could share each of these files with
+input2:The better way would be to make a new file that contains the contents
+input2:The \verb!tar! program packages many files together into a single disk file (often called an \emph{archive}), and can restore individual files from the archive.  \verb!tar! is named after \textbf{t}ape \textbf{ar}chive, as it was initially created to move files to/from magnetic tapes.
+input2:The flags to \verb!tar! that we have used have the following meanings: \verb!-c! means create an archive, \verb!-v! means write the name of each file as it is added, and \verb!-f filename! means to create the archive in \verb!filename!.  As you can see, \verb!tar! allows you to collect all flags into a single argument; since \verb!f! is included in the flag argument, the name of the archive file to be created must immediately follow \verb!-cvf!. The filename arguments for inclusion can either be regular files, or the name of a directory; in the latter case, all files contained in the directory are included in the archive; if an included file is a directory, then its contents are also included in the archive.
+input2:The \verb!-t! command to \verb!tar! indicates that I want to see a table of contents. Again, we have
+input2:There are many other options supported by \verb!tar!.  See \verb!tar(1)! for more information.\footnote{This indicates that you should look at the man page for \texttt{tar} in section 1 of the Linux users manual. This can be achieved using a browser, as indicated earlier in the chapter, or by typing
+input2:\item The tools \verb!compress!, \verb!uncompress!, and \verb!zcat! use an adaptive Lempel-Ziv coding to remove the redundancy.  \verb!compress! encodes the content of a file using adaptive Lempel-Ziv coding; \verb!uncompress! and \verb!zcat! decode an encoded file, producing the original file.
+input2:\item The tools \verb!gzip!, \verb!gunzip!, and \verb!gzcat! use Lempel-Ziv coding (LZ77) to remove the redundancy.  \verb!gzip! encodes the content of a file using Lempel-Ziv coding; \verb!gunzip! and \verb!gzcat! decode an encoded file, producing the original file.
+input2:The default behavior of \verb!compress! and \verb!gzip! is to replace each file argument by an encoded file with an extension of \verb!.Z! or \verb!.gz!, respectively, while keeping the same ownership modes, access, and modification times.  For example,
+input2:The default behavior of \verb!uncompress! and \verb!gunzip! is to replace each file argument with an extension of \verb!.Z! or \verb!.gz!, respectively, by an unencoded file with the \verb!.Z! or \verb!.gz!
+input2:The default behavior of \verb!zcat! and \verb!gzcat! unencode each file argument with an extension of \verb!.Z! or \verb!.gz!, respectively, and write the unencoded content to standard output.  For example,
+input2:The most common use of these types of tools are for very large data files.  The principle use of compression technologies is in conjunction with file packaging tools for files that are to be exchanged.  These are described in the next section
+input2:Therefore, you can easily create a compressed \verb!tar! archive by using \verb!tar! and \verb!gzip! as follows:
+input2:\item The constant conversion from uncompressed to compressed and back again represents significant wasted computational resources.
+input2:Fortunately, \verb!tar! can compress and uncompress as part of its processing.  The \verb!-z! flag tells \verb!tar! to create a compressed archive during creation and file addition, and to uncompress the data in a compressed archive when extracting files or listing its contents.
+input2:The commands:
+input2:Linux provides the \verb!zip! and \verb!unzip! commands\footnote{The Arch Linux image described in the appendices does not have \texttt{zip} or \texttt{unzip} installed. If you need to use it, you need to execute \texttt{sudo pacman -S zip} and answer the question posed in the affirmative.} for creating ZIP archive files and extracting files from a ZIP archive, respectively.  The following dialog shows use of \verb!zip! and \verb!unzip! to create, list, extract to standard output, and extract the contents of an archive \verb!example.zip!.  It assumes that we have a directory named \verb!tmp! in the current working directory.
+input2:The \verb!unzip -l! command enables you to determine the contents of an archive.
+input2:The \verb!unzip -p! command enables you to extract a member of the archive to standard output; in this case, we redirect standard output to \verb!mycat.c!.  Finally, to extract the entire contents of an archive, you invoke \verb!unzip archive-name!; the files are extracted into the current working directory; if a filename includes a directory name (e.g., \verb!tmp/cat.c!), the file will be extracted into that directory; the directory will be created if it does not exist.  If a file already exists, \verb!unzip! will prompt you about each file unless you have specified the \verb!-o! flag, which indicates overwrite existing files without prompting.

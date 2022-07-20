@@ -1,0 +1,47 @@
+Here you can find file paths for the files that were most core to our application and saw the
+most editing. You are of course more than welcome to look at other files, these are just
+the most essential.
+
+Note:
+"Gallery" is the Settings Page
+"Slideshow" is the Shopping List Page
+"Home" is the Pantry list page
+
+
+XML FILES:
+
+Pantry>PantryApp>app>src>main>res>layout
+
+Every item in the layout folder is utilized in some form or fasion to construct the
+layouts of our primary activities and functionality.
+
+
+NON-UI KOTLIN FILES:
+
+Pantry>PantryApp>app>src>main>java>com>example>pantryapp
+
+The six files in here store our primary activites and notification system functionality
+
+
+UI KOTLIN FILES:
+
+Pantry>PantryApp>app>src>main>java>com>example>pantryapp>ui
+
+The gallery folder holds kotlin files for constructing the settings page layout
+The home folder holds kotlin files for constructing the pantry list page layout
+The slideshow folder holds kotlin files for constructing the shopping list layout
+
+
+DATABASE FILES:
+
+Pantry>PantryApp>app>src>main>java>com>example>pantryapp>db
+
+The kotlin files stored in here are essential for our database functionality
+
+
+APP RELEASE APK LOCATION:
+
+PantryApp>app>release>app-release.apk
+
+From here you can install the apk onto any android device with a compatible api.
+

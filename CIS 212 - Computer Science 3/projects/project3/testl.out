@@ -1,0 +1,4041 @@
+input1:\chapter{C programming on Linux}
+input1:
+input1:\section{The edit-compile-link-execute (ECLE) cycle}
+input1:\index{ECLE cycle}
+input1:Python is an interpreted language.
+input1:
+input1:\begin{itemize}[noitemsep]
+input1:for each source file is called an \emph{object} file;
+input1:a single executable program file; and, finally,
+input1:\end{itemize}
+input1:
+input1:compile, link, and execute again.
+input1:
+input1:The GNU Compiler Collection is a compilation system that enables you to compile source files written in
+input1:\index{commands@\textbf{commands}!gcc}
+input1:C, C++, Objective-C, Fortran, Ada and Go.
+input1:This system has been adopted as part of Linux.
+input1:
+input1:\verb!gcc! has a large number of flags, only a few of which we will cover in this book.
+input1:
+input1:Suppose we have a source file named \verb!prog.c! that we have created using our favorite editor.
+input1:Note that, by convention, C source files have a \verb!.c! extension.
+input1:Now suppose that we wish to compile \verb!prog.c! into a binary object file.
+input1:The command needed to do so is:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ gcc -c prog.c!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\verb!gcc! can also link object files into an executable program.
+input1:will produce an executable program in a file named \verb!prog!:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ gcc -o prog prog.o!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ ./prog!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:You may wonder why you have to type \verb!./prog!.
+input1:By typing a command with a slash(\verb!/!) in it, \verb!bash! does not search through those directories,
+input1:
+input1:Having to invoke \verb!gcc! twice to build \verb!prog! may seem like one invocation too many.
+input1:In fact, for simple programs like \verb!prog.c!, it can all be done in one command, as in:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ gcc -o prog prog.c!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Most programs will consist of multiple source files, each providing different functionality (like different
+input1:modules used in a Python program).
+input1:your executable program file.
+input1:
+input1:\label{sec:CFLAGS}
+input1:to your program executing incorrectly.
+input1:Decades of experience recommend that you specify \verb!-W -Wall! as compilation flags when compiling your
+input1:Therefore, we strongly recommend that your compile command lines look like:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ gcc -c -W -Wall prog.c!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:
+input1:\index{commands@\textbf{commands}!make}
+input1:executable program.
+input1:executable program file must be recreated.
+input1:recreate a file that depends upon a file that has changed will be extremely useful.
+input1:\verb!make! is such a tool.
+input1:
+input1:upon which it depends has changed.
+input1:\verb!.o!).
+input1:
+input1:How can \verb!make! possibly work?
+input1:
+input1:By convention, we keep all source files for a related set of programs in a separate directory.
+input1:\index{make@\textbf{make}!Makefile}
+input1:Let's look at an example \verb!Makefile! for \verb!prog!:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!CFLAGS=-W -Wall!\newline
+input1:\verb!OBJECTS=prog.o!\newline
+input1:\verb!!\newline
+input1:\verb!prog: $(OBJECTS)!\newline
+input1:\verb!        gcc -o prog $(OBJECTS)!\newline
+input1:\verb!!\newline
+input1:\verb!prog.o: prog.c!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:What does this mean? Let's look at each line in turn.
+input1:\begin{itemize}[noitemsep]
+input1:\item \verb!CFLAGS=-W -Wall!\newline
+input1:\index{make@\textbf{make}!CFLAGS variable}
+input1:The built-in rules for converting from a C source file to a C object file knows to look for a variable named
+input1:its object file.
+input1:\item \verb!OBJECTS=prog.o!\newline
+input1:\index{make@\textbf{make}!OBJECTS variable}
+input1:\item \verb!prog: $(OBJECTS)!\newline
+input1:\verb!        gcc -o prog $(OBJECTS)!\newline
+input1:is defined as \verb!prog.o!, this means that \verb!prog! depends upon \verb!prog.o!.
+input1:\item \verb!prog.o: prog.c!\newline
+input1:This indicates that \verb!prog.o! depends upon \verb!prog.c!. The absence of a rule for updating
+input1:\verb!prog.o! tells \verb!make! to use its built-in rule.
+input1:\index{make@\textbf{make}!built-in rules}
+input1:\end{itemize}
+input1:
+input1:The lines starting with \verb!prog:! and \verb!prog.o:! define \emph{targets}.
+input1:\index{make@\textbf{make}!target}
+input1:command to \verb!bash!:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ make name_of_target!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ make prog.o!\newline
+input1:\verb!$ make prog!\newline
+input1:\verb!$ make!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:The first command asks \verb!make! to compile \verb!prog.c! to produce \verb!prog.o! if \verb!prog.c! is newer than \verb!prog.o!.
+input1:The second command asks \verb!make! to link \verb!prog.o! to produce \verb!prog! if \verb!prog.o! is newer
+input1:than \verb!prog!; as a side effect, if \verb!prog.c! is newer than \verb!prog.o!, \verb!make! would compile
+input1:\verb!prog! in that case.
+input1:in \verb!Makefile!; in this case, it would recreate \verb!prog! if necessary.
+input1:
+input1:If all of our programs were just a single source file, like \verb!prog!, \verb!make! might seem like
+input1:overkill.
+input1:Usually your programs will consists of several source files, and need to link to special libraries; in such
+input1:to make sure our targets are up-to-date is a definite benefit.
+input1:\begin{center}
+input1:\includegraphics[scale=0.3]{c/depgraph}
+input1:\end{center}
+input1:
+input1:The following \verb!Makefile! captures this dependency graph along with any non-built-in rules needed
+input1:to update a target if it is older than any of its dependencies:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!CFLAGS=-W -Wall!\newline
+input1:\verb!OBJECTS=prog.o a.o b.o!\newline
+input1:\verb!!\newline
+input1:\verb!prog: $(OBJECTS)!\newline
+input1:\verb!        gcc -o prog $(OBJECTS)!\newline
+input1:\verb!!\newline
+input1:\verb!prog.o: prog.c!\newline
+input1:\verb!a.o: a.c globals.h!\newline
+input1:\verb!b.o: b.c globals.h!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:What has changed from our previous \verb!Makefile!?
+input1:
+input1:Let's summarize what we have learned so far:
+input1:\begin{itemize}[noitemsep]
+input1:directory;
+input1:program files, and provides custom rules needed to update a target if it needs to be updated;
+input1:command arguments needed when compiling a C source file to its object file;
+input1:object file names needed to build our program;
+input1:relevant source file \emph{and} any files ``included'' by that source file;
+input1:\verb!make! for compiling C source files.
+input1:\end{itemize}
+input1:
+input1:book.
+input1:are encouraged to add to your makefiles, when appropriate.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!CFLAGS=-W -Wall!\newline
+input1:\verb!OBJECTS=a.o b.o!\newline
+input1:\verb!PROGRAMS=prog1 prog2!\newline
+input1:\verb!!\newline
+input1:\verb!all: $(PROGRAMS)!\newline
+input1:\verb!!\newline
+input1:\verb!prog1: prog1.o $(OBJECTS)!\newline
+input1:\verb!        gcc -o prog1 prog1.o $(OBJECTS)!\newline
+input1:\verb!!\newline
+input1:\verb!prog2: prog2.o $(OBJECTS)!\newline
+input1:\verb!        gcc -o prog2 prog2.o $(OBJECTS)!\newline
+input1:\verb!!\newline
+input1:\verb!prog1.o: prog1.c!\newline
+input1:\verb!prog2.o: prog2.c!\newline
+input1:\verb!a.o: a.c globals.h!\newline
+input1:\verb!b.o: b.c globals.h!\newline
+input1:\verb!!\newline
+input1:\verb!clean:!\newline
+input1:\verb!        rm -f prog1.o prog2.o $(OBJECTS) $(PROGRAMS)!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:This is a slightly more complicated use case - we have two programs, \verb!prog1! and \verb!prog2!, that use
+input1:functions defined in \verb!a.c! and \verb!b.c!.
+input1:\begin{itemize}[noitemsep]
+input1:\item \verb!OBJECTS=a.o b.o!\newline
+input1:object files needed by both programs;
+input1:\index{make@\textbf{make}!PROGRAMS variable}
+input1:\item \verb!PROGRAMS=prog1 prog2!\newline
+input1:\index{make@\textbf{make}!all target}
+input1:\item \verb!all: $(PROGRAMS)!\newline
+input1:\item \verb!prog1: prog1.o $(OBJECTS)!\newline
+input1:\verb!        gcc -o prog1 prog1.o $(OBJECTS)!\newline
+input1:rule; we also add an equivalent target and rule for \verb!prog2!;
+input1:\item \verb!prog1.o: prog1.c!\newline
+input1:\verb!prog2.o: prog2.c!\newline
+input1:\verb!prog2.o!;
+input1:\item \verb!clean:!\newline
+input1:\index{make@\textbf{make}!clean target}
+input1:\verb!        rm -f prog1.o prog2.o $(OBJECTS) $(PROGRAMS)!\newline
+input1:finally, it is common to add a target named \verb!clean!; when you invoke \verb!make clean!, it executes
+input1:\end{itemize}
+input1:
+input1:\index{make@\textbf{make}!install target}
+input1:
+input1:\section{A simple, example program}
+input1:\label{sec:approxpi}
+input1:Recall that in section 3.1 we introduced a simple program that approximates $\pi$ as a truncated infinite
+input1:series.
+input1:The code below is a C version of this program.
+input1:\index{C@\textbf{C}!$\pi$ computation example}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verbatiminput{"c/approx_pi.c"}
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:number of differences.
+input1:
+input1:\begin{itemize}[noitemsep]
+input1:
+input1:C does not have a syntactic representation
+input1:for exponentiation, so \verb!math.h! also defines a function \verb!double pow(double x, double y)! which
+input1:
+input1:simply states that \verb!argv! is a list of character strings, just as \verb!sys.argv! is in Python.
+input1:
+input1:function does in Python.
+input1:
+input1:\index{C@\textbf{C}!stdio!printf()}
+input1:Python, C does not have a built-in function to print data on standard output. Additionally, \verb!printf()!
+input1:string.
+input1:
+input1:(\verb!{}!) to delimit a block.
+input1:
+input1:C requires that all variables be declared before use.
+input1:which is a \verb!double! \emph{and} initialized to \verb!0.0!, and \verb!i!, which is an \verb!int!.
+input1:
+input1:
+input1:The computation of \verb!sum! is identical to our Python code, except that each occurrence of \verb!x**y!
+input1:had to be converted to an invocation of \verb!pow(x, y)!.
+input1:The \verb!return! is also identical.
+input1:
+input1:This is because C allows statements to span multiple lines, as well as allowing multiple statements
+input1:to be placed on a single line.
+input1:Of course, in C we need to declare each variable before use.
+input1:
+input1:\index{C@\textbf{C}!stdio!printf()}
+input1:\end{itemize}
+input1:
+input1:First, let's build a \verb!Makefile! to construct our \verb!approx_pi! executable.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!CFLAGS=-W -Wall!\newline
+input1:\verb!OBJECTS=approx_pi.o!\newline
+input1:\verb!LIBRARIES=-lm!\newline
+input1:\verb!!\newline
+input1:\verb!approx_pi: $(OBJECTS)!\newline
+input1:\verb!        gcc -o approx_pi $(OBJECTS) $(LIBRARIES)!\newline
+input1:\verb!!\newline
+input1:\verb!approx_pi.o: approx_pi.c!\newline
+input1:\verb!!\newline
+input1:\verb!clean:!\newline
+input1:\verb!        rm -f approx_pi $(OBJECTS)!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\index{make@\textbf{make}!LIBRARIES variable}
+input1:makefile.
+input1:\verb!gcc! command that builds \verb!approx_pi!.
+input1:to remember which libraries you are using and for you to add additional
+input1:Routines accessed from \verb!<stdio.h>! and \verb!<stdlib.h>! are resolved
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ make!\newline
+input1:\verb!cc -W -Wall   -c -o approx_pi.o approx_pi.c!\newline
+input1:\verb!gcc -o approx_pi approx_pi.o -lm!\newline
+input1:\verb!$ ls -l approx_pi*!\newline
+input1:\verb!-rwxr-xr-x 1 me me 8360 Jul 30 11:49 approx_pi!\newline
+input1:\verb!$ python3 approx_pi.py 5!\newline
+input1:\verb!pi[5] = 3.1426047456630846, error = 0.03222%!\newline
+input1:\verb!$ ./approx_pi 5!\newline
+input1:\verb!pi[5] = 3.1426047456630846, error = 0.03222%!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ python3 approx_pi.py 5 >tmp.out!\newline
+input1:\verb!$ ./approx_pi 5 | diff - tmp.out!\newline
+input1:\verb!$ rm -f tmp.out!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:The bare hyphen (\verb!-!) as an argument to \verb!diff! tells it to use its
+input1:standard input; thus, \verb!diff! compares its standard input to \verb!tmp.out!.
+input1:same.
+input1:
+input1:\section{Variables, types, operators, and expressions}
+input1:\subsection{Variable names}
+input1:\index{C@\textbf{C}!variables}
+input1:\index{C@\textbf{C}!variables!names}
+input1:character.
+input1:The first character of a name must be a letter or an underscore;
+input1:you are urged \emph{not} to begin variable names with an underscore as system library routines often use
+input1:Upper and lower case letters are distinct.
+input1:Conventional practice is to use all upper case for defined symbolic constants (e.g., \verb!BUFFER_SIZE!).
+input1:Conventions for variables vary:
+input1:\begin{itemize}[noitemsep]
+input1:\item mixed case/start lower: for single word variable names, all lower case; for multi-word variable
+input1:words (e.g., \verb!modificationTime!);
+input1:\end{itemize}
+input1:
+input1:31.)
+input1:words and must be in lower case.
+input1:
+input1:In this book, we will use mixed case/start lower and mixed case/start upper in our examples.
+input1:
+input1:
+input1:\subsection{Basic data types}
+input1:\index{C@\textbf{C}!data types}
+input1:\index{C@\textbf{C}!basic data types}
+input1:C has only a few basic data types:
+input1:\begin{itemize}[noitemsep]
+input1:\index{C@\textbf{C}!basic data types!char}
+input1:\index{C@\textbf{C}!basic data types!int}
+input1:\item \verb!float! - single-precision floating point;
+input1:\index{C@\textbf{C}!basic data types!float}
+input1:\item \verb!double! - double-precision floating point.
+input1:\index{C@\textbf{C}!basic data types!double}
+input1:\end{itemize}
+input1:\verb!short! and \verb!long! qualifiers apply to integers; for example \verb!short int i! or
+input1:\index{C@\textbf{C}!basic data types!short qualifier}
+input1:\index{C@\textbf{C}!basic data types!long qualifier}
+input1:
+input1:it hard to write completely portable source code.
+input1:\begin{itemize}[noitemsep]
+input1:\item \verb!short int! is at least 16 bits of precision;
+input1:\item \verb!long int! is at least 32 bits of precision;
+input1:\item \verb!long long int! is at least 64 bits of precision.
+input1:\end{itemize}
+input1:
+input1:\verb!signed! and \verb!unsigned! qualifiers can be applied to \verb!char! or any integer type:
+input1:\index{C@\textbf{C}!basic data types!signed qualifier}
+input1:\index{C@\textbf{C}!basic data types!unsigned qualifier}
+input1:\begin{itemize}[noitemsep]
+input1:\end{itemize}
+input1:
+input1:\verb!long double! specifies extended-precision floating point; it is not often used, and will not be used in this book.
+input1:There are standard header files, \verb!<limits.h>! and \verb!<float.h>!, that contain symbolic constants for
+input1:
+input1:\subsection{Structured types}
+input1:\index{C@\textbf{C}!structured data types}
+input1:\index{C@\textbf{C}!structured data types!arrays}
+input1:\label{sec:arraytype}
+input1:For example, one would declare an array of \texttt{25} integers as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int myArray[25];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:C does \emph{not} have a special built-in type for \emph{strings}.
+input1:\index{C@\textbf{C}!structured data types!strings}
+input1:Instead, a \emph{string} is an array of characters, as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!char buf[1024];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:We will discuss structures later in this chapter.
+input1:
+input1:\subsection{Constants/literals}
+input1:\index{C@\textbf{C}!constants}
+input1:\index{C@\textbf{C}!literals}
+input1:termed \emph{constants} in C.
+input1:The following table indicates how to express constant integer values for different integer types.
+input1:\begin{center}
+input1:\begin{tabular}{|l|l|l|}
+input1:\hline
+input1:signed integer & \texttt{int} & \texttt{1234}\\
+input1:signed long integer & \texttt{long} & \texttt{1234L}\\
+input1:signed long long integer & \texttt{long long} & \texttt{1234LL}\\
+input1:unsigned integer & \texttt{unsigned} & \texttt{1234U}\\
+input1:unsigned long integer & \texttt{unsigned long} & \texttt{1234UL}\\
+input1:unsigned long long integer & \texttt{unsigned long long} & \texttt{1234ULL}\\
+input1:\hline
+input1:\end{tabular}
+input1:\end{center}
+input1:
+input1:\verb!double! unless a suffix is provided.
+input1:\begin{center}
+input1:\begin{tabular}{|l|l|l|l|l|}
+input1:\hline
+input1:single-precision floating point & \texttt{float} & \texttt{123.4f} & \texttt{1e-2f} & \texttt{1.2e7f}\\
+input1:double-precision floating point & \texttt{double} & \texttt{123.4} & \texttt{1e-2} & \texttt{1.2e7}\\
+input1:extended-precision floating point & \texttt{long double} & \texttt{123.4L} & \texttt{1e-2L} & \texttt{1.2e7L}\\
+input1:\hline
+input1:\end{tabular}
+input1:\end{center}
+input1:
+input1:\subsection{Character and string constants}
+input1:A character constant is an integer, written as a single character within single quotes, such as \verb!'x'!.
+input1:Escape sequences, such as \verb!'\n'!, are character constants.
+input1:\begin{center}
+input1:\begin{tabular}{|l|l||l|l|}
+input1:\hline
+input1:\texttt{\textbackslash{a}} & alert (bell) & \texttt{\textbackslash{b}} & backspace\\
+input1:\texttt{\textbackslash{f}} & formfeed & \texttt{\textbackslash{n}} & newline (end of line)\\
+input1:\texttt{\textbackslash{r}} & carriage return & \texttt{\textbackslash{t}} & horizontal tab\\
+input1:\texttt{\textbackslash{v}} & vertical tab & \texttt{\textbackslash\textbackslash} & backslash\\
+input1:\texttt{\textbackslash{?}} & question mark & \texttt{\textbackslash{'}} & single quote\\
+input1:\texttt{\textbackslash{"}} & double quote & \texttt{\textbackslash{0}} & null (end of string)\\
+input1:\hline
+input1:\end{tabular}
+input1:\end{center}
+input1:
+input1:A string constant/literal is a sequence of 0 or more characters surrounded by double
+input1:As described previously, a string is an array of characters;
+input1:a string constant is just such an array of characters, with a null character
+input1:
+input1:literals.
+input1:\verb!"x"! is an array of characters, 2 characters long, consisting of \verb!'x'!
+input1:followed by \verb!'\0'!.
+input1:
+input1:Given what we have seen so far, we can write a simple function that calculates
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int strlen(char s[]) {!\newline
+input1:\verb!    int i, len;!\newline
+input1:\verb!!\newline
+input1:\verb!    len = 0;!\newline
+input1:\verb^    for (i = 0; s[i] != '\0'; i = i + 1) {^\newline
+input1:\verb!        len += 1;!\newline
+input1:\verb!    }!\newline
+input1:\verb!    return len;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:You should convince yourself that this function works correctly if passed
+input1:an empty string (i.e., \verb!""!).
+input1:\index{C@\textbf{C}!string functions!strlen}
+input1:string-manipulation functions, are defined in \verb!<string.h>! and can be
+input1:used if you \verb!#include <string.h>! in your source files.
+input1:
+input1:\subsection{Variable declarations}
+input1:\index{C@\textbf{C}!variables!declarations}
+input1:All variables must be declared before use.
+input1:Each declaration specifies a type, and associates one or more variable
+input1:names with that type; for example:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int first, last, step;!\newline
+input1:\verb!char c, buf[1024];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:A variable may be initialized in its declaration, as in:
+input1:\index{C@\textbf{C}!variables!initialization}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int formatChar = '%';!\newline
+input1:\verb!int bufferSize = MAXBUF + 1;!\newline
+input1:\verb!char keyword[] = "expedite";!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:a character array if you are initializing it with a string literal.
+input1:
+input1:\subsection{Variable scope}
+input1:\index{C@\textbf{C}!variables!scope}
+input1:are referred to as \emph{external} variables.
+input1:\index{C@\textbf{C}!variables!scope!external}
+input1:External variables can be accessed by \emph{any} code in any function in any source
+input1:variable.
+input1:If an external variable is not explicitly initialized, it is initialized to zero
+input1:by default.
+input1:
+input1:\verb!{!) are referred to as \emph{automatic} variables.
+input1:\index{C@\textbf{C}!!variables!scope!automatic}
+input1:value.
+input1:
+input1:\index{C@\textbf{C}!variables!const}
+input1:indicated that its value will not change, as in:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!const char errmsg[] = "processing error";!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\verb!const! can also be used with arguments to functions to indicate that
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int strlen(const char str[]);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Arithmetic operators}
+input1:\index{C@\textbf{C}!arithmetic operators}
+input1:The binary operators \verb!+!, \verb!-!, \verb!*!, and \verb!/! are defined for
+input1:defined for integer types.
+input1:that division.
+input1:Or more succinctly, \verb!y * (x / y) + (x % y)! is identical to \verb!x!.
+input1:
+input1:\subsection{Relational and logical operators}
+input1:\index{C@\textbf{C}!relational operators}
+input1:\index{C@\textbf{C}!logical operators}
+input1:C does not possess a Boolean type.
+input1:C interprets an integer value of 0 as false, and any integer value that is
+input1:\emph{not} 0 as true.
+input1:result is true, 0 when false.
+input1:
+input1:The following comparison operators, when used with numeric types, generate boolean values:
+input1:\begin{center}
+input1:\begin{tabular}{|l|l|}
+input1:\hline
+input1:\texttt{x \textless~y} & x is strictly less than y\\
+input1:\texttt{x \textless{=} y} & x is less than or equal to y\\
+input1:\texttt{x \textgreater~y} & x is strictly greater than y\\
+input1:\texttt{x \textgreater{=} y} & x is greater than or equal to y\\
+input1:\texttt{x == y} & x is equal to y\\
+input1:\texttt{x != y} & x is not equal to y\\
+input1:\hline
+input1:\end{tabular}
+input1:\end{center}
+input1:
+input1:\begin{center}
+input1:\begin{tabular}{|c|l|p{6cm}|}
+input1:\hline
+input1:\hline
+input1:\end{tabular}
+input1:\end{center}
+input1:
+input1:\subsection{Type conversions}
+input1:\label{typeconversions}
+input1:\index{C@\textbf{C}!type conversions}
+input1:common type according to a small number of rules.
+input1:operand into a ``wider'' one without losing information,
+input1:such as converting an integer to floating point in an expression like
+input1:\verb!f + i!.
+input1:
+input1:Expressions that do not make sense, like using a floating point value as an
+input1:index into an array, are illegal, and will generate compiler errors.
+input1:Expressions that might lose information, such as assigning a wider integer type
+input1:to a narrower one, are \emph{not} illegal, but will generate a warning from
+input1:
+input1:Of particular importance is to note that a \verb!char! is just a small integer,
+input1:so, as unusual as it may seem, \verb!char! variables and constants may be
+input1:freely used in arithmetic expressions.
+input1:One must exercise caution, though, as many such uses make assumptions about
+input1:lower and upper case letters.
+input1:It is much safer to rely upon functions in \verb!<ctype.h>! for performing
+input1:such manipulations: \verb!isalnum()!, \verb!isalpha()!, \verb!iscntrl()!,
+input1:\verb!isdigit()!, \verb!isgraph()!, \verb!islower()!, \verb!isprint()!,
+input1:\verb!ispunct()!, \verb!isspace()!, \verb!isupper()!, \verb!isxdigit()!,
+input1:\verb!tolower()!, and \verb!toupper()!.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!else!\newline
+input1:\verb!    convert char and short to int!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Floating point to integer conversions cause truncation of any fractional part.
+input1:
+input1:\verb!(!\textit{type-name}\verb!) !\textit{expression}.
+input1:The result of \textit{expression} is converted to \textit{type-name} using
+input1:For example, given an integer \verb!N!, we take its square root
+input1:by invoking \verb!sqrt((double)N)!.
+input1:\verb!double! before invoking \verb!sqrt()!.
+input1:not altered.
+input1:
+input1:\subsection{Increment and decrement operators}
+input1:\index{C@\textbf{C}!variables!increment operator}
+input1:\index{C@\textbf{C}!variables!decrement operator}
+input1:is special syntax for it.
+input1:\begin{center}
+input1:\begin{tabular}{|l|l|}
+input1:\hline
+input1:\texttt{++x} & adds \texttt{1} to \texttt{x} before returning its value\\
+input1:\texttt{x++} & adds \texttt{1} to \texttt{x} after returning its value\\
+input1:\texttt{\textminus\textminus{x}} & subtracts \texttt{1} from \texttt{x} before returning its value\\
+input1:\texttt{x\textminus\textminus} & subtracts \texttt{1} from \texttt{x} after returning its value\\
+input1:\hline
+input1:\end{tabular}
+input1:\end{center}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int x, y, n = 5;!\newline
+input1:\verb!!\newline
+input1:\verb!x = n++;!\newline
+input1:\verb!y = ++n!\newline
+input1:\verb!printf("%d %d %d\n", n, x, y);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:What do you think will be printed out?
+input1:
+input1:\verb!n! starts out as \verb!5!.
+input1:increment \verb!n!; this leaves \verb!x! with a value of \verb!5!, and \verb!n!
+input1:with a value of \verb!6!.
+input1:to \verb!y!; this leaves \verb!n! with a value of \verb!7!, and \verb!y! with a
+input1:value of \verb!7!.
+input1:\index{C@\textbf{C}!stdio!printf()}
+input1:output:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!7 5 7!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Postfix autoincrement (\verb!x++!) is often used when assembling strings in a
+input1:character array, as in:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!if (c == '\n')!\newline
+input1:\verb!    buf[i++] = c;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:It is also used with pointers, which will be discussed later in this chapter.
+input1:
+input1:\subsection{Assignments and assignment operators}
+input1:\index{C@\textbf{C}!variables!assignments}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!variable = expression;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:The entire assignment statement is also an expression, and returns a value -
+input1:examples of efficient and elegant C source:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!var1 = var2 = expression;!\newline
+input1:\verb^if ((status = fetch(...)) != EOF) ...^\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:several variables in a single line; this statement is processed right to left -
+input1:i.e., \verb!expression! is evaluated and assigned to \verb!var2!. The value of
+input1:\verb!var1!.
+input1:statement.
+input1:
+input1:\index{C@\textbf{C}!variables!assignment operators}
+input1:form \verb!variable op= expression!; this is equivalent to \verb!variable = (variable) op (expression)! except that \verb!variable! is only evaluated once.
+input1:The operators \verb!+!, \verb!-!, \verb!*!, \verb!/!, and \verb!%! all have
+input1:with bit manipulation, which also have assignment operator forms. Since we are
+input1:in this section.}
+input1:
+input1:For example
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!while ((n += 5) < LIMIT) ...!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Conditional expressions}
+input1:\index{C@\textbf{C}!conditional expressions}
+input1:\index{C@\textbf{C}!ternary operator}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!x = expr!\textsubscript{1}\verb! ? expr!\textsubscript{2}\verb! : expr!\textsubscript{3}\verb!;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:This is equivalent to
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!if (expr!\textsubscript{1}\verb!) {!\newline
+input1:\verb!    x = expr!\textsubscript{2}\verb!;!\newline
+input1:\verb!else!\newline
+input1:\verb!    x = expr!\textsubscript{3}\verb!;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:except that it also returns a value which can be exploited in an
+input1:expression, just like assignment and assignment operators.
+input1:
+input1:\section{Control flow}
+input1:\index{C@\textbf{C}!control flow}
+input1:\subsection{Statements and blocks}
+input1:\index{C@\textbf{C}!statement}
+input1:An expression becomes a \emph{statement} when it is followed by a semicolon.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!x = 0;!\newline
+input1:\verb!i++;!\newline
+input1:\verb!printf(...);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\index{C@\textbf{C}!compound statement}
+input1:\index{C@\textbf{C}!block}
+input1:into a \emph{compound statement}, also known as a \emph{block}.
+input1:A block is syntactically equivalent to a single statement.
+input1:
+input1:\subsection{Conditional execution, \texttt{if-else}}
+input1:\index{C@\textbf{C}!control flow!if-else}
+input1:
+input1:The syntax for \verb!if-else! is
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!if (expression)!\newline
+input1:\verb!    statement!\textsubscript{1}\newline
+input1:\verb!else!\newline
+input1:\verb!    statement!\textsubscript{2}\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\verb!expression! is evaluated; if it is true (i.e., has a non-zero value),
+input1:\verb!statement!\textsubscript{1} is executed; if false,
+input1:\verb!statement!\textsubscript{2} is executed.
+input1:
+input1:is omitted from a nested sequence of \verb!if!'s.
+input1:previous \verb!else!-less \verb!if!.
+input1:
+input1:In Python, you were also exposed to \verb!elif! to perform multi-way decisions.
+input1:In C, this is done as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!if (expression!\textsubscript{1}\verb!)!\newline
+input1:\verb!    statement!\textsubscript{1}\newline
+input1:\verb!else if (expression!\textsubscript{2}\verb!)!\newline
+input1:\verb!    statement!\textsubscript{2}\newline
+input1:\verb!else if (expression!\textsubscript{3}\verb!)!\newline
+input1:\verb!    statement!\textsubscript{3}\newline
+input1:\verb!. . .!\newline
+input1:\verb!else!\newline
+input1:\verb!    statement!\textsubscript{N}\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:chain is terminated.
+input1:
+input1:\index{C@\textbf{C}!control flow!while}
+input1:\index{C@\textbf{C}!control flow!for}
+input1:The safest way to loop through code until a terminating conditions is reached
+input1:Python enables this through its \verb!while! and \verb!for! statements.
+input1:C provides a \verb!while! statement that is very similar to that in Python; C's
+input1:\begin{wrapfigure}{R}{0.25\textwidth}
+input1:\centering
+input1:\includegraphics[scale=0.4]{c/WhileBreakContinue}
+input1:\end{wrapfigure}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!while (expression)!\newline
+input1:\verb!    statement!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\verb!expression! is evaluated; if it is non-zero, \verb!statement! is executed
+input1:and \verb!expression! is re-evaluated.
+input1:This cycle continues until \verb!expression! is zero, at which point execution
+input1:resumes \emph{after} \verb!statement!.
+input1:C provides a \verb!break! statement that enables an early exit from a \verb!while!
+input1:\index{C@\textbf{C}!control flow!break}
+input1:loop.\footnote{\texttt{break} can also be used to achieve an early exit from
+input1:\texttt{for} and \texttt{switch} statements, as well.}
+input1:The \verb!break! statement in a \verb!while! loop causes execution to resume after
+input1:\verb!statement!.
+input1:\index{C@\textbf{C}!control flow!continue}
+input1:iteration in a \texttt{for} statement, as well.}
+input1:\begin{wrapfigure}{R}{0.25\textwidth}
+input1:\centering
+input1:\includegraphics[scale=0.4]{c/ForBreakContinue}
+input1:\end{wrapfigure}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!for (expr!\textsubscript{1}\verb!; expr!\textsubscript{2}\verb!; expr!\textsubscript{3}\verb!)!\newline
+input1:\verb!    statement!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:This is equivalent to:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!expr!\textsubscript{1}\verb!;!\newline
+input1:\verb!while (expr!\textsubscript{2}\verb!) {!\newline
+input1:\verb!    statement!\newline
+input1:\verb!    expr!\textsubscript{3}\verb!;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:in a \verb!for! loop, a \verb!continue! causes \verb!expr!\textsubscript{3} to be
+input1:
+input1:While it is possible to put any legal C statements into \verb!expr!\textsubscript{1} and
+input1:\verb!expr!\textsubscript{3}, it is bad style to force unrelated computations
+input1:
+input1:or update fields of a \verb!for! loop?
+input1:C provides a \emph{comma} operator that enables one to specify multiple
+input1:\index{C@\textbf{C}!control flow!comma operator}
+input1:
+input1:obscure code.} but is most often
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!for (i=0, j=0; i <= M; i++, j++)!\newline
+input1:\verb!    statement /* that refers to i and j */!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Multi-way decision based upon constants}
+input1:\index{C@\textbf{C}!control flow!switch}
+input1:nested \verb!if-else! statements is not particularly efficient if one
+input1:tests.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!switch (expression) {!\newline
+input1:\verb!    case const-expr!\textsubscript{1}\verb!: statements!\textsubscript{1}\newline
+input1:\verb!    case const-expr!\textsubscript{2}\verb!: statements!\textsubscript{2}\newline
+input1:\verb!    case const-expr!\textsubscript{3}\verb!: statements!\textsubscript{3}\newline
+input1:\verb!    . . .!\newline
+input1:\verb!    case default: statements!\textsubscript{N}\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:
+input1:\emph{never} what one wants to happen, it is \emph{critical} that you always
+input1:with each \verb!case! label.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!switch (expression) {!\newline
+input1:\verb!    case const-expr!\textsubscript{1}\verb!: statements!\textsubscript{1}\verb!; !\texttt{\textbf{break};}\newline
+input1:\verb!    case const-expr!\textsubscript{2}\verb!: statements!\textsubscript{2}\verb!; !\texttt{\textbf{break};}\newline
+input1:\verb!    case const-expr!\textsubscript{3}\verb!: statements!\textsubscript{3}\verb!; !\texttt{\textbf{break};}\newline
+input1:\verb!    . . .!\newline
+input1:\verb!    case default: statements!\textsubscript{N}\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Labels and goto as a last resort}
+input1:\index{C@\textbf{C}!control flow!labels}
+input1:\index{C@\textbf{C}!control flow!goto}
+input1:Most assembly languages, and some earlier ``high-level'' languages, support
+input1:inserting labels in your source code and being able to force execution to
+input1:continue at one of those labels.
+input1:
+input1:Unfortunately, sometimes one needs to abandon processing in some deeply-nested
+input1:control structure.
+input1:\verb!switch!, but cannot help us if we are several levels deep.
+input1:Thus, labels and goto are most commonly used in such situations, as depicted
+input1:below.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!for (. . .)!\newline
+input1:\verb!    for (. . .) {!\newline
+input1:\verb!        . . .!\newline
+input1:\verb!        if (disaster)!\newline
+input1:\verb!            goto error;!\newline
+input1:\verb!    }!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:
+input1:\section{Functions and program structure}
+input1:\index{C@\textbf{C}!functions}
+input1:A C program is composed of functions and global data.
+input1:\index{C@\textbf{C}!functions!main()}
+input1:
+input1:\subsection{Functions}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\index{C@\textbf{C}!functions!generic signature}
+input1:\verb!return-type function-name(argument declarations) {!\newline
+input1:\verb!    declarations and statements!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!dummy() {}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:This function does nothing and returns nothing.
+input1:Code that is dependent upon this default behavior is very dangerous; good software
+input1:engineering practice dictates that one must \emph{always} use
+input1:\index{C@\textbf{C}!functions!prototypes}
+input1:
+input1:Communication between functions is via arguments to and return values from a function; functions can
+input1:also communicate through external global data variables.
+input1:\index{C@\textbf{C}!functions!order}
+input1:multiple files.
+input1:A single function must be completely defined in a single source file - i.e., it
+input1:\emph{cannot} be split over two or more files.
+input1:\index{C@\textbf{C}!functions!pre-declaration}
+input1:
+input1:\index{C@\textbf{C}!functions!returning function value}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!return expression;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:
+input1:It is not illegal, but most likely a sign of trouble, if a function returns a value in one place but not
+input1:garbage.
+input1:
+input1:\subsection{An example program}
+input1:Let's construct a program to print each line of standard input that contains a particular ``pattern'' or
+input1:The main program falls neatly into three pieces:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\index{C@\textbf{C}!stdio!printf()}
+input1:\index{C@\textbf{C}!stdio!fgets()}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!char *fgets(char buf[], int size, FILE *stream);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:a stream of characters from an open file (\verb!stream!).
+input1:function value and does nothing to \verb!buf!.
+input1:line of input is copied.
+input1:
+input1:Thus, our \verb!main()! is starting to look as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!!\newline
+input1:\verb!#define BUFSIZE 1024!\newline
+input1:\verb!!\newline
+input1:\verb!#define UNUSED __attribute__((unused))!\newline
+input1:\verb!!\newline
+input1:\verb!int main(UNUSED int argc, UNUSED char *argv[]) {!\newline
+input1:\verb!    char buf[BUFSIZE];!\newline
+input1:\verb!!\newline
+input1:\verb;    while (fgets(buf, BUFSIZE, stdin) != NULL) {;\newline
+input1:\verb!            printf("%s", buf);!\newline
+input1:\verb!    }!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:you will have a filter that simply copies its standard input to its standard output.
+input1:
+input1:\verb!gcc! has provided a set of extensions for specifying attributes in your source code; one of
+input1:those attributes enables you to indicate that a particular parameter or variable is unused \emph{on purpose}.
+input1:warning, since you have proactively indicated that it will not be used.
+input1:appropriate.
+input1:
+input1:We could write a function to do this, and we will show this later.
+input1:
+input1:\index{C@\textbf{C}!string functions!strstr}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!char *strstr(const char *haystack, const char *needle);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\verb!strstr()!, which indicates that it returns \verb!NULL! if \verb!needle! is \emph{not} contained in
+input1:it is.
+input1:
+input1:Thus, our completed program (named \verb!find.c!) looks as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!#include <string.h>!\newline
+input1:\verb!!\newline
+input1:\verb!#define BUFSIZE 1024!\newline
+input1:\verb!!\newline
+input1:\verb!#define UNUSED __attribute__((unused))!\newline
+input1:\verb!!\newline
+input1:\verb!int main(UNUSED int argc, UNUSED char *argv[]) {!\newline
+input1:\verb!    char buf[BUFSIZE];!\newline
+input1:\verb!    char pattern[] = "ould";   /* pattern to search for */!\newline
+input1:\verb!!\newline
+input1:\verb^    while (fgets(buf, BUFSIZE, stdin) != NULL) {^\newline
+input1:\verb^        if (strstr(buf, pattern) != NULL)^\newline
+input1:\verb!            printf("%s", buf);!\newline
+input1:\verb!    }!\newline
+input1:\verb!    return 0;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:A program that has a static pattern to search for is not particularly useful, as we would have to
+input1:
+input1:\subsection{External variables}
+input1:\index{C@\textbf{C}!variables!external}
+input1:External variables are defined outside of any function, and are thus potentially accessible by
+input1:many functions.
+input1:functions.
+input1:
+input1:name is declared.
+input1:
+input1:If an external variable is to be referenced before it is defined, or it is defined in a different source
+input1:\index{C@\textbf{C}!variables!external!extern declaration}
+input1:
+input1:\index{C@\textbf{C}!variables!external!extern definition}
+input1:\emph{definition}.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int sp;!\newline
+input1:\verb!double val[MAXVAL];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!extern int sp;!\newline
+input1:\verb!extern double val[];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:initialization is restricted to that single definition.
+input1:
+input1:\subsection{Static variables}
+input1:\index{C@\textbf{C}!variables!static}
+input1:\index{C@\textbf{C}!variables!external!static}
+input1:External variables enable two types of access to named storage: 1) by functions within a source file, and
+input1:Often we require external storage so that functions within a file can share, but wish to hide that
+input1:The keyword \verb!static!, if prefixed to external variable definitions, achieves this
+input1:
+input1:The following example declarations
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!static int sp;!\newline
+input1:\verb!static double val[MAXVAL];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:External static declarations can be used for functions, as well.
+input1:\index{C@\textbf{C}!functions!static}
+input1:We will exploit \verb!static! functions in later chapters when defining abstract data type methods.
+input1:
+input1:Finally, \verb!static! can also be applied to variables declared within functions.
+input1:\index{C@\textbf{C}!variables!automatic!static}
+input1:variable:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int someFunction(void) {!\newline
+input1:\verb!    static int initialized = 0;!\newline
+input1:\verb!!\newline
+input1:\verb^    if (! initialized) {^\newline
+input1:\verb!        initialized++;!\newline
+input1:\verb!        /* perform required initialization */!\newline
+input1:\verb!    }!\newline
+input1:\verb!    /* logic of someFunction() */!\newline
+input1:\verb!    return /* appropriate value */!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Header files}
+input1:\index{C@\textbf{C}!header files}
+input1:We use header files (ending in \verb!.h!) to specify types, symbolic constants and function prototypes.
+input1:We use source files (ending in \verb!.c!) to define (and initialize) external variables and define
+input1:\index{C@\textbf{C}!source files}
+input1:functions.
+input1:\index{C@\textbf{C}!stdio!printf()}
+input1:\index{C@\textbf{C}!stdio!fgets()}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int isSubString(const char *needle, const char *haystack);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:where \verb!isSubString()! returns 1(true) if \verb!needle! is contained in \verb!haystack!, and
+input1:0 (false) if not.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\textbf{issubstring.h}\newline
+input1:\verb!int isSubString(const char *needle, const char *haystack);!\newline
+input1:\verb!!\newline
+input1:\textbf{issubstring.c}\newline
+input1:\verb!#include "issubstring.h"!\newline
+input1:\verb!#include <string.h>!\newline
+input1:\verb!!\newline
+input1:\verb!int isSubString(const char *needle, const char *haystack) {!\newline
+input1:\verb^    return strstr(haystack, needle) != NULL;^\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:angle brackets (\verb!<>!) - files included using angle brackets are searched for in standard directories
+input1:
+input1:
+input1:Our main program, \verb!find.c!, must now look as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include "issubstring.h"!\newline
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!!\newline
+input1:\verb!#define BUFSIZE 1024!\newline
+input1:\verb!!\newline
+input1:\verb!#define UNUSED __attribute__((unused))!\newline
+input1:\verb!!\newline
+input1:\verb!int main(UNUSED int argc, UNUSED char *argv[]) {!\newline
+input1:\verb!    char buf[BUFSIZE];!\newline
+input1:\verb!    char pattern[] = "ould";   /* pattern to search for */!\newline
+input1:\verb!!\newline
+input1:\verb^    while (fgets(buf, BUFSIZE, stdin) != NULL) {^\newline
+input1:\verb!        if (isSubString(pattern, buf))!\newline
+input1:\verb!            printf("%s", buf);!\newline
+input1:\verb!    }!\newline
+input1:\verb!    return 0;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:We no longer need to include \verb!<string.h>! here, since this code does not use \verb!strstr()!.
+input1:It does need to include \verb!"issubstring.h"!, since we are now calling that function.
+input1:
+input1:All that is left to support ease of building and debugging is to create a Makefile for our
+input1:pattern matching program.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!CFLAGS=-W -Wall!\newline
+input1:\verb!OBJECTS=find.o issubstring.o!\newline
+input1:\verb!!\newline
+input1:\verb!find: $(OBJECTS)!\newline
+input1:\verb!        gcc -o find $(OBJECTS)!\newline
+input1:\verb!!\newline
+input1:\verb!find.o: find.c issubstring.h!\newline
+input1:\verb!issubstring.o: issubstring.c issubstring.h!\newline
+input1:\verb!!\newline
+input1:\verb!clean:!\newline
+input1:\verb!        rm -f $(OBJECTS) find!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:You might ask ``Why indicate a dependency for \verb!find.o! upon \verb!issubstring.h! but not for
+input1:\verb!stdio.h!?''.
+input1:The standard include files are very stable, and do not change.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include "issubstring.h"!\newline
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!!\newline
+input1:\verb!#define BUFSIZE 1024!\newline
+input1:\verb!!\newline
+input1:\verb!int main(int argc, char *argv[]) {!\newline
+input1:\verb!    char buf[BUFSIZE];!\newline
+input1:\verb!    char *pattern;   /* pattern to search for, taken from argv[1] */!\newline
+input1:\verb!!\newline
+input1:\verb^    if (argc != 2) {^\newline
+input1:\verb!        printf("usage: %s pattern\n", argv[0]);!\newline
+input1:\verb!        return 1;!\newline
+input1:\verb!    }!\newline
+input1:\verb!    pattern = argv[1];!\newline
+input1:\verb^    while (fgets(buf, BUFSIZE, stdin) != NULL) {^\newline
+input1:\verb!        if (isSubString(pattern, buf))!\newline
+input1:\verb!            printf("%s", buf);!\newline
+input1:\verb!    }!\newline
+input1:\verb!    return 0;!\newline!
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Block structure}
+input1:variables can be defined in a block-structured fashion within a function.
+input1:Variables declared in this way hide any identically named variables in outer blocks, and remain in
+input1:
+input1:Good software engineering practice recommends that you avoid variable names that conceal names in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!!\newline
+input1:\verb!int number = 42;!\newline
+input1:\verb!!\newline
+input1:\verb!int main(int argc, char *argv[]) {!\newline
+input1:\verb!    int number = 10;!\newline
+input1:\verb!    int i, j;!\newline
+input1:\verb!!\newline
+input1:\verb!    i = 5;!\newline
+input1:\verb!    j = 23; {!\newline
+input1:\verb!        int number;!\newline
+input1:\verb!!\newline
+input1:\verb!        for (number = i; number < j; number++)!\newline
+input1:\verb!            ;!\newline
+input1:\verb!    }!\newline
+input1:\verb!    printf("%d\n", number);!\newline
+input1:\verb!    return 0;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Initialization}
+input1:\index{C@\textbf{C}!variables!initialization}
+input1:to zero.
+input1:should be assumed to contain garbage.
+input1:expression.
+input1:entered.
+input1:
+input1:An array may be initialized by following its declaration with a list of initializers enclosed in braces
+input1:and separated by commas, as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int days[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:missing elements will be zero for external, static, and automatic variables.
+input1:
+input1:There are two common ways to do this:
+input1:\begin{itemize}[noitemsep]
+input1:\index{C@\textbf{C}!sizeof compile-time operator}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int days[] = { 31,28,31,30,31,30,31,31,30,31,30,31 };!\newline
+input1:\verb!#define DAYS_LENGTH (sizeof days / sizeof(int))!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\end{itemize}
+input1:
+input1:\subsection{The C preprocessor}
+input1:Every C compiler consists of multiple passes.
+input1:\index{C@\textbf{C}!preprocessor}
+input1:The commands that are understood are: \verb!#include!, \verb!#define!, \verb!#if!, and \verb!#ifdef!.
+input1:
+input1:\subsubsection{File inclusion}
+input1:\index{C@\textbf{C}!preprocessor!\#include}
+input1:We have already encountered this earlier.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include "filename"!\newline
+input1:\verb!#include <filename>!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:source file is found.
+input1:are searched for \verb!filename!.
+input1:An included file may itself contain \verb!#include! lines.
+input1:
+input1:File inclusion has very different semantics from \verb!import! statements in Python.
+input1:
+input1:These include common \verb!#define! statements and extern declarations, or
+input1:access to function prototype declarations, such as \verb!<stdio.h>!.
+input1:be recompiled.
+input1:
+input1:\subsubsection{Macro substitution}
+input1:\index{C@\textbf{C}!preprocessor!\#define}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#define name replacement-text!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:to be continued.
+input1:
+input1:A macro definition may use previous definitions.
+input1:Substitutions do \emph{not} take place within quoted strings - i.e., if \verb!YES! is a defined macro
+input1:
+input1:often used:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#define forever for(;;)  /* infinite loop */!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Macros can be defined with arguments, as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#define max(A,B) (((A) > (B)) ? (A) : (B))!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:When invoked in your code, although it looks like a function call, \verb!max()! expands into
+input1:in-line code.
+input1:Therefore,
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!x = max(p+q, r+s);!\newline
+input1:\newline
+input1:becomes\newline
+input1:\newline
+input1:\verb!x = (((p+q) > (r+s)) ? (p+q) : (r+s));!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:incremented twice.
+input1:
+input1:For example, if we define
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#define square(x) x * x!\newline
+input1:\newline
+input1:what happens if we invoke\newline
+input1:\newline
+input1:\verb!square(z+1)!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{exercise}
+input1:\small
+input1:~\newline
+input1:\newline$\Box$
+input1:\normalsize
+input1:\end{exercise}
+input1:
+input1:\subsubsection{Conditional evaluation}
+input1:There are a number of statements that are used to control preprocessing,
+input1:\index{C@\textbf{C}!preprocessor!\#if}
+input1:of conditions evaluated during compilation.
+input1:include \verb!sizeof! or casts.
+input1:\index{C@\textbf{C}!preprocessor!\#endif}
+input1:\index{C@\textbf{C}!preprocessor!\#elif}
+input1:\index{C@\textbf{C}!preprocessor!\#else}
+input1:\begin{itemize}[noitemsep]
+input1:until an \verb!#endif/#elif/#else! are processed; if zero, repeat this step;
+input1:\end{itemize}
+input1:The expression \verb!defined(name)! is \verb!1/0! if \verb!name! is defined/not.
+input1:\index{C@\textbf{C}!preprocessor!defined()}
+input1:
+input1:\index{C@\textbf{C}!header files!multiple inclusion}
+input1:lead to all kinds of difficulties.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb^#if !defined(_HDR_H_)^\newline
+input1:\verb!#define _HDR_H_!\newline
+input1:\newline
+input1:\verb!/* actual contents of hdr.h go here */!\newline
+input1:\newline
+input1:\verb!#endif /* _HDR_H_ */!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:to worry about multiple inclusions of some common header files.
+input1:files, as well.
+input1:
+input1:upper case is a common approach used by C and C++ programmers.
+input1:
+input1:The \verb!#elif! construct is to enable a switch-like choice of lines to process, as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#if SYSTEM == OSX!\newline
+input1:\verb!    #define HDR "osx.h"!\newline
+input1:\verb!#elif SYSTEM == LINUX!\newline
+input1:\verb!    #define HDR "linux.h"!\newline
+input1:\verb!#elif SYSTEM == WINDOWS!\newline
+input1:\verb!    #define HDR "windows.h"!\newline
+input1:\verb!#else!\newline
+input1:\verb!    #define HDR "default.h"!\newline
+input1:\verb!#endif /* SYSTEM */!\newline
+input1:\verb!#include HDR!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Finally, \verb!#ifdef name! is a synonym for \verb!#if defined(name)!, and
+input1:\index{C@\textbf{C}!preprocessor!\#ifdef}
+input1:\index{C@\textbf{C}!preprocessor!\#ifndef}
+input1:\verb!#ifndef name! is a synonym for \verb^#if !defined(name)^.
+input1:
+input1:\section{Pointers and arrays}
+input1:\index{C@\textbf{C}!data types!pointers}
+input1:What's so special about C?
+input1:
+input1:Pointers to data are integrally related to arrays.
+input1:Additionally, C supports pointers to functions, a feature that we will exploit when we introduce
+input1:abstract data types.
+input1:
+input1:\subsection{Pointers to data}
+input1:\begingroup
+input1:\setlength{\intextsep}{0pt}
+input1:\setlength{\columnsep}{15pt}
+input1:\begin{wrapfigure}{R}{0.25\textwidth}
+input1:\centering
+input1:\includegraphics[scale=0.5]{c/PointerGraph}
+input1:\end{wrapfigure}
+input1:A typical computer has an array of consecutively
+input1:numbered (or addressed) memory cells that can be
+input1:manipulated individually or in contiguous groups;
+input1:\verb!N! cells, numbered \verb!0 .. N-1!.
+input1:
+input1:Now suppose that we have a \verb!char! variable named \verb!c!, and that it is assigned to address
+input1:
+input1:\index{C@\textbf{C}!data types!pointers!assignment}
+input1:After executing such a statement, \verb!p! is said to ``point to'' \verb!c!.
+input1:\par
+input1:\endgroup
+input1:\verb!&! can only be applied to variables and array elements; it cannot be applied to expressions or
+input1:constants.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int x = 1, y = 2, z[10];!\newline
+input1:\verb!int *p, *q;        /* p and q are pointers to an int */!\newline
+input1:\verb!!\newline
+input1:\verb!p = &x;            /* point now points to x */!\newline
+input1:\verb!y = *p;            /* y is now 1 */!\newline
+input1:\verb!*p = 0;            /* x is now 0 */!\newline
+input1:\verb!q = &z[0];         /* q now points to z[0] */!\newline
+input1:\verb!p = q;             /* p now points to z[0] */!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\index{C@\textbf{C}!data types!pointers!declaration}
+input1:must be dereferenced to yield an \verb!int! - i.e., \verb!p! is a pointer to an \verb!int!.
+input1:\index{C@\textbf{C}!data types!pointers!dereference}
+input1:
+input1:Pointers are constrained to point to a particular type of object - in this case, \verb!p! is a pointer
+input1:to an \verb!int!.
+input1:
+input1:\subsection{Call by value and pointers}
+input1:
+input1:Suppose we need a function to swap two values as part of an algorithm. A naive approach would be as
+input1:follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb;void swap(int x, int y) {   /* Will not work! */;\newline
+input1:\verb!    int temp;!\newline
+input1:\verb!!\newline
+input1:\verb!    temp = x;!\newline
+input1:\verb!    x = y;!\newline
+input1:\verb!    y = temp;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:If a caller invokes \verb!swap(a, b)!, upon return from \verb!swap()!, \verb!a! and \verb!b! will still
+input1:
+input1:What happens if we modify \verb!swap()! as follows?
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!void swap(int *px, int *py) {   /* swap *px and *py */!\newline
+input1:\verb!    int temp;!\newline
+input1:\verb!!\newline
+input1:\verb!    temp = *px;!\newline
+input1:\verb!    *px = *py;!\newline
+input1:\verb!    *py = temp;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:be swapped.
+input1:
+input1:You saw similar situations in Python when you passed mutable data structures (like lists or dictionaries),
+input1:both.
+input1:\index{C@\textbf{C}!functions!modifying caller's variables}
+input1:as well as return a function value.
+input1:
+input1:\subsection{Pointers and arrays}
+input1:Pointers and arrays are strongly related in C, in that any operation that can be achieved by
+input1:array subscripting can also be done with pointers.
+input1:\index{C@\textbf{C}!data types!pointers!array equivalence}
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int a[10];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:This defines an integer array named \verb!a! of size \verb!10! - i.e., a block of \verb!10! consecutive
+input1:\verb!int! objects in memory named \verb!a[0]!, \verb!a[1]!, ..., \verb!a[9]!.
+input1:
+input1:Now assume that \verb!pa! is a pointer to an integer, declared as
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int *pa;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:The assignment \verb!pa = &a[0];! causes \verb!pa! to point to element zero of \verb!a! - i.e., \verb!pa!
+input1:\verb!x!.
+input1:\verb!i! elements past \verb!pa!; and, \verb!pa - i! points \verb!i! elements before \verb!pa!.
+input1:\begin{center}
+input1:\includegraphics[scale=0.6]{c/PointerArray}
+input1:\end{center}
+input1:
+input1:The meaning of ``add 1 to a pointer'', and by extension, all pointer arithmetic, is that \verb!pa + 1!
+input1:\index{C@\textbf{C}!data types!pointers!arithmetic}
+input1:\verb!i!\textsuperscript{th} object of that type beyond \verb!pa!.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!pa = &a[0];!\newline
+input1:\verb!pa = a;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:There are several ramifications of this strong relationship between pointers and arrays:
+input1:\begin{itemize}[noitemsep]
+input1:\item a reference to \verb!a[i]! can be written as \verb!*(a + i)!;
+input1:\item a reference to \verb!&a[i]! is identical to \verb!a + i!;
+input1:\item \verb!pa[i]! is identical to \verb!*(pa + i)!;
+input1:\item since a pointer is a variable, expressions like \verb!pa = a! and \verb!pa++! are legal;
+input1:\item since an array name is not a variable, expressions like \verb!a = pa! and \verb!a++! are \emph{illegal};
+input1:name parameter is a pointer;
+input1:\item as formal parameters in a function definition, \verb!s[]! and \verb!*s! are equivalent; thus, if
+input1:\end{itemize}
+input1:
+input1:\subsection{Pointer arithmetic}
+input1:
+input1:
+input1:Pointer values can be compared using \verb!==!, \verb^!=^, \verb!>!, \verb!>=!, \verb!<!, and \verb!<=!.
+input1:
+input1:
+input1:Thus, valid pointer arithmetic operations are:
+input1:\begin{itemize}[noitemsep]
+input1:\item adding or subtracting a pointer and an integer;
+input1:\item assigning or comparing to \verb!NULL!.
+input1:\end{itemize}
+input1:
+input1:The following operations on pointers are \emph{invalid}:
+input1:\begin{itemize}[noitemsep]
+input1:\item add, multiply, or divide two pointers;
+input1:\item add a float or double to a pointer;
+input1:\end{itemize}
+input1:
+input1:\subsection{\texttt{void *} pointers and heap memory}
+input1:\subsubsection{\texttt{void *} pointers}
+input1:\index{C@\textbf{C}!data types!pointers!void *}
+input1:As we shall see later in this chapter, pointers to structures act somewhat like object
+input1:references in object-oriented languages.
+input1:Nearly all object-oriented languages, Python included, have a base class \verb!Object! from which all
+input1:C provides a generic pointer, \verb!void *!; any pointer can be cast to \verb!void *! and back again
+input1:without loss of information.
+input1:\verb!void *! is used to construct modules that provide generic capabilities at runtime; we will be
+input1:
+input1:will generate a compiler or a runtime error.
+input1:
+input1:routines defined in \verb!<stdlib.h>!.
+input1:
+input1:\subsubsection{Heap memory}
+input1:\index{C@\textbf{C}!heap memory}
+input1:program starts how much memory a particular data structure will occupy.
+input1:Languages like C (and Python) provide \emph{heap memory} that can be allocated as a data structure
+input1:needs to grow.
+input1:In Python, every time you invoke a constructor (e.g., \verb!list()!, \verb!dict()!, \verb!set()!, or
+input1:This is known as \emph{garbage collection}.
+input1:
+input1:C provides a set of routines for allocating and freeing heap memory
+input1:(in \verb!<stdlib.h>!), but does not track references
+input1:to heap-allocated memory, so does not provide garbage collection.
+input1:Thus, your program must \emph{itself} keep track of references to heap blocks, and free blocks when
+input1:Failure to do so causes \emph{memory leaks} in your program, which must be
+input1:assiduously avoided.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!/*!\newline
+input1:\verb! * malloc: return a pointer to space for an object of size `size' bytes, or!\newline
+input1:\verb! */!\newline
+input1:\verb!void *malloc(size_t size);!\newline
+input1:\verb!!\newline
+input1:\verb!/*!\newline
+input1:\verb! * free: deallocates space pointed to by `ptr'; it does nothing if `ptr' is  NULL.!\newline
+input1:\verb! *       `ptr' must be a pointer to space previously allocated by malloc(), calloc()!\newline
+input1:\verb! *       or realloc().!\newline
+input1:\verb! */!\newline
+input1:\verb!void free(void *ptr);!\newline
+input1:\verb!!\newline
+input1:\verb!/*!\newline
+input1:\verb! * calloc: returns a pointer to space for an array of `nmemb' elements, each!\newline
+input1:\verb! *         The space is initialized to zero bytes.!\newline
+input1:\verb! */!\newline
+input1:\verb!void *calloc(size_t nmemb, size_t size);!\newline
+input1:\verb!!\newline
+input1:\verb!/*!\newline
+input1:\verb! *          initialized; if a new block had to be allocated, a free(ptr) was done!\newline
+input1:\verb! */!\newline
+input1:\verb!void *realloc(void *ptr, size_t size);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:These prototypes use a type \verb!size_t!, which is also defined in \verb!<stdlib.h>!.
+input1:Think of it as an integer.
+input1:
+input1:\index{C@\textbf{C}!sizeof compile-time operator}
+input1:bytes needed for an instance of a type or for a particular variable.
+input1:is returned to you as a \verb!void *!.
+input1:Let's look at an example.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdlib.h>!\newline
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!!\newline
+input1:\verb!int *p;!\newline
+input1:\verb!!\newline
+input1:\verb!p = (int *)malloc(sizeof(int));!\newline
+input1:\verb^if (p != NULL) {^\newline
+input1:\verb!    *p = 42;!\newline
+input1:\verb!} else {!\newline
+input1:\verb!    fprintf(stderr, "Error allocating memory for integer\n");!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:What does this code do?
+input1:We include \verb!<stdlib.h>! so that we can call \verb!malloc()! and refer to \verb!NULL!; we
+input1:also include \verb!<stdio.h>! so that we can call \verb!fprintf()!.
+input1:\index{C@\textbf{C}!stdio!fprintf()}
+input1:an integer.
+input1:\verb!malloc()!) to an \verb!int *!.
+input1: 
+input1:There are two important aspects to this example:
+input1:\begin{itemize}[noitemsep]
+input1:your program needs to take appropriate action;
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int *p = (int *)malloc(sizeof(int));!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:is an integer-specific version of a standard pattern that you will see in code that uses \verb!malloc()!;
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!type *p = (type *)malloc(sizeof(type));!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!type *p = (type *)malloc(N * sizeof(type));!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\end{itemize}
+input1:
+input1:\subsubsection{An example program}
+input1:\label{sec:exampleprogram}
+input1:\index{C@\textbf{C}!string functions!strcpy}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdio.h>!\newline
+input1:\verb!#include <stdlib.h>!\newline
+input1:\verb!#include <string.h>!\newline
+input1:\verb!!\newline
+input1:\verb!#define NLINES 100!\newline
+input1:\verb!#define MAXLINESIZE 1024!\newline
+input1:\verb!!\newline
+input1:\verb!int main(int argc, char *argv[]) {!\newline
+input1:\verb!    char *lines[NLINES];!\newline
+input1:\verb!    char buf[MAXLINESIZE];!\newline
+input1:\verb!    char *p;!\newline
+input1:\verb!    int i;!\newline
+input1:\verb!    int nl = 0;!\newline
+input1:\verb!!\newline
+input1:\verb^    while (nl < NLINES && fgets(buf, MAXLINESIZE, stdin) != NULL) {^\newline
+input1:\verb!        strcpy(p, buf);!\newline
+input1:\verb!        lines[nl++] = p;!\newline
+input1:\verb!    }!\newline
+input1:\verb!    for (i = 0; i < nl; i++)!\newline
+input1:\verb!        printf("%s", lines[i]);!\newline
+input1:\verb!    for (i = 0; i < nl; i++)!\newline
+input1:\verb!        free((void *)lines[i]);!\newline
+input1:\verb!    return 0;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:end of string.
+input1:students make.
+input1:You are encouraged to use \verb!strdup()! for this very common operation,
+input1:\index{C@\textbf{C}!string functions!strdup}
+input1:
+input1:\subsection{Character pointers and functions}
+input1:\index{C@\textbf{C}!strings}
+input1:The most common pointers that you will encounter are pointers to characters.
+input1:
+input1:A string literal is written as: \verb!"This is a string"!.
+input1:
+input1:Note that C does \emph{not} provide any operators for processing an entire string as a unit!
+input1:Arrays of characters are used, and a library of functions, defined in \verb!<string.h>!, enables
+input1:typical string manipulation.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!char amsg[] = "this is a string";!\newline
+input1:\verb!char *pmsg = "this is a string";!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:point to a different string in memory.
+input1:
+input1:\subsection{Pointer arrays - pointers to pointers}
+input1:\index{C@\textbf{C}!data types!pointers!pointers to}
+input1:
+input1:As you may recall, \verb!argv! was declared as \verb!char *argv[]! - what does this mean?
+input1:It means that \verb!argv[0]! is of type \verb!char *!; thus our previous assertion that \verb!argv! is
+input1:
+input1:Let's give it a try:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdio.h>    /* so we can access printf() */!\newline
+input1:\verb!!\newline
+input1:\verb!int main(int argc, char *argv[]) {!\newline
+input1:\verb!    int i;!\newline
+input1:\verb!!\newline
+input1:\verb!    for (i = 0; i < argc; i++) {!\newline
+input1:\verb!        printf("%s%s", (i > 0) ? " " : "", argv[i]);!\newline
+input1:\verb!    }!\newline
+input1:\verb!    printf("\n");!\newline
+input1:\verb!    return 0;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:Let's see if this works.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!$ gcc -W -Wall -o myecho myecho.c!\newline
+input1:\verb!$ echo this is a test!\newline
+input1:\verb!this is a test!\newline
+input1:\verb!$ ./myecho this is a test!\newline
+input1:\verb!./myecho this is a test!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\begin{wrapfigure}{R}{0.35\textwidth}
+input1:\centering
+input1:\includegraphics[scale=0.3]{c/ArgvPicture}
+input1:\end{wrapfigure}
+input1:to \verb!i > 1!.
+input1:
+input1:What exactly is it doing? Let's deconstruct it piece by piece:
+input1:\begin{itemize}[noitemsep]
+input1:are expected, both strings;
+input1:\end{itemize}
+input1:
+input1:\subsubsection{Initializing arrays of pointers}
+input1:Suppose you wanted to define a list of keywords that your program would understand as user commands.
+input1:\verb!left!, \verb!right!, \verb!zoom in!, and \verb!zoom out!.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!char *keywords[] = {!\newline
+input1:\verb!    "up",!\newline
+input1:\verb!    "down",!\newline
+input1:\verb!    "left",!\newline
+input1:\verb!    "right",!\newline
+input1:\verb!    "zoom in",!\newline
+input1:\verb!    "zoom out",!\newline
+input1:\verb!    NULL!\newline
+input1:\verb!};!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:is; \verb!NULL! is an excellent value to use when you have an array of character pointers.
+input1:
+input1:\subsection{Multi-dimensional arrays}
+input1:\index{C@\textbf{C}!data types!multi-dimensional arrays}
+input1:of pointers.
+input1:A multi-dimensional array is declared as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int matrix[100][50];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\verb!i!\textsuperscript{th} row and \verb!j!\textsuperscript{th} column is \verb!matrix[i][j]!.
+input1:
+input1:One can initialize a multi-dimensional array. The following code shows how to do so for a small,
+input1:two-dimensional array.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int matrix[2][4] = {!\newline
+input1:\verb!    { 1, 2, 3, 4 },!\newline
+input1:\verb!    { 5, 6, 7, 8 }!\newline
+input1:\verb!};!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Pointers to functions}
+input1:\index{C@\textbf{C}!data types!pointers!to functions}
+input1:A function itself is not a variable in C, but it is possible to define pointers to functions.
+input1:These can be assigned to pointer variables, placed in arrays, passed as arguments to functions, returned
+input1:by functions, etc.
+input1:Let's look at one use of function pointers.
+input1:
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\textit{process command arguments}\newline
+input1:\textit{read all lines of input}\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:form of sorting.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!void sort(char *lines[], int left, int right, int (*comp)(char *l1, char *l2))!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:What does this prototype tell us?
+input1:\begin{itemize}[noitemsep]
+input1:if \verb!l1 > l2!.
+input1:strings lexicographically.
+input1:\end{itemize}
+input1:
+input1:Suppose we have read \verb!n! lines of text, such that \verb!lines[0] .. lines[n-1]! have valid
+input1:pointers.
+input1:If we wanted to do a lexicographical sort, \verb!main()! would invoke \verb!sort()! as:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <string.h>!\newline
+input1:\verb!!\newline
+input1:\verb!sort(lines, 0, n-1, strcmp);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Now suppose that we want to do a numeric sort.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#include <stdlib.h>!\newline
+input1:\verb!!\newline
+input1:\verb!int numcmp(char *l1, char *l2) {!\newline
+input1:\verb!    int i1 = atoi(l1);!\newline
+input1:\verb!    int i2 = atoi(l2);!\newline
+input1:\verb!    return i1 - i2;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:and \verb!main()! would invoke \verb!sort()! as
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!sort(lines, 0, n-1, numcmp);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsubsection{Care when defining function pointers}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int *f(void *arg);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:this defines a function named \verb!f! that returns a pointer to an integer, while
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int (*pf)(void *arg);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:defines \verb!pf! as a pointer to a function returning an integer.
+input1:
+input1:We will use function pointers when constructing abstract data types in C, so we will have plenty of
+input1:practice.
+input1:
+input1:\section{Structures}
+input1:\index{C@\textbf{C}!structured data types!structs}
+input1:A \emph{structure} is a collection of one or more variables, possibly of different types, grouped
+input1:A structure declaration looks as follows:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct [tag] {!\newline
+input1:\verb!    declarations!\newline
+input1:\verb!};!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:The keyword \verb!struct! introduces a structure declaration, which is a list of variable declarations
+input1:
+input1:A \verb!struct! declaration defines a type; it is equivalent to a Python class definition for which
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct { . . . } x, y, z;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:A \verb!struct! declaration that is \emph{not} followed by a list of variables reserves no storage;
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct point {!\newline
+input1:\verb!    int x;!\newline
+input1:\verb!    int y;!\newline
+input1:\verb!};!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:We can declare an instance of a \verb!point! using
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct point pt;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:We can initialize a structure in its declaration as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct point maxpt = { 320, 200 };!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:We can refer to a member of a particular \verb!struct! as \textit{structure-name.member-name}, as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!printf("(%d,%d)\n", pt.x, pt.y);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:Structures can be nested; for example, if we represent a rectangle as a pair of points denoting
+input1:diagonally opposite corners, we can define
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct rect {!\newline
+input1:\verb!    struct point ll;!\newline
+input1:\verb!    struct point ur;!\newline
+input1:\verb!};!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:If we declare \verb!screen! as
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct rect screen;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\verb!screen!.
+input1:
+input1:\subsection{Legal operations on a structure}
+input1:\begin{itemize}[noitemsep]
+input1:\item Copy it as a unit.
+input1:\item Assign to it as a unit.
+input1:\item Pass it by value as a function argument.
+input1:\item Return it by value as a function return value.
+input1:\item Takes its address using \verb!&!.
+input1:\item Access its members.
+input1:\item A global structure may be initialized using a list of constant member values.
+input1:\item An automatic structure may be initialized using runtime expressions, as with automatic variables.
+input1:\end{itemize}
+input1:
+input1:\subsection{Pointers to structures}
+input1:Passing large structures by value can be very inefficient.
+input1:We can declare pointers to structures just as we do for built-in data types, as in
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct point *pp;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:This indicates that \verb!pp! is a pointer to structures of type \verb!struct point!.
+input1:
+input1:Pointers to structures are so frequently used that an alternative notation is provided to
+input1:access members.
+input1:\verb!(*p).member-name!.
+input1:
+input1:\subsection{Arrays of structures}
+input1:Of course, we can create an array of structures.
+input1:Recall our previous example of an array of keywords.
+input1:Let's modify it slightly and show how it might be used:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct key {!\newline
+input1:\verb!    char *word;!\newline
+input1:\verb!    int value;!\newline
+input1:\verb!};!\newline
+input1:\verb!!\newline
+input1:\verb!struct key keywords[] = {!\newline
+input1:\verb!    { "up", 1},!\newline
+input1:\verb!    { "down", 2},!\newline
+input1:\verb!    { "left", 3},!\newline
+input1:\verb!    { "right", 4},!\newline
+input1:\verb!    { "zoom in", 5},!\newline
+input1:\verb!    { "zoom out", 6},!\newline
+input1:\verb!    { NULL, -1}!\newline
+input1:\verb!};!\newline
+input1:\verb!!\newline
+input1:\verb!int mapKeyword(char *word) {!\newline
+input1:\verb!    int i;!\newline
+input1:\verb!!\newline
+input1:\verb^    for (i = 0; keywords[i].word != NULL; i++)^\newline
+input1:\verb!        if (strcmp(word, keywords[i].word) == 0)!\newline
+input1:\verb!            return keywords[i].value;!\newline
+input1:\verb!    return keywords[i].value;!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\subsection{Self-referential structures}
+input1:that a structure contain one or more members that can \emph{point at} instances of that structure - e.g.,
+input1:linked lists, binary trees.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!struct node {!\newline
+input1:\verb!    struct node *next;!\newline
+input1:\verb!    int value;!\newline
+input1:\verb!};!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:for members of that struct, one can declare pointers to instances of that structure.
+input1:It makes no sense for a structure to contain a member which is an instance of that structure; where
+input1:
+input1:\subsection{Typedefs}
+input1:\index{C@\textbf{C}!data types!typedefs}
+input1:C provides a facility for creating new data type \emph{names}.
+input1:For example,
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!typedef int Length;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\verb!int! can be used; for example:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!Length len, maxlen;!\newline
+input1:\verb!Length *lengths[25];!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:We can use \verb!typedef! to also define synonyms for pointers.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!typedef char *String;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:makes \verb!String! a synonym for \verb!char *!.
+input1:
+input1:The most common use of \verb!typedef! is with respect to structures.
+input1:Let's revisit our point structure and define a new type name for it.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!typedef struct point {!\newline
+input1:\verb!    int x;!\newline
+input1:\verb!    int y;!\newline
+input1:\verb!} Point;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:letter,
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!typedef struct rectangle {!\newline
+input1:\verb!    Point ll;!\newline
+input1:\verb!    Point ur;!\newline
+input1:\verb!} Rectangle;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:Note that \verb!typedef! does \emph{not} create a new type in any sense; it merely adds a synonym for some
+input1:existing type.
+input1:For example, we can declare variables as \verb!struct point p1;! or as \verb!Point p2;!.
+input1:
+input1:It is also possible to create a synonym for function pointers.
+input1:For example:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!typedef int (*PFI)(char *, char *);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!PFI strcmp, numcmp;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:The \verb!sizeof! compile time operator works with \verb!struct!'s just like it does for built-in
+input1:types.
+input1:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!typedef struct node {!\newline
+input1:\verb!    struct node *next;!\newline
+input1:\verb!    int val;!\newline
+input1:\verb!} Node;!\newline
+input1:\verb!!\newline
+input1:\verb!Node *head = NULL;    /* head of singly-linked list */!\newline
+input1:\verb!Node *tail = NULL;    /* tail of singly-linked list */!\newline
+input1:\verb!!\newline
+input1:\verb!int addNode(int value) { /* add node to tail of list */!\newline
+input1:\verb!    Node *n = (Node *)malloc(sizeof(Node));!\newline
+input1:\verb!!\newline
+input1:\verb^    if (n != NULL) {^\newline
+input1:\verb!        n->val = value;!\newline
+input1:\verb!        n->next = NULL;!\newline
+input1:\verb!        if (head == NULL)!\newline
+input1:\verb!            head = n;!\newline
+input1:\verb!        else!\newline
+input1:\verb!            tail->next = n;!\newline
+input1:\verb!        tail = n;!\newline
+input1:\verb!        return 1;    /* return success indication */!\newline
+input1:\verb!    } else {!\newline
+input1:\verb!        return 0;    /* return failure indication */!\newline
+input1:\verb!    }!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:The call to \verb!malloc()! looks just like those we have seen before.
+input1:
+input1:\subsection{Unions}
+input1:\index{C@\textbf{C}!data types!unions}
+input1:A \emph{union} is a variable that may hold (at different times) objects of different types and
+input1:without embedding any machine-dependent information in your program.
+input1:
+input1:string literals; we would like to define a single structure type for a literal in our symbol
+input1:table.
+input1:
+input1:The syntax is similar to that for structures. For this symbol table application:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!union literalValue {!\newline
+input1:\verb!    int ival;!\newline
+input1:\verb!    double dval;!\newline
+input1:\verb!    char *sval;!\newline
+input1:\verb!} u;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:defines a variable named \verb!u! which at different times can hold an integer, a double-precision floating point number,
+input1:or a pointer to a character array.
+input1:The tag identifier, in this case \verb!literalValue!, is optional.
+input1:
+input1:holds.
+input1:One normally creates a structure, called a \emph{discriminated union}, which consists of a member for
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!#define INTVALUE 1!\newline
+input1:\verb!#define DOUBLEVALUE 2!\newline
+input1:\verb!#define STRINGVALUE 3!\newline
+input1:\verb!!\newline
+input1:\verb!struct sTableEntry {!\newline
+input1:\verb!    int uType;!\newline
+input1:\verb!    union literalValue u;!\newline
+input1:\verb!} s;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:place that information in \verb!s! declared above.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!s.uType = INTVALUE;!\newline
+input1:\verb!s.u.ival = 42;!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:current value in \verb!s! on standard output:
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!switch(s.uType) {!\newline
+input1:\verb!    case INTVALUE:    printf("%d\n", s.u.ival); break;!\newline
+input1:\verb!    case DOUBLEVALUE: printf("%f\n", s.u.dval); break;!\newline
+input1:\verb!    case STRINGVALUE: printf("%s\n", s.u.sval); break;!\newline
+input1:\verb!    default:          printf("illegal discriminator value - %d\n", s.uType);!\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:
+input1:As with structures, pointers to unions can be created/used, and \verb!malloc()! can be used to
+input1:
+input1:\section{Input and output}
+input1:\index{C@\textbf{C}!stdio}
+input1:A program comes to life with standard input (\verb!stdin!), standard output (\verb!stdout!), and
+input1:standard error output (\verb!stderr!) predefined.
+input1:By default, \verb!stdin! is associated with your keyboard, and \verb!stdout! and \verb!stderr! are
+input1:associated with your terminal window.
+input1:\subsection{Single character input and output}
+input1:The simplest input mechanism is to read one character at a time from \verb!stdin!, using \verb!getchar()!:
+input1:\index{C@\textbf{C}!stdio!getchar()}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int getchar(void);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:The function
+input1:\index{C@\textbf{C}!stdio!putchar()}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int putchar(int ch);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:We have previously seen that \verb!printf()! also prints its output on \verb!stdout!.
+input1:\index{C@\textbf{C}!stdio!printf()}
+input1:
+input1:\subsection{Formatted input - \texttt{scanf()}}
+input1:\index{C@\textbf{C}!stdio!scanf()}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int scanf(char *format, ...);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:we discussed in section \ref{call by value}.
+input1:If an end of file is detected while scanning, \verb!EOF! is returned.
+input1:
+input1:The \verb!scanf()! format string usually contains conversion specifications, which are used to
+input1:control conversion of input.
+input1:It may contain:
+input1:\begin{itemize}[noitemsep]
+input1:\item blanks or tabs, which are ignored;
+input1:character \verb!*!, an optional number specifying a maximum field width, an optional \verb!h!, \verb!l! or
+input1:\end{itemize}
+input1:\begin{center}
+input1:\small
+input1:\begin{tabular}{|c|p{4cm}|l|p{6cm}|}
+input1:\hline
+input1:\textbf{character} & \textbf{input data} & \textbf{argument} & \textbf{comment} \\
+input1: & & \textbf{type} & \\
+input1:\hline
+input1:\texttt{d} & decimal integer & \texttt{int *} & \texttt{ld} -> \texttt{long *}, \texttt{Ld} -> \texttt{long long *}\\
+input1:\hline
+input1:\hline
+input1:\texttt{o} & octal integer & \texttt{int *} & with or without leading 0; \texttt{lL} modifiers as for decimal integer\\
+input1:\hline
+input1:\texttt{u} & unsigned decimal integer & \texttt{unsigned *} & \texttt{lu} -> \texttt{unsigned long *}, \texttt{Lu} -> \texttt{unsigned long long *}\\
+input1:\hline
+input1:\texttt{x} & hexadecimal integer & \texttt{int *} & with or without leading 0x/0X; \texttt{lL} modifiers as for decimal integer\\
+input1:\hline
+input1:\hline
+input1:\hline
+input1:\texttt{e,f,g} & floating point number & \texttt{float *} &  with optional sign, optional decimal point and optional exponent; \texttt{lf} -> \texttt{double *}, \texttt{Lf} -> \texttt{long double *}\\
+input1:\hline
+input1:\texttt{\%} & literal \% & no assignment & \\
+input1:\hline
+input1:\end{tabular}
+input1:\normalsize
+input1:\end{center}
+input1:
+input1:Here are a couple of examples.
+input1:\begin{itemize}[noitemsep]
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int day, year;!\newline
+input1:\verb!char monthname[20];!\newline
+input1:\verb!!\newline
+input1:\verb^if (scanf("%d %s %d", &day, monthname, &year) != 3) {^\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int day, month, year;!\newline
+input1:\verb!!\newline
+input1:\verb^if (scanf("%d/%d/%d", &month, &day, &year) != 3) {^\newline
+input1:\verb!}!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:\end{itemize}
+input1:
+input1:\subsection{File access}
+input1:and close it.
+input1:\verb!<stdio.h>! defines \verb!stdin!, \verb!stdout!, and \verb!stderr! as instances of a \verb!FILE *!.
+input1:The function prototypes are as follow.
+input1:\index{C@\textbf{C}!stdio!fopen()}
+input1:\index{C@\textbf{C}!stdio!getc()}
+input1:\index{C@\textbf{C}!stdio!putc()}
+input1:\index{C@\textbf{C}!stdio!fclose()}
+input1:\index{C@\textbf{C}!stdio!fscanf()}
+input1:\index{C@\textbf{C}!stdio!fprintf()}
+input1:\index{C@\textbf{C}!stdio!fgets()}
+input1:\index{C@\textbf{C}!stdio!fputs()}
+input1:\index{C@\textbf{C}!stdio!scanf()}
+input1:\index{C@\textbf{C}!stdio!sprintf()}
+input1:\begin{center}
+input1:\small
+input1:\begin{tabular}{|l|p{7cm}|}
+input1:\hline
+input1:\textbf{prototype} & \textbf{comment} \\
+input1:\hline
+input1:\texttt{FILE *fopen(char *name, char *mode);} & most common mode values are \texttt{"r"} to open for reading, \texttt{"w"} to open for writing (overwriting any existing contents), and \texttt{"a"} to open for appending\\
+input1:\hline
+input1:\texttt{int getc(FILE *fp);} & return next character from stream, returning \texttt{EOF} if end of file\\
+input1:\hline
+input1:\texttt{int putc(int c, FILE *fp);} & write character to stream\\
+input1:\hline
+input1:\texttt{int fclose(FILE *fp);} & close stream\\
+input1:\hline
+input1:\texttt{int fscanf(FILE *fp, char *format, ...);} & scan stream according to \texttt{format}\\
+input1:\hline
+input1:\texttt{int fprintf(FILE *fp, char *format, ...);} & output values to stream according to \texttt{format}\\
+input1:\hline
+input1:\texttt{char *fgets(char *buf, int size, FILE *fp);} & fetch next line, including \texttt{'\textbackslash{n'}} into buf, returning \texttt{buf} if successful, \texttt{NULL} if end of file\\
+input1:\hline
+input1:\texttt{int fputs(char *buf, FILE *fp);} & output characters in \texttt{buf} to stream\\
+input1:\hline
+input1:\end{tabular}
+input1:\normalsize
+input1:\end{center}
+input1:
+input1:There are also versions of \verb!scanf()! and \verb!printf()! that work with characters buffers instead of
+input1:\verb!FILE *! streams.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!int sscanf(char *buf, char *format, ...);!\newline
+input1:\verb!int sprintf(char *buf, char *format, ...);!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:buffer.
+input1:\begin{adjustwidth}{1cm}{}
+input1:\small
+input1:\verb!char *p, buf[4096];!\newline
+input1:\verb!!\newline
+input1:\verb!p = buf;!\newline
+input1:\verb!p += sprintf(p, format1, v1, v2, ..., vn);!\newline
+input1:\verb!p += sprintf(p, format2, w1, w2, ..., wm);!\newline
+input1:\verb!p += sprintf(p, format3, x1, x2, ..., xo);!\newline
+input1:\verb!* * *!\newline
+input1:\normalsize
+input1:\end{adjustwidth}
+input1:
+input1:\section{Environment variable \& command argument conventions}
+input1:There are a variety of ways for providing information to programs that you
+input1:invoke in \verb!bash!:
+input1:\begin{itemize}[noitemsep]
+input1:environment variable if it is defined; for example, \verb!make! will obtain
+input1:environment, and will use that value unless \verb!CFLAGS! is explicitly defined
+input1:\item A program can indicate that it will change its functionality if particular
+input1:\begin{itemize}[label=$\star$]
+input1:\verb!-<character>!, where \verb!<character>! is replaced by a single letter;
+input1:an argument. By convention, an argument of this form indicates
+input1:perform its function. For example, \verb!ls! without a flag indicates that
+input1:
+input1:Most commands permit one to specify several short flag characters in a single
+input1:argument - consider \verb!ls -lrt!. The \verb!-l! flag indicates that one should
+input1:ordered by modification time. It is perfectly legal to invoke this as
+input1:\verb!ls -l -r -t!, but users require compounding individual flags so often
+input1:that, by convention, most programs support this approach.
+input1:
+input1:Sometimes an argument of this type requires an additional piece of information;
+input1:For example, \verb!ls -w 50! indicates that \verb!ls! should restrict its output
+input1:command.
+input1:When a short flag requires additional information, it cannot be combined with
+input1:\verb!ls -lw 65!.
+input1:\item "long" flags - 
+input1:such flags are introduced
+input1:by two hyphens, as in \verb!--all! or \verb!ls --width=50!.
+input1:\end{itemize} 
+input1:arguments.
+input1:\end{itemize}
+input1:
+input1:From this discussion, you should infer that Linux \emph{strongly} discourages
+input1:starting a filename with a hyphen (\verb!'-'!).
+input1:
+input1:If you are writing a program in C to be invoked from \verb!bash!, you will need
+input1:specified when your program was invoked.
+input1:\begin{itemize}[noitemsep]
+input1:\item If information (such as \verb!CFLAGS! to \verb!make!) can be provided
+input1:via an environment variable, this information should be obtained before
+input1:processing any command arguments.
+input1:\item While some programs enable one to intersperse flags between filenames,
+input1:\item If an argument starts with \verb!'-'!, and it is \emph{not} a bare
+input1:\verb!'-'!, it is a flag; if it \emph{is} a bare \verb!'-'!, most programs
+input1:consider this to be shorthand for \verb!standard input!.
+input1:will depend upon this distinction.
+input1:\begin{itemize}[label=$\star$,noitemsep]
+input1:\item If it is a short flag, your code should process each character that
+input1:that additional information.
+input1:from an environment variable.
+input1:\end{itemize}
+input1:\end{itemize}
+input1:
+input1:\section{Debugging your programs}
+input1:\index{gdb@\textbf{gdb}}
+input1:\index{commands@\textbf{commands}!gdb}
+input1:The GNU debugger, usually called GDB and named \verb!gdb! as an
+input1:It can be used to debug programs written in a number of programming
+input1:
+input1:and is included in all Linux distributions.
+input1:
+input1:GDB enables you to inspect what a program is doing at certain points of
+input1:execution.
+input1:Errors like \emph{segmentation faults} are often quite easy to find with
+input1:
+input1:Complete documentation for \verb!gdb! may be obtained from
+input1:\url{https://www.gnu.org/software/gdb/documentation/}.
+input1:
+input1:\subsection{Preparing your program for use with \texttt{gdb}}
+input1:Normally, you compile your program as follows:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!$ gcc [flags] -o <executable file> <source files>!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:As advised in Section \ref{sec:CFLAGS}, \verb![flags]! should be
+input1:replaced by \verb!-W -Wall!.
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!$ gcc -W -Wall -g -o prog prog.c!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\index{gdb@\textbf{gdb}!-g flag to gcc}
+input1:
+input1:following command:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!$ gdb prog!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:This command simply starts up \verb!gdb!; section \ref{running under gdb}
+input1:
+input1:\verb!gdb! provides an interactive shell, enabling you to recall history using
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) help !\textit{command}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:\label{running under gdb}
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) run [arguments]!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\index{gdb@\textbf{gdb}!run command}
+input1:If your program requires arguments, obtained through \verb!argv[]! in
+input1:You may also specify I/O redirection (\verb!<file! and/or \verb!>file!)
+input1:
+input1:should run to successful completion.
+input1:program unsuccessfully terminates, and displays some useful information about
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/gdb/testbug.c}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:The following dialog shows execution of this program using \verb!gdb!:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/gdb/testbug.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:As you can see, we encountered a \emph{segmentation fault} in \verb!strlen()!,
+input1:\index{gdb@\textbf{gdb}!segmentation fault}
+input1:You may recall that segmentation faults result from attempting to access
+input1:virtual address \verb!0!.
+input1:Since we define \verb!a! to be \verb!NULL! in \verb!main()!, pass \verb!a! to
+input1:\begin{adjustwidth}{1cm}{}
+input1:\texttt{Segmentation fault (core dumped)}
+input1:\end{adjustwidth}}
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!const char *a = "This is a test string";!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/gdb/test.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:\index{gdb@\textbf{gdb}!quit command}
+input1:If you are attempting to \verb!quit! after a program has terminated
+input1:successfully, \verb!gdb! lets you \verb!quit! directly, as in:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) quit!\newline
+input1:\verb!$!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:requests that you verify your intention to quit, as in:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) quit!\newline
+input1:\verb!A debugging session is active.!\newline
+input1:\verb!!\newline
+input1:\verb!        Inferior 1 [process 26028] will be killed.!\newline
+input1:\verb!!\newline
+input1:\verb!Quit anyway? (y or n) y!\newline
+input1:\verb!$!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:fault that killed your program, it would not have to be interactive.
+input1:your program as it executes.
+input1:
+input1:This command is \verb!bt! (for \textit{backtrace} -- \verb!backtrace! is also
+input1:\index{gdb@\textbf{gdb}!backtrace command}
+input1:\index{gdb@\textbf{gdb}!bt command|see {backtrace}}
+input1:a legal command to obtain this functionality).
+input1:segmentation fault:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) bt!\newline
+input1:\verb!#1  0x00007ffff7ab8201 in strlen () from /usr/lib/libc.so.6!\newline
+input1:\verb!#2  0x000000000040055e in foo_len (s=0x0) at test.c:8!\newline
+input1:\verb!#3  0x0000000000400583 in main (argc=1, argv=0x7fffffff3878) at test.c:14!\newline
+input1:\verb!(gdb)!\newline
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:A particularly useful command to \verb!gdb! is to set a \emph{breakpoint} in
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) break !\textit{location}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\index{gdb@\textbf{gdb}!break command}
+input1:When your program reaches a breakpoint, it will pause and control
+input1:returns to \verb!gdb!. You must set your initial breakpoint[s] before you
+input1:your program has paused and \verb!gdb! has regained control.
+input1:
+input1:Let's set a breakpoint in our faulty program before we execute it
+input1:\footnote{The boilerplate text from \texttt{gdb} will no longer be shown in
+input1:dialogs.}:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/gdb/breakpoint.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:could have specified
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) break test.c:8!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:your program before a bug manifests itself.
+input1:
+input1:\verb!main()!; when \verb!foo_len()! is invoked, control returns to \verb!gdb!.
+input1:\index{gdb@\textbf{gdb}!print command}
+input1:as \verb!$1!, \verb!$2!, ...
+input1:
+input1:function arguments by name, but of any local or global variables by name,
+input1:as well.
+input1:If a variable is a pointer, say `\verb!struct foo *p!;', specifying
+input1:\verb!struct foo! to which \verb!p! currently points to be printed out.
+input1:
+input1:\verb!c! (for \textit{continue} -- \verb!continue! is also a legal command
+input1:\index{gdb@\textbf{gdb}!continue command}
+input1:\index{gdb@\textbf{gdb}!c|see {continue}}
+input1:to obtain this functionality) command.
+input1:
+input1:We can also single step our program after execution is paused.
+input1:\begin{itemize}[noitemsep]
+input1:\index{gdb@\textbf{gdb}!step command}
+input1:\emph{steps} into that function.
+input1:bottom of your problem.
+input1:\index{gdb@\textbf{gdb}!next command}
+input1:command.  
+input1:does \emph{not} step into that function.
+input1:\end{itemize}
+input1:
+input1:Typing \verb!step! or \verb!next! many times is extremely tedious.
+input1:\verb!gdb! interprets a bare carriage return to mean
+input1:Thus, if you need to step/next through many lines of code, repeatedly typing
+input1:
+input1:\index{gdb@\textbf{gdb}!clear command}
+input1:breakpoint.
+input1:In our example above, a `\verb!clear foo_len!' command will remove
+input1:
+input1:Breakpoints permit \verb!gdb! to regain control when a statement is about
+input1:to be executed.
+input1:when a watched variable changes value.
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!(gdb) watch my_var!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\index{gdb@\textbf{gdb}!watch command}
+input1:old and new values are printed.
+input1:program; if you wish to set a watchpoint for a static local variable within
+input1:a function, you need to set a breakpoint for that function, set a watchpoint
+input1:
+input1:Please consult materials at
+input1:\url{https://www.gnu.org/software/gdb/documentation/}
+input1:as you become familiar with \verb!gdb!.
+input1:
+input1:\section{Managing heap memory}
+input1:Valgrind is a program-execution monitoring framework.
+input1:\index{commands@\textbf{commands}!valgrind}
+input1:\emph{memcheck} tool.
+input1:
+input1:\begin{itemize}[noitemsep]
+input1:\item Use of unitialized memory.
+input1:\item Reading/writing to heap memory after it has been freed.
+input1:\item Heap allocated memory leaks.
+input1:\item Mismatched use of malloc vs free.
+input1:\item And many more ...
+input1:\end{itemize}
+input1:
+input1:\subsection{Invoking \texttt{valgrind}}
+input1:memory, we run it with \verb!valgrind! as follows:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!$ valgrind prog arguments!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:to \verb!gcc!.
+input1:\index{valgrind@\textbf{valgrind}!-g flag to gcc}
+input1:consulted at \url{http://valgrind.org/docs/manual/manual.html}.
+input1:
+input1:\subsection{Use of unitialized memory}
+input1:\verb!valgrind! keeps track of each program variable and each block allocated by
+input1:\verb!malloc()! to determine when that variable/block has been written to.
+input1:If your program attempts to read from a variable or heap block before it
+input1:has been initialized, \verb!valgrind! will flag each occurrence appropriately.
+input1:\index{valgrind@\textbf{valgrind}!uninitialized memory check}
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/uninit.c}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/uninit.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:unitialized value was used in main, at line 8 of uninit.c.
+input1:
+input1:\subsection{Reading/writing to heap memory after it has been freed}
+input1:\verb!valgrind! keeps track of each \verb!malloc()! allocated block
+input1:\index{valgrind@\textbf{valgrind}!writes to freed memory}
+input1:Attempts to access an already freed heap block cause
+input1:\verb!valgrind! to flag each occurrence appropriately.
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/alreadyfree.c}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/alreadyfree.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:destination string, thus causing \verb!valgrind! to flag two invalid writes.
+input1:
+input1:
+input1:Such attempts cause
+input1:\verb!valgrind! to flag each occurrence appropriately.
+input1:\index{valgrind@\textbf{valgrind}!access beyond allocation}
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/overrun.c}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/overrun.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\emph{n} items in a heap
+input1:
+input1:\subsection{Heap allocated memory leaks}
+input1:
+input1:\verb!valgrind! keeps track of each \verb!malloc()! allocated block
+input1:allocations cause
+input1:\verb!valgrind! to flag those occurrences.
+input1:\index{valgrind@\textbf{valgrind}!memory leaks}
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/memleak.c}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/memleak.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verb!$ valgrind --leak-check=full prog arguments!
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\index{valgrind@\textbf{valgrind}!-{}-leak-check=full}
+input1:
+input1:\subsection{Mismatched use of malloc vs free}
+input1:
+input1:\verb!valgrind! keeps track of each \verb!malloc()! allocated block
+input1:Attempts to free memory that is not allocated (e.g. has already been
+input1:cause \verb!valgrind! to flag those occurrences.
+input1:\index{valgrind@\textbf{valgrind}!double frees}
+input1:
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/dblfree.c}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/dblfree.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input1:
+input1:\subsection{General advice}
+input1:\verb!valgrind! is an enormously useful tool.
+input1:it is essential that all memory allocation and use errors be eliminated
+input1:from your programs.
+input1:
+input1:The previous sections have demonstrated how different types of memory misuse
+input1:The only time you should be satisfied that you have eliminated all problems
+input1:following dialog.
+input1:\small
+input1:\begin{adjustwidth}{1cm}{}
+input1:\verbatiminput{c/valgrind/allok.log}
+input1:\end{adjustwidth}
+input1:\normalsize
+input2:\chapter{A beginner's guide to Linux}
+input2:\label{ch:beginnersguide}
+input2:\section{Some history}
+input2:\label{sec:somehistory}
+input2:It is likely that you have been using computers since you were very young.
+input2:computers to play a game called ``Lode Runner'' in 1985.
+input2:hour while I was trying to finish up a section of a research paper (using paper and pencil).
+input2:
+input2:\begin{wrapfigure}{L}{0.25\textwidth}
+input2:\centering
+input2:\includegraphics[width=0.8\linewidth]{linux/model33teletype}
+input2:{\small Model 33 teletype}\newline
+input2:~\newline
+input2:~\newline
+input2:~\newline
+input2:\includegraphics[width=0.8\linewidth]{linux/adm3a}
+input2:{\small adm3a terminal}\newline
+input2:\end{wrapfigure}
+input2:The very first interactive computers had a single ``console'' upon which output from programs was displayed
+input2:The input and output speeds on such consoles were maddeningly slow,
+input2:of mass storage for digital information\Smiley{}.
+input2:
+input2:%\begin{wrapfigure}{L}{0.25\textwidth}
+input2:%\centering
+input2:%\includegraphics[width=0.8\linewidth]{adm3a}
+input2:%{\small adm3a terminal}
+input2:%\end{wrapfigure}
+input2:As processors became more powerful and memory became more plentiful, computers were fitted with
+input2:but usually consisted of a cathode ray tube for display and a keyboard;
+input2:consoles.
+input2:particular time-sharing system that was popular in universities and among computer science researchers
+input2:was UNIX\textsuperscript{TM}.
+input2:
+input2:UNIX\textsuperscript{TM} was developed by Ken Thompson and Dennis Ritchie at Bell Laboratories,
+input2:UNIX\textsuperscript{TM} was used internally within Bell Labs until Thompson spent a sabbatical
+input2:year at Berkeley; as with all good
+input2:computer scientists, Thompson took his environment (UNIX\textsuperscript{TM}) with him;
+input2:
+input2:also experiencing
+input2:of UNIX\textsuperscript{TM} was restricted to universities.
+input2:Computer system vendors, such as HP, IBM, and Sun, observed this demand, and negotiated licensing arrangements
+input2:workstations and servers (HP/HP-UX, IBM/AIX, Sun/SunOS).
+input2:depended upon when programming on a POSIX-compliant system.
+input2:
+input2:One particularly unique innovation of UNIX\textsuperscript{TM} was how it read commands from a user,
+input2:commonly called a command line interpreter (CLI).
+input2:The UNIX\textsuperscript{TM} kernel provided a complete set of system calls enabling processes to create and
+input2:\texttt{sh} was written by Steve Bourne.
+input2:
+input2:Beginning in 1991, Linus Torvalds began work to create a new, free operating system kernel.
+input2:as Linux.
+input2:flavors of UNIX\textsuperscript{TM}.
+input2:
+input2:\section{The user interface}
+input2:A command line interpreter, usually \emph{bash}\footnote{The name is an acronym for
+input2:
+input2:by a terminal window in which \texttt{bash} is executing.
+input2:
+input2:\section{The command line interpreter - \texttt{bash}}
+input2:\label{sec:commandlineinterpreter}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries date}}\verb!                  !\textit{show today's date}\newline
+input2:\verb!Tue Jun 27 15:09:02 PDT 2017!\newline
+input2:\verb!/home/me!\newline
+input2:\verb!$ !{\ttfamily {\bfseries date; pwd}}\verb!             !\textit{a semicolon is a command separator}\newline
+input2:\verb!Tue Jun 27 15:09:43 PDF 2017!\newline
+input2:\verb!/home/me!
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:execute \textit{b}.
+input2:
+input2:\texttt{Enter} key in this text.)
+input2:
+input2:Both \texttt{date} and \texttt{pwd} are commands that do not require any additional information in
+input2:Most programs require additional \textit{command arguments} to provide additional information to
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!this!\newline
+input2:\verb!$ !{\ttfamily {\bfseries echo this and that}}\verb!    !\textit{print `this and that'}\newline
+input2:\verb!this and that!\newline
+input2:\verb!$ !{\ttfamily {\bfseries echo this\verb!  !and that}}\verb!   !\textit{two spaces between `this' and `and'}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:These examples demonstrate a number of features of \texttt{bash}.
+input2:\begin{itemize}
+input2:as it sees fit.
+input2:\verb!"!.
+input2:\end{itemize}
+input2:In fact, \texttt{bash} gives special meanings to most non-alphanumeric characters.
+input2:For example:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries echo A semi-colon }}\verb!'!{\ttfamily {\bfseries (;)}}\verb!'! {\ttfamily {\bfseries is a command separator.}}\newline
+input2:\verb!A semi-colon (;) is a command separator.!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:A command argument that needs to contain an apostrophe, \verb!'!, can be escaped using a quotation
+input2:mark, \verb!"!, and vice versa.
+input2:
+input2:called \emph{short flags}.
+input2:\index{bash@\textbf{bash}!short flags}
+input2:into a single flag - e.g., \verb!command -a -b -c! can usually be written as
+input2:\verb!command -abc!.
+input2:
+input2:\index{bash@\textbf{bash}!long flags}
+input2:If additional information is required when a long flag is specified, it is written as
+input2:is \texttt{.}, \texttt{bash} does something special.}.
+input2:
+input2:\index{commands@\textbf{commands}!ls}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!book  calendar.data  Music  Pictures  shopping.list  src!\newline
+input2:\verb!.   .bashrc   .vimrc  calendar.data  Pictures       src!\newline
+input2:\verb!..  .profile  book    Music          shopping.list!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls \verb!--!all}}\verb!              !\textit{long form of -a}\newline
+input2:\verb!.   .bashrc   .vimrc  calendar.data  Pictures       src!\newline
+input2:\verb!..  .profile  book    Music          shopping.list!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls \verb!--!group-directories-first}}\verb!  !\textit{places directories first, no short version}\newline
+input2:\verb!book  Music  Pictures  src  calendar.data  shopping.list!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls -p}}\verb!                 !\textit{append / to indicate directories}\newline
+input2:\verb!bin/  calendar.data  Music/  Pictures/  shopping.list  src/!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls \verb!--!indicator-style=slash}}\verb!    !\textit{long version of -p}\newline
+input2:\verb!bin/  calendar.data  Music/  Pictures/  shopping.list  src/!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls -t *.*}}\verb!             !\textit{display files ordered by modification time, newest first}\newline
+input2:\verb!shopping.list  calendar.data!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls -rt *.*}}\verb!            !\textit{same, but oldest first (reverse sort)}\newline
+input2:\verb!calendar.data  shopping.list!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls -w 20 *.*}}\verb!          !\textit{output is 20 characters wide}\newline
+input2:\verb!calendar.data!\newline
+input2:\verb!shopping.list!\newline
+input2:\verb!calendar.data!\newline
+input2:\verb!shopping.list!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:pattern we wish to find.
+input2:
+input2:What does that mean?
+input2:
+input2:a special meaning to \texttt{bash}.
+input2:that string by all
+input2:filenames that consist of 1 or more characters before a \verb!.!, and 0 or more characters after.
+input2:In our directory, this pattern matches exactly two files, \texttt{calendar.data} and \texttt{shopping.list}.
+input2:
+input2:The \verb!?! in a command argument indicates that it matches any single character at that point - e.g.,
+input2:``jo?n'' matches \verb!john! or \verb!joan!, but not \verb!johan!.
+input2:directory, but would \emph{not} match \texttt{a.x}.
+input2:case, \texttt{ls}).
+input2:this feature.}
+input2:
+input2:What should you do if you start a program by mistake?
+input2:
+input2:\section{Simple commands}
+input2:\label{sec:simplecommands}
+input2:Linux provides you with a number of simple commands to manipulate files and your environment.
+input2:
+input2:\subsection{Obtaining help}
+input2:\label{sec:obtaininghelp}
+input2:pages for \textit{command}.
+input2:Additionally,
+input2:you can skim it quickly for commands that might be relevant to what you want to do.
+input2:\url{http://www.tldp.org/LDP/intro-linux/intro-linux.pdf} that gives an overview of how things work.
+input2:
+input2:\index{commands@\textbf{commands}!man}
+input2:typing ``man \textit{command}'' to \texttt{bash}.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries man ls}}\verb!!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\subsection{Creating files}
+input2:\label{sec:creatingfiles}
+input2:Information on Linux systems is stored in files.
+input2:In order to enter information into a file, as well as to modify that information, you will need to use
+input2:a text editor.
+input2:It is likely that you have experience using \emph{document} editors, such as Microsoft\textsuperscript{TM}
+input2:Word.
+input2:Document editors not only enable you to enter and edit information in a document, it also enables you to
+input2:specify how that information should be formatted when it is displayed.
+input2:
+input2:The Arch Linux image described in Appendix B comes with \texttt{nano}
+input2:(\url{https://wiki.archlinux.org/index.php/nano}) and \texttt{vi}
+input2:(\url{https://wiki.archlinux.org/index.php/Vim}).
+input2:See \url{https://en.wikipedia.org/wiki/List_of_text_editors} for a list of text editors that has been
+input2:compiled in Wikipedia.
+input2:
+input2:\begin{exercise}
+input2:\small
+input2:Choose a screen editor.
+input2:If your editor is named ``editor'', it is likely that you can find a tutorial
+input2:\begin{itemize}[noitemsep]
+input2:\item Use your editor to create a new file in your home directory
+input2:\begin{adjustwidth}{1cm}{}
+input2:\end{adjustwidth}
+input2:of \verb!Jabberwocky!, and with line 1 translated into modern English using
+input2:\begin{itemize}[noitemsep]
+input2:\item \verb!'Twas! --> \verb!It was!
+input2:\item \verb!brillig! --> \verb!evening!
+input2:\item \verb!slithy! --> \verb!smooth, active!
+input2:\item \verb!toves! --> \verb!badgers!
+input2:\end{itemize}
+input2:of \verb!Jabberwocky1!, and with line 2 translated into modern English using
+input2:\begin{itemize}[noitemsep]
+input2:\item \verb!gyre! --> \verb!scratch!
+input2:\item \verb!gimble! --> \verb!bore holes!
+input2:\item \verb!wabe! --> \verb!hill side!
+input2:\end{itemize}
+input2:of \verb!Jabberwocky2!, and with line 3 translated into modern English using
+input2:\begin{itemize}[noitemsep]
+input2:\item \verb!mimsy! --> \verb!unhappy!
+input2:\item \verb!borogoves! --> \verb!parrots!
+input2:\end{itemize}
+input2:of \verb!Jabberwocky3!, and with line 4 translated into modern English using
+input2:\begin{itemize}[noitemsep]
+input2:\item \verb!mome! --> \verb!solemn!
+input2:\item \verb!raths! --> \verb!turtles!
+input2:\item \verb!outgrabe! --> \verb!squeaked out!
+input2:\end{itemize}
+input2:\end{itemize}
+input2:When you have finished, \verb!Jabberwocky4! should read as:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\end{adjustwidth}
+input2:$\Box$
+input2:\normalsize
+input2:\end{exercise}
+input2:
+input2:
+input2:\subsection{Listing your files}
+input2:\label{sec:listingyourfiles}
+input2:We have previously encountered \texttt{ls} in section \ref{sec:commandlineinterpreter}.
+input2:\index{commands@\textbf{commands}!ls}
+input2:
+input2:\texttt{ls} can be used to see some of this metadata:
+input2:\needspace{8\baselineskip}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries ls -l}}\verb!!\newline
+input2:\verb!total 24!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 book!\newline
+input2:\verb!-rw-rw-r-- 1 me me  141 Jul  6 14:59 calendar.data!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Music!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Pictures!\newline
+input2:\verb!-rw-rw-r-- 1 me me   86 Jul  6 14:59 shopping.list!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 src!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:Each subsequent line provides information about an
+input2:individual file:
+input2:\begin{itemize}
+input2:a directory (\texttt{d}) or a normal file (\texttt{-});
+input2:everyone else;
+input2:file system;
+input2:associated group (\texttt{me}) follow;
+input2:of last modification;
+input2:\end{itemize}
+input2:
+input2:For example,
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries ls -l calendar.data}}\verb!!\newline
+input2:\verb!-rw-rw-r-- 1 me me  141 Jul  6 14:59 calendar.data!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\begin{exercise}
+input2:\small
+input2:Use \verb!ls! to perform a long listing of your \verb!Jabberwocky! files.
+input2:translated version?
+input2:Is it as you expected?
+input2:\newline$\Box$
+input2:\normalsize
+input2:\end{exercise}
+input2:
+input2:\subsection{Naming your files}
+input2:\label{sec:namingyourfiles}
+input2:\index{file system@\textbf{file system}!naming}
+input2:Most operating systems, and Linux is no exception, have rules about creating legal filenames.
+input2:It is unusual for anyone to want to type that many characters as an argument to a command, so, in practice,
+input2:you will usually use far fewer letters in your filenames.
+input2:
+input2:Linux allows any character in a filename except for \texttt{/} and a null character; this does \emph{not}
+input2:mean that you should start putting lots of strange characters in your filenames.
+input2:The POSIX specification\footnote{\url{http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html\#tag_03_280}} is quite clear on characters to use in filenames that are portable
+input2:across \emph{all} POSIX-conformant systems\footnote{Linux is a POSIX-conformant system}:
+input2:\begin{itemize}
+input2:\end{itemize}
+input2:
+input2:We have already seen that \texttt{-} is used to introduce flags in bash command lines, so you are \emph{strongly}
+input2:recommended to avoid starting your filenames with a \texttt{-}.
+input2:
+input2:\subsection{What's in a file?}
+input2:\label{sec:whatsinafile}
+input2:
+input2:commands it provides.
+input2:
+input2:\index{commands@\textbf{commands}!cat}
+input2:\begin{itemize}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries cat shopping.list}}\verb!!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\item \texttt{cat} works perfectly well for short files, like \texttt{shopping.list}, but for very long files
+input2:Linux provides two commands that will show one screenful at a time, waiting for an action from
+input2:\begin{itemize}
+input2:\item \texttt{more} is an especially primitive program for paging through text one screenful at a time.
+input2:\index{commands@\textbf{commands}!more}
+input2:Often, this is all that is needed.
+input2:\item Counterintuitively, \texttt{less} is a program similar to \texttt{more}, but with more
+input2:\index{commands@\textbf{commands}!less}
+input2:\end{itemize}
+input2:\end{itemize}
+input2:
+input2:\subsection{Moving, copying, removing files - \texttt{mv}, \texttt{cp}, \texttt{rm}}
+input2:\label{sec:movingcopyingremovingfiles}
+input2:\index{commands@\textbf{commands}!mv}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries mv shopping.list Shopping.List}}\verb!!\newline
+input2:\verb!$ !{\ttfamily {\bfseries ls *.*}}\verb!!\newline
+input2:\verb!calendar.data  Shopping.List!\newline
+input2:\verb!$ !{\ttfamily {\bfseries cat shopping.list}}\verb!!\newline
+input2:\verb!cat: shopping.list: No such file or directory!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:The file \texttt{shopping.list} has been ``moved'' to a file named \texttt{Shopping.List}.
+input2:different from \texttt{Shopping.List}.
+input2:
+input2:
+input2:\index{commands@\textbf{commands}!cp}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries cp Shopping.List 20170706-shopping.list}}\verb!!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\index{commands@\textbf{commands}!rm}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries rm Shopping.List shopping.list}}\verb!!\newline
+input2:\verb!rm: cannot remove 'shopping.list': No such file or directory!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries ls *.*}}\verb!!\newline
+input2:\verb!20170706-shopping.list  calendar.data!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries cp 20170706-shopping.list shopping.list}}\verb!!\newline
+input2:\verb!$ !{\ttfamily {\bfseries cat shopping.list}}\verb!!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\subsubsection{Count lines, words, and characters - \texttt{wc}}
+input2:\label{sec:wc}
+input2:\index{commands@\textbf{commands}!wc}
+input2:The number of lines in \texttt{shopping.list} is exactly what we need:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries wc shopping.list}}\verb!!\newline
+input2:\verb! 4 17 85 shopping.list!\newline
+input2:\verb!$ !{\ttfamily {\bfseries wc -l shopping.list}}\verb!!\newline
+input2:\verb!4 shopping.list!\newline
+input2:\verb!$ !{\ttfamily {\bfseries wc -w shopping.list calendar.data}}\verb!!\newline
+input2:\verb! 17 shopping.list!\newline
+input2:\verb! 19 calendar.data!\newline
+input2:\verb! 36 total!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:If we specify \texttt{-l}, \texttt{wc} restricts itself to counting lines; \texttt{-w} or \texttt{-c}
+input2:restricts \texttt{wc} to counting words or characters, respectively.
+input2:
+input2:\subsubsection{Translate or delete characters - \texttt{tr}}
+input2:\label{sec:tr}
+input2:\index{commands@\textbf{commands}!tr}
+input2:It often happens that you have a need to translate and/or delete characters in
+input2:a file.
+input2:\verb!tr! copies its standard input to standard output, translating or deleting
+input2:characters as described by its arguments.
+input2:Let's look at some simple examples.
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries tr a A}}\verb!!\newline
+input2:\verb!!{\ttfamily {\bfseries abacus}}\verb!!\newline
+input2:\verb!AbAcus!\newline
+input2:\textit{ctl-d}\verb!                !\textit{you type this to indicate end-of-file}\newline
+input2:\verb!$ !{\ttfamily {\bfseries tr -d x}}\verb!!\newline
+input2:\verb!!{\ttfamily {\bfseries xerxes}}\verb!!\newline
+input2:\verb!eres!\newline
+input2:\textit{ctl-d}\newline
+input2:\verb!$ !{\ttfamily {\bfseries tr '[:upper:]' '[:lower:]'}}\verb!!\newline
+input2:\verb!!{\ttfamily {\bfseries This Is A Test}}\verb!!\newline
+input2:\verb!this is a test!\newline
+input2:\textit{ctl-d}\newline
+input2:\verb!$ !{\ttfamily {\bfseries tr -s '[:blank:]' '\textbackslash{n}'}}\verb!!\newline
+input2:\verb!!{\ttfamily {\bfseries This~Is~~A~~~Test}}\verb!!\newline
+input2:\verb!This!\newline
+input2:\verb!Is!\newline
+input2:\verb!A!\newline
+input2:\verb!Test!\newline
+input2:\textit{ctl-d}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:The first invocation tells \verb!tr! to replace all occurrences of `a' by
+input2:`A'.
+input2:Since \verb!tr! is a simple filter (only reads standard input and writes to
+input2:
+input2:The second invocation indicates that \verb!tr! should delete all occurrences
+input2:
+input2:The third invocation indicates that all upper-case characters on standard
+input2:\verb!tr! understands a number of character class arguments (such as
+input2:
+input2:The final invocation tells \verb!tr! to translate each horizontal white space
+input2:character (blank or tab) to an end of line character.
+input2:Sequences of multiple horizontal white space characters are ``squeezed'' into
+input2:of its own.
+input2:
+input2:\subsubsection{Report, omit, or count repeated lines - \texttt{uniq}}
+input2:\label{sec:uniq}
+input2:\index{commands@\textbf{commands}!uniq}
+input2:
+input2:The default behavior for \verb!uniq! is to copy standard input to
+input2:standard output, replacing each sequence of matching lines by a single instance
+input2:
+input2:\verb!uniq -c!.
+input2:\small
+input2:\begin{adjustwidth}{1cm}{}
+input2:\verbatiminput{linux/uniq.out}
+input2:\end{adjustwidth}
+input2:\normalsize
+input2:
+input2:preceded by a count of 1.
+input2:
+input2:\small
+input2:\begin{adjustwidth}{1cm}{}
+input2:\verbatiminput{linux/uniqsorted.out}
+input2:\end{adjustwidth}
+input2:\normalsize
+input2:
+input2:As expected, \verb!uniq! discovered two successive lines consisting solely of
+input2:a sequence of matching lines, and each was output with a count of $1$.
+input2:
+input2:in \verb!bash!.
+input2:
+input2:\subsubsection{Find occurrence of a pattern - \texttt{grep}}
+input2:\label{sec:grep}
+input2:\index{commands@\textbf{commands}!grep}
+input2:The following shows us using \texttt{grep} to answer our question about apples.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries grep apple shopping.list}}\verb!!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\texttt{grep} understands much more powerful patterns, called \emph{regular expressions}; we recommend that
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries grep -v apple shopping.list}}\verb!!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:If you specify two or more file arguments to \texttt{grep}, it will prefix each matching line
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries grep apple shopping.list calendar.data}}\verb!!\newline
+input2:\verb!shopping.list:2 granny smith apples!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\subsubsection{Sorting files - \texttt{sort}}
+input2:\label{sec:sort}
+input2:This command sorts its input into alphabetical order, by default.
+input2:\index{commands@\textbf{commands}!sort}
+input2:The order can be changed using various flags which will be shown below.
+input2:Let's sort our shopping list.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries sort shopping.list}}\verb!!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:line comes last (`2' comes after `1').
+input2:
+input2:Here are some examples, again using \texttt{shopping.list}.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!$ !{\ttfamily {\bfseries sort -n shopping.list}}\verb!           !\textit{numeric sort on first field}\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!$ !{\ttfamily {\bfseries sort -k 2 shopping.list}}\verb!         !\textit{sort on 2\textsuperscript{nd} field}\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:whitespace characters.
+input2:Thus, \textbf{b}ottle \textless{} \textbf{g}ranny \textless{} \textbf{h}ot \textless{}
+input2:
+input2:\subsubsection{Beginning and end of a file - \texttt{head} and \texttt{tail}}
+input2:\label{sec:headtail}
+input2:examples.
+input2:\index{commands@\textbf{commands}!head}
+input2:\index{commands@\textbf{commands}!tail}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\subsubsection{Comparing files - \texttt{cmp} and \texttt{diff}}
+input2:\label{sec:cmpdiff}
+input2:Earlier in this chapter, we made a copy of \texttt{shopping.list} named \texttt{20170706-shopping.list}.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries cat 20170706-shopping.list}}\verb!!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!10 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:We have discovered that we do not eat enough tomatoes, such that we are building up a tomato mountain in
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries cat shopping.list}}\verb!!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:we sometimes do not see subtle textual differences.
+input2:Therefore, we can rely upon comparison tools to help us out.
+input2:
+input2:\index{commands@\textbf{commands}!cmp}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries cmp shopping.list 20170706-shopping.list}}\verb!!\newline
+input2:\verb!shopping.list 20170706-shopping.list differ: byte 40, line 3!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:While \texttt{cmp} has indicated we made some change to \texttt{shopping.list}, we want to verify
+input2:This is where \texttt{diff} comes handy.
+input2:\index{commands@\textbf{commands}!diff}
+input2:\needspace{4\baselineskip}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ !{\ttfamily {\bfseries diff shopping.list 20170706-shopping.list}}\verb!!\newline
+input2:\verb!3c3!\newline
+input2:\verb!< 3 hot house tomatoes!\newline
+input2:\verb!---!\newline
+input2:\verb!> 10 hot house tomatoes!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:shown in this way.
+input2:
+input2:\begin{exercise}
+input2:\small
+input2:Use \verb!diff! to compare your \verb!Jabberwocky! files.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\verb!$ for n in 1 2 3 4; do!\newline
+input2:\verb!> diff Jabberwocky Jabberwocky$n!\newline
+input2:\verb!> done!\newline
+input2:\end{adjustwidth}
+input2:\newline$\Box$
+input2:\normalsize
+input2:\end{exercise}
+input2:
+input2:\section{The file system}
+input2:
+input2:\begin{wrapfigure}{R}{0.4\textwidth}
+input2:\centering
+input2:\label{CaDS tree}
+input2:\includegraphics[width=1.0\linewidth]{linux/DirectoryTree}
+input2:{\small Partial directory tree}
+input2:\end{wrapfigure}
+input2:In your previous computing experience, you have undoubtedly been exposed to folders via a graphical user
+input2:interface.
+input2:Double clicking on a folder usually causes its contents to be displayed.
+input2:Double clicking on a file in a folder usually causes an application associated with that type of
+input2:file to execute on that file.
+input2:current state of this book.
+input2:Note that directories are shown in \textbf{\textcolor{blue}{blue}} and files are shown in \textbf{\textcolor{OliveGreen}{green}}.
+input2:
+input2:\verb!{ CaDS, ch02, me, shopping.list }!.
+input2:\index{file system@\textbf{file system}!pathname}
+input2:file that is of interest.
+input2:
+input2:Linux provides a hierarchical file system of this type.
+input2:
+input2:between directories.
+input2:
+input2:\subsection{Current working directory and home directory}
+input2:\label{sec:cwdandhome}
+input2:\index{file system@\textbf{file system}!current working directory}
+input2:so \texttt{bash} maintains a notion of your \emph{current working directory}.
+input2:It also maintains a notion of your \emph{home directory}, which has been assigned to you when your
+input2:account was created; 
+input2:whenever you start up a terminal window, your current working directory is your home directory.
+input2:If you type a file name that does \emph{not} start with a \texttt{/}, it assumes that you are naming
+input2:
+input2:\index{file system@\textbf{file system}!home directory}
+input2:\texttt{bash} prompt, ``\$ ''.}.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ pwd                         !\textit{what is our current working directory}\newline
+input2:\verb!/home/me                      !\textit{just started bash, we are in our home directory}\newline
+input2:\verb!$ ls -p                       !\textit{what's in our home directory?}\newline
+input2:\verb!20170706-shopping.list  calendar.data  Pictures/      src/!\newline
+input2:\verb!book/                   Music/         shopping.list!\newline
+input2:\verb!$ pwd                         !\textit{let's see if we were successful}\newline
+input2:\verb!/home/me/Music                !\textit{yes we were}\newline
+input2:\verb!/home/me                      !\textit{we are back home}\newline
+input2:\verb!$ cd src; pwd; cd; pwd        !\textit{cd into src; what does cd without a directory do?}\newline 
+input2:\verb!/home/me/src!\newline
+input2:\verb!/home/me                      !\textit{ok, cd without a directory takes us home}\newline
+input2:\verb!$ cd /home/me/Pictures; pwd   !\textit{we can specify a full pathname to cd, as well}\newline
+input2:\verb!/home/me/Pictures!\newline
+input2:\verb!$ cd ~; pwd                   !\textit{what does `\textasciitilde' mean?}\newline
+input2:\verb!/home/me                      !\textit{ok, it's shorthand for home}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:character of a pathname, as in \verb!~/shopping.list!, to access files that are in your home
+input2:directory.
+input2:that are directly reachable from your home directory.
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ pwd!\newline
+input2:\verb!/home/me!\newline
+input2:\verb!$ ls -a!\newline
+input2:\verb!.   .bashrc   .vimrc  calendar.data  Pictures       src!\newline
+input2:\verb!..  .profile  book    Music          shopping.list!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\index{file system@\textbf{file system}!.}
+input2:\index{file system@\textbf{file system}!..}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cd Music; pwd               !\textit{let's start somewhere interesting}\newline
+input2:\verb!/home/me/Music!\newline
+input2:\verb!$ cd ..; pwd                  !\textit{go up one level}\newline
+input2:\verb!/home/me!\newline
+input2:\verb!$ cd ..; pwd                  !\textit{again}\newline
+input2:\verb!/home!\newline
+input2:\verb!$ cd ..; pwd                  !\textit{and again}\newline
+input2:\verb!/!\newline
+input2:\verb!$ cd ..; pwd                  !\textit{will this work?}\newline
+input2:\verb!/!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:Just as we can use \verb!'~'! as shorthand for our home directory, we can use use \verb!'.'! as shorthand
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ pwd!\newline
+input2:\verb!/CaDS/ch02/me!\newline
+input2:\verb!$ ls -p ..!\newline
+input2:\verb!adm3a.jpg  ch02.synctex.gz  DirectoryTree.pdf  me.tgz!\newline
+input2:\verb!ch02.pdf   ch02.tex         me/                model33teletype.jpg!\newline
+input2:\verb!$ cd Music; pwd!\newline
+input2:\verb!/CaDS/ch02/me/Music!\newline
+input2:\verb!$ cat ../shopping.list                !\textit{Need to look at shopping list again}\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!$ head -n 1 ../../me/shopping.list    !\textit{Admittedly unusual, but works}\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!$ cd ..; tail -n 1 ./shopping.list    !\textit{./name treated identically to name}\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\label{sec:dotanddotdot}
+input2:The last two examples are meant to show that you can introduce \verb!'.'! and \verb!'..'! as elements of a
+input2:pathname. The last example may seem strange, but later you will see a situation where using \verb!'./'!
+input2:comes in handy.
+input2:
+input2:\subsection{Creating a new directory - \texttt{mkdir}}
+input2:\label{sec:mkdir}
+input2:\index{commands@\textbf{commands}!mkdir}
+input2:Let's suppose that we want to create a directory to hold all of our archival shopping lists.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cd                          !\textit{go home}\newline
+input2:\verb!$ mkdir ShoppingLists         !\textit{create our directory}\newline
+input2:\verb!$ cd ShoppingLists            !\textit{make it our working directory}\newline
+input2:\verb!$ ls -a                       !\textit{what's in a newly-created directory?}\newline
+input2:\verb!$ cd ..                       !\textit{up to our parent}\newline
+input2:\verb!$ ls -l ShoppingLists         !\textit{it's empty, so no output from ls}\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul 11 16:00 ShoppingLists!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:There is also an \texttt{rmdir} command that can be used to remove a directory; this will only work \emph{if}
+input2:\index{commands@\textbf{commands}!rmdir}
+input2:
+input2:\subsection{The Linux hierarchical file system structure}
+input2:\label{sec:Linuxfilesystem}
+input2:\index{Linux file system}
+input2:
+input2:%\newpage
+input2:\begin{wrapfigure}{R}{0.25\textwidth}
+input2:\includegraphics[scale=0.55]{linux/root-tree}
+input2:\end{wrapfigure}
+input2:
+input2:\begin{itemize}[noitemsep]
+input2:\item \texttt{/usr} - has several important sub-directories:
+input2:\begin{itemize}[noitemsep]
+input2:\item \texttt{/usr/bin} - contains programs that are accessed by all users,
+input2:\item \texttt{/usr/include} - contains include files needed by C and C++ programs,
+input2:\item \texttt{/usr/share/doc} and \texttt{/usr/share/man} - contain manuals, documentation, examples, etc.,
+input2:\item \texttt{/usr/local} - has \texttt{bin}, \texttt{include}, \texttt{lib}, \texttt{etc}, etc. directories for locally added software.
+input2:\end{itemize}
+input2:\end{itemize}
+input2:
+input2:\subsection{Environment variables}
+input2:\label{sec:environmentvariables}
+input2:\index{bash@\textbf{bash}!environment}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb! * * *                   !\textit{several variables specific to particular programs}\newline
+input2:\verb!USER=me                  !\textit{my identity}\newline
+input2:\verb!PWD=/home/me             !\textit{my current working directory}\newline
+input2:\verb!HOME=/home/me            !\textit{my home directory}\newline
+input2:\verb!PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:!\newline
+input2:\verb!/usr/bin/vendor_perl:/usr/bin/core_perl!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\index{bash@\textbf{bash}!environment variable}
+input2:Each environment variable has a name consisting of upper-case letters, digits, and underscores (\verb!'_'!).
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!me                       !\textit{as we expected}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\index{bash@\textbf{bash}!shell variable}
+input2:
+input2:How does one remove a variable?
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ ID=/usr/local/include  !\textit{`ID' has a very long value}\newline
+input2:\verb!$ echo $ID               !\textit{did it work?}\newline
+input2:\verb!/usr/local/include       !\textit{yes}\newline
+input2:\verb!$ bash                   !\textit{create a child process running bash}\newline
+input2:\verb!$ bash                   !\textit{create a child process running bash}\newline
+input2:\verb!/usr/local/include       !\textit{yes}\newline
+input2:\verb!$ echo $ID               !\textit{make sure it has been removed}\newline
+input2:\verb!                         !\textit{yes, it has no value}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\index{bash@\textbf{bash}!search path}
+input2:
+input2:A particular environment variable, \texttt{PATH}, is of particular importance to \texttt{bash}, as it tells
+input2:\index{bash@\textbf{bash}!shell variable!PATH}
+input2:\texttt{PATH} consists of a sequence of directory names separated by colons (\verb!:!).
+input2:process.
+input2:
+input2:\texttt{which}. Let's look at it in action.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ which bash             !\textit{where is bash stored?}\newline
+input2:\verb!/usr/bin/bash!\newline
+input2:\verb!$ which wc               !\textit{where is wc stored?}\newline
+input2:\verb!/usr/bin/wc!\newline
+input2:\verb!$ which pyhton3          !\textit{look for python3, but a typo}\newline
+input2:\verb!which: no pyhton3 in (/usr/local/sbin:/usr/local/bin:/usr/bin:!\newline
+input2:\verb!/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl)!\newline
+input2:\verb!$ pyhton3                !\textit{let's see what bash says}\newline
+input2:\verb!bash: pyhton3: command not found!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\begin{itemize}[noitemsep]
+input2:\end{itemize}
+input2:
+input2:it.
+input2:Fortunately, since \texttt{PATH} is an environment variable, you can change it, and \texttt{bash} will begin
+input2:Before showing you how this is done, why might we want to change \texttt{PATH}?
+input2:
+input2:And, finally, you might want to have a number of your own programs (it is very easy to do) that you use
+input2:
+input2:make up \texttt{PATH}.
+input2:your version will have to be in a directory that is earlier in \texttt{PATH} than \texttt{/usr/bin}.
+input2:Let's experiment with this a bit.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ mkdir ~/bin            !\textit{let's create a personal bin directory}\newline
+input2:\verb!$ cp /usr/bin/ls ~/bin   !\textit{make a copy of ls in that directory}\newline
+input2:\verb!$ sudo cp /usr/bin/ls /usr/local/bin  !\textit{make a copy in /usr/local/bin}\newline
+input2:\verb![sudo] password for me:  !\textit{type your password, followed by Enter; no echo}\newline
+input2:\verb!$ ls -l ~/bin/ls /usr/local/bin/ls /usr/bin/ls!\newline
+input2:\verb!-rwxr-xr-x 1 me   me   130552 Jul 12 15:11 /home/me/bin/ls!\newline
+input2:\verb!-rwxr-xr-x 1 root root 130552 Mar 12 07:09 /usr/bin/ls!\newline
+input2:\verb!-rwxr-xr-x 1 root root 130552 Jul 12 15:10 /usr/local/bin/ls!\newline
+input2:\verb!$ PATH=/usr/bin:/bin     !\textit{set path to just /usr/bin and /bin}\newline
+input2:\verb!$ which ls!\newline
+input2:\verb!/usr/bin/ls              !\textit{found it in /usr/bin}\newline
+input2:\verb!$ which ls!\newline
+input2:\verb!/usr/local/bin/ls        !\textit{found it in /usr/local/bin}\newline
+input2:\verb!$ which ls!\newline
+input2:\verb!/home/me/bin/ls          !\textit{found it in \textasciitilde/bin}\newline
+input2:\verb!$ rm ~/bin/ls            !\textit{remove copy from \textasciitilde/bin}\newline
+input2:\verb!$ which ls!\newline
+input2:\verb!/usr/local/bin/ls        !\textit{found it in /usr/local/bin}\newline
+input2:\verb!$ sudo rm /usr/local/bin/ls           !\textit{remove copy from /usr/local/bin}\newline
+input2:\verb![sudo] password for me:!\newline
+input2:\verb!$ which ls!\newline
+input2:\verb!/usr/bin/ls              !\textit{found it in /usr/bin}\newline
+input2:\verb!$ echo $PATH!\newline
+input2:\verb!/home/me/bin:/usr/local/bin:/usr/bin:/bin!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:Only two tricky things in this exercise:
+input2:\begin{itemize}[noitemsep]
+input2:\item as can be done in most programming languages, we can define a new value for a variable in terms
+input2:\index{commands@\textbf{commands}!sudo}
+input2:your account (\texttt{me}) is permitted to use \texttt{sudo}, all you need to do is type your password
+input2:\end{itemize}
+input2:
+input2:\subsection{Input, output, error output}
+input2:\label{sec:inputoutputerror}
+input2:Computers would be not nearly as useful to us if this was all that could be done.
+input2:\index{bash@\textbf{bash}!standard input}
+input2:\index{bash@\textbf{bash}!standard output}
+input2:\index{bash@\textbf{bash}!standard error output}
+input2:
+input2:When a program comes to life, three data channels are defined:
+input2:\begin{itemize}[noitemsep]
+input2:\end{itemize}
+input2:
+input2:system.
+input2:\index{bash@\textbf{bash}!IO redirection}
+input2:\subsubsection{Input redirection}
+input2:\label{sec:inputredirection}
+input2:\index{bash@\textbf{bash}!standard input redirection}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cd                     !\textit{make sure we are home}\newline
+input2:\verb!$ cat shopping.list      !\textit{reacquaint ourselves with shopping.list}\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!$ cat                    !\textit{invoke without a filename}\newline
+input2:\verb!line 1                   !\textit{you type this}\newline
+input2:\textit{ctl-d}\verb!                     !\textit{you type this to indicate end-of-file}\newline
+input2:\verb!$ cat <shopping.list     !\textit{what is this?}\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:There are several things going on here that make this work:
+input2:\begin{itemize}[noitemsep]
+input2:indicate an end of file;
+input2:\item \texttt{cat} doesn't care, as it has been invoked without any arguments, so it simply reads from
+input2:standard input until an end of file is detected.
+input2:\end{itemize}
+input2:
+input2:arguments.\footnote{Some programs, such as \texttt{cat}, understand an argument consisting solely of a
+input2:terminal window. The man page for a particular command will indicated if a particular program interprets a bare '-' in this way.}
+input2:
+input2:\subsubsection{Output redirection}
+input2:\label{sec:outputredirection}
+input2:\index{bash@\textbf{bash}!standard output redirection}
+input2:terminal window; in fact, in creating this textbook, a large number of files have been generated in this
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ echo '$ ls -l'; ls -l  !\textit{show command and output}\newline
+input2:\verb!$ ls -l!\newline
+input2:\verb!total 24!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 book!\newline
+input2:\verb!-rw-rw-r-- 1 me me  141 Jul  6 14:59 calendar.data!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Music!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Pictures!\newline
+input2:\verb!-rw-rw-r-- 1 me me   86 Jul  6 14:59 shopping.list!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 src!\newline
+input2:\verb!$ ls -l >>tmp.out         !\textit{and this output?}\newline
+input2:\verb!$ cat tmp.out             !\textit{maybe it's in here?}\newline
+input2:\verb!$ ls -l                   !\textit{yes, it is}\newline
+input2:\verb!total 24!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 book!\newline
+input2:\verb!-rw-rw-r-- 1 me me  141 Jul  6 14:59 calendar.data!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Music!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Pictures!\newline
+input2:\verb!-rw-rw-r-- 1 me me   86 Jul  6 14:59 shopping.list!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 src!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:
+input2:The ability to perform such redirection \emph{again} depends upon each program writing to standard
+input2:output by default.
+input2:
+input2:It's a bit clunky having to break up our original command line (\verb!echo '$ ls -l'; ls -l!) into
+input2:The shell also understands grouping commands to act as a single ``command'', such that you can redirect
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cat tmp.out!\newline
+input2:\verb!$ ls -l!\newline
+input2:\verb!total 24!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 book!\newline
+input2:\verb!-rw-rw-r-- 1 me me  141 Jul  6 14:59 calendar.data!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Music!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 Pictures!\newline
+input2:\verb!-rw-rw-r-- 1 me me   86 Jul  6 14:59 shopping.list!\newline
+input2:\verb!drwxrwxr-x 2 me me 4096 Jul  6 14:59 src!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:appropriately serialized, can be directed to a file.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ bash -c "echo '$ ls -l'; ls -l" >tmp.out!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:redirected to \texttt{tmp.out}.
+input2:
+input2:\subsubsection{Error redirection}
+input2:\label{sec:errorredirection}
+input2:It stands to reason that since we can redirect standard input and standard output, it is likely that we can redirect standard error output, as well.
+input2:\index{bash@\textbf{bash}!standard error output redirection}
+input2:\texttt{filename}, and to interpret \Frowny{}\Frowny{}\texttt{filename} to mean to redirect standard
+input2:yet).
+input2:Instead, \texttt{bash} interprets \texttt{2\textgreater{filename}} and \texttt{2\textgreater{\textgreater}{filename}} to mean that standard error output should be redirected.
+input2:
+input2:Let's look at some examples of standard error output redirection:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cat Shoping.list           !\textit{typo in filename}\newline
+input2:\verb!cat: Shoping.list: No such file or directory!\newline
+input2:\verb!cat: Shoping.list: No such file or directory!\newline
+input2:\verb!cat: Shoping.list: No such file or directory!\newline
+input2:\verb!cat: readme.1st: No such file or directory!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\texttt{bash} has a syntax for specifying this, shown below.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cat shopping.list Shoping.list >tmp.out 2>&1!\newline
+input2:\verb!$ cat tmp.out!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!cat: Shoping.list: No such file or directory!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:by \texttt{1}.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cat shopping.list 1>tmp.out!\newline
+input2:\verb!$ cat tmp.out!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:That is, \texttt{digit\textgreater} works for each output stream known to \texttt{bash}.
+input2:In this book, we restrict ourselves to standard output (\texttt{1}) and standard error output
+input2:(\texttt{2}).
+input2:
+input2:\subsection{Pipes and multiple processes}
+input2:\label{sec:pipes}
+input2:\index{bash@\textbf{bash}!pipes}
+input2:Being able to do so would be pretty useless if commands did not read from standard input by default,
+input2:write results to standard output by default, and write error messages to standard error output by default.
+input2:Given that programs do conform to this standard, \texttt{bash} can now provide significant expressive
+input2:This is done through an abstraction known as \emph{pipelines}.
+input2:
+input2:How would you do so?
+input2:We could make a special version of \texttt{ls} that understood a flag \verb!--count!, which would indicate
+input2:\verb!--all! could also be specified with this new flag, indicating that hidden files that start with a
+input2:period (\verb!.!) would also be counted. Seems reasonable so far.
+input2:
+input2:But we already have \texttt{wc} which will count lines, words, and characters in a file.
+input2:take its input from that file, we would have a solution without having to modify \texttt{ls}.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ ls .!\newline
+input2:\verb!book  calendar.data  Music  Pictures  Shopping.List  src  tmp.err  tmp.out!\newline
+input2:\verb!$ ls . >tmp.out!\newline
+input2:\verb!8!\newline
+input2:\verb!$ rm tmp.out!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:It is clear that this works.
+input2:file after we are done.
+input2:
+input2:for processes running programs to communicate with
+input2:Linux supports several different types of IPC that
+input2:enable different styles of interaction.
+input2:In this case, we would like to have a way for two
+input2:discussed parent/child relationships between directories
+input2:and files, when \texttt{bash} creates a process to
+input2:reading that data, as if coming from a file.
+input2:called a \emph{pipe} which provides this ability; each
+input2:pipe has a write end and a read end; if one process
+input2:
+input2:\texttt{bash} is already able to redirect input, output,
+input2:and error output.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ ls .!\newline
+input2:\verb!book  calendar.data  Music  Pictures  Shopping.List  src  tmp.err!\newline
+input2:\verb!$ ls . | wc -w!\newline
+input2:\verb!7!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:This works exactly as intended.
+input2:Note that we removed \texttt{tmp.out} in our previous
+input2:directory.
+input2:
+input2:\texttt{bash} reads everything up to a semicolon or
+input2:individual commands separated by \verb!|! characters.
+input2:
+input2:Note that pipelines are only concerned with standard
+input2:output.
+input2:work:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cat shopping.list Shoping.list 2>&1 | more!\newline
+input2:\verb!1 bottle of milk!\newline
+input2:\verb!2 granny smith apples!\newline
+input2:\verb!3 hot house tomatoes!\newline
+input2:\verb!1 six-pack of Coca Cola!\newline
+input2:\verb!cat: Shoping.list: No such file or directory!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:As described above, \verb!bash! first looks for pipe symbols (\verb!|!) in
+input2:
+input2:A common use of this mixing of output and error messages
+input2:blended output in a file.
+input2:The program \texttt{tee} copies its standard input
+input2:\index{commands@\textbf{commands}!tee}
+input2:in its argument list.
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ command [arguments, if any] 2>&1 | tee log!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:will cause \verb!command! to run and display
+input2:piped into \texttt{tee}.
+input2:context, as well.
+input2:This is often used when marking programming projects,
+input2:program under test as well as to capture a log to give
+input2:
+input2:\begin{exercise}
+input2:\label{ex:wordfreqpipeline}
+input2:\small
+input2:in a file.
+input2:We could write a program, say in Python or C, to perform this task.
+input2:\verb!bash!'s support of pipes, all one has to type is a single pipeline
+input2:command to \verb!bash!.
+input2:
+input2:We know from Section \ref{sec:tr} that we can use \verb!tr! to break up a file
+input2:into one word per line.
+input2:We also know from Section \ref{sec:sort} that we can use \verb!sort! to sort
+input2:a file.
+input2:We also know from Section \ref{sec:uniq} that we can use \verb!uniq! to count
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\verb!$ tr -s '[:blank:]' '\n'!\newline
+input2:\end{adjustwidth}
+input2:
+input2:input lexicographically (as characters).
+input2:
+input2:Finally, if presented with a sorted file on standard input, \verb!uniq!
+input2:replaces each sequence of identical lines by a single copy of that line on
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\verb!$ tr -s '[:blank:]' '\n' <document | sort | uniq -c!\newline
+input2:\end{adjustwidth}
+input2:\begin{itemize}[noitemsep]
+input2:\item As discussed in Section \ref{sec:uniq}, \verb!uniq! is case sensitive,
+input2:such that ``this'' and ``This'' would be considered separate words.
+input2:artefact.
+input2:\item Our definition of a ``word'' means that punctuation is included in a
+input2:characters from words.
+input2:\end{itemize}
+input2:$\Box$
+input2:\normalsize
+input2:\end{exercise}
+input2:
+input2:\section{Compression and file packaging}
+input2:\label{sec:compressionfilepackaging}
+input2:\index{file archives}
+input2:
+input2:\index{commands@\textbf{commands}!find}
+input2:\verb!CaDS!:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ find CaDS -print!\newline
+input2:\verb!CaDS!\newline
+input2:\verb!CaDS/book.tex!\newline
+input2:\verb!CaDS/ch00!\newline
+input2:\verb!CaDS/ch00/Preface.pdf!\newline
+input2:\verb!CaDS/ch00/Preface.synctex.gz!\newline
+input2:\verb!CaDS/ch00/Preface.tex!\newline
+input2:\verb!CaDS/ch01!\newline
+input2:\verb!CaDS/ch01/ch01.pdf!\newline
+input2:\verb!CaDS/ch01/ch01.synctex.gz!\newline
+input2:\verb!CaDS/ch01/ch01.tex!\newline
+input2:\verb!CaDS/ch02!\newline
+input2:\verb!CaDS/ch02/adm3a.jpg!\newline
+input2:\verb!CaDS/ch02/ch02.pdf!\newline
+input2:\verb!CaDS/ch02/ch02.synctex.gz!\newline
+input2:\verb!CaDS/ch02/ch02.tex!\newline
+input2:\verb!CaDS/ch02/dir.out!\newline
+input2:\verb!CaDS/ch02/me!\newline
+input2:\verb!CaDS/ch02/me/20170706-shopping.list!\newline
+input2:\verb!CaDS/ch02/me/book!\newline
+input2:\verb!CaDS/ch02/me/calendar.data!\newline
+input2:\verb!CaDS/ch02/me/Music!\newline
+input2:\verb!CaDS/ch02/me/Pictures!\newline
+input2:\verb!CaDS/ch02/me/shopping.list!\newline
+input2:\verb!CaDS/ch02/me/src!\newline
+input2:\verb!CaDS/ch02/me.tgz!\newline
+input2:\verb!CaDS/ch02/model33teletype.jpg!\newline
+input2:\verb!CaDS/Outline.pdf!\newline
+input2:\verb!CaDS/Outline.synctex.gz!\newline
+input2:\verb!CaDS/Outline.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:this file system:
+input2:by attaching each file to an email message,
+input2:by using a network file transfer program (such as \verb!scp! or \verb!ftp!),
+input2:or by copying each file to a cloud storage provider
+input2:(such as DropBox, Apple's iCloud, or Microsoft's OneDrive).
+input2:While this one-file-at-a-time approach would work,
+input2:and consistent way.
+input2:You have probably used ZIP files for such things in
+input2:your previous computer experience.
+input2:
+input2:\subsection{\texttt{tar}}
+input2:\label{sec:tar}
+input2:\index{commands@\textbf{commands}!tar}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -cvf CaDS.tar CaDS | column!\newline
+input2:\verb!CaDS/                                   CaDS/ch02/dir.out!\newline
+input2:\verb!CaDS/book.tex                           CaDS/ch02/me/!\newline
+input2:\verb!CaDS/ch00/                              CaDS/ch02/me/20170706-shopping.list!\newline
+input2:\verb!CaDS/ch00/Preface.pdf                   CaDS/ch02/me/book/!\newline
+input2:\verb!CaDS/ch00/Preface.synctex.gz            CaDS/ch02/me/calendar.data!\newline
+input2:\verb!CaDS/ch00/Preface.tex                   CaDS/ch02/me/Music/!\newline
+input2:\verb!CaDS/ch01/                              CaDS/ch02/me/Pictures/!\newline
+input2:\verb!CaDS/ch01/ch01.pdf                      CaDS/ch02/me/shopping.list!\newline
+input2:\verb!CaDS/ch01/ch01.synctex.gz               CaDS/ch02/me/src/!\newline
+input2:\verb!CaDS/ch01/ch01.tex                      CaDS/ch02/me.tgz!\newline
+input2:\verb!CaDS/ch02/                              CaDS/ch02/model33teletype.jpg!\newline
+input2:\verb!CaDS/ch02/adm3a.jpg                     CaDS/Outline.pdf!\newline
+input2:\verb!CaDS/ch02/ch02.pdf                      CaDS/Outline.synctex.gz!\newline
+input2:\verb!CaDS/ch02/ch02.synctex.gz               CaDS/Outline.tex!\newline
+input2:\verb!CaDS/ch02/ch02.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\index{commands@\textbf{commands}!column}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -tf CaDS.tar | column!\newline
+input2:\verb!CaDS/                                   CaDS/ch02/dir.out!\newline
+input2:\verb!CaDS/book.tex                           CaDS/ch02/me/!\newline
+input2:\verb!CaDS/ch00/                              CaDS/ch02/me/20170706-shopping.list!\newline
+input2:\verb!CaDS/ch00/Preface.pdf                   CaDS/ch02/me/book/!\newline
+input2:\verb!CaDS/ch00/Preface.synctex.gz            CaDS/ch02/me/calendar.data!\newline
+input2:\verb!CaDS/ch00/Preface.tex                   CaDS/ch02/me/Music/!\newline
+input2:\verb!CaDS/ch01/                              CaDS/ch02/me/Pictures/!\newline
+input2:\verb!CaDS/ch01/ch01.pdf                      CaDS/ch02/me/shopping.list!\newline
+input2:\verb!CaDS/ch01/ch01.synctex.gz               CaDS/ch02/me/src/!\newline
+input2:\verb!CaDS/ch01/ch01.tex                      CaDS/ch02/me.tgz!\newline
+input2:\verb!CaDS/ch02/                              CaDS/ch02/model33teletype.jpg!\newline
+input2:\verb!CaDS/ch02/adm3a.jpg                     CaDS/Outline.pdf!\newline
+input2:\verb!CaDS/ch02/ch02.pdf                      CaDS/Outline.synctex.gz!\newline
+input2:\verb!CaDS/ch02/ch02.synctex.gz               CaDS/Outline.tex!\newline
+input2:\verb!CaDS/ch02/ch02.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:The \verb!-t! command to \verb!tar! indicates that I want to see a table of contents. Again, we have
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -tvf CaDS.tar CaDS/ch02/ch02.tex!\newline
+input2:\verb!-rw-r--r-- me/me   94095 2017-07-14 11:28 CaDS/ch02/ch02.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -xf book.tar!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:I can check to see that it has worked by executing
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ ls CaDS!\newline
+input2:\verb!book.tex  ch00  ch01  ch02  Outline.pdf  Outline.synctex.gz  Outline.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -xOf CaDS.tar CaDS/ch01/ch01.tex >chapter1.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:
+input2:\subsection{Compression}
+input2:\label{sec:compression}
+input2:
+input2:\index{file compression}
+input2:\begin{itemize}[noitemsep]
+input2:\end{itemize} 
+input2:\index{commands@\textbf{commands}!compress}
+input2:\index{commands@\textbf{commands}!uncompress}
+input2:\index{commands@\textbf{commands}!zcat}
+input2:\index{commands@\textbf{commands}!gzip}
+input2:\index{commands@\textbf{commands}!gunzip}
+input2:\index{commands@\textbf{commands}!gzcat}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ cp shopping.list sl.1     !\textit{make a couple of files to compress}\newline
+input2:\verb!$ cp shopping.list sl.2!\newline
+input2:\verb!$ gzip sl.1                 !\textit{Encode sl.1 to sl.1.gz, remove sl.1}\newline
+input2:\verb!$ compress sl.2             !\textit{Encode sl.2 to sl.2.Z, remove sl.2}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ gunzip sl.1.gz            !\textit{Unencode sl.1.gz to sl.1, remove sl.1.gz}\newline
+input2:\verb!$ uncompress sl.2.Z         !\textit{Unencode sl.2.Z to sl.2, remove sl.2.Z}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ gzcat sl.1.gz             !\textit{Unencode sl.1.gz, writing contents to standard output}\newline
+input2:\verb!$ zcat sl.2.Z               !\textit{Unencode sl.2.Z, writing contents to standard output}\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:
+input2:\subsection{Compression and File Packaging}
+input2:\label{sec:compressionplusfilepackaging}
+input2:\subsubsection{\texttt{gzip} and \texttt{tar}}
+input2:\label{sec:gzipplustar}
+input2:Therefore, you can easily create a compressed \verb!tar! archive by using \verb!tar! and \verb!gzip! as follows:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -cf CaDS.tar CaDS; gzip CaDS.tar!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ gunzip CaDS.tar.gz; tar -tf CaDS.tar!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:\needspace{8\baselineskip}
+input2:While this approach works, it suffers from several deficiencies:
+input2:\begin{itemize}[noitemsep]
+input2:\item The constant conversion from uncompressed to compressed and back again represents significant wasted computational resources.
+input2:\end{itemize}
+input2:
+input2:\index{gzipped tar archives}
+input2:
+input2:The commands:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -zcf CaDS.tar.gz CaDS!\newline
+input2:\verb!$ tar -ztf CaDS.tar.gz!\newline
+input2:\verb!$ tar -zxf CaDS.tar.gz CaDS/ch01/ch01.tex!\newline
+input2:\verb!$ tar -zxOf CaDS.tar.gz CaDS/ch01/ch01.tex >chapter1.tex!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:Gzipped \verb!tar! archives are so prevalent in Linux systems that such an archive is usually named with
+input2:a \verb!.tgz! extension, as in
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ tar -zcf CaDS.tgz CaDS!\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:\subsubsection{\texttt{zip} and \texttt{unzip}}
+input2:\label{zipplusunzip}
+input2:\index{commands@\textbf{commands}!zip}
+input2:\index{commands@\textbf{commands}!unzip}
+input2:
+input2:\begin{adjustwidth}{1cm}{}
+input2:\small
+input2:\verb!$ ls tmp!\newline
+input2:\verb!cat   cat.c   tento6.txt!\newline
+input2:\verb!$ zip example.zip tmp/*!\newline
+input2:\verb!  adding: tmp/cat (deflated 70%)!\newline
+input2:\verb!  adding: tmp/cat.c (deflated 36%)!\newline
+input2:\verb!  adding: tmp/tento6.txt (deflated 80%)!\newline
+input2:\verb!$ unzip -l example.zip!\newline
+input2:\verb!Archive:  example.zip!\newline
+input2:\verb!  Length      Date    Time    Name!\newline
+input2:\verb!---------  ---------- -----   ----!\newline
+input2:\verb!     8710  2016-08-30 12:44   tmp/cat!\newline
+input2:\verb!      327  2016-08-30 12:43   tmp/cat.c!\newline
+input2:\verb! 46301948  2016-08-30 12:44   tmp/tento6.txt!\newline
+input2:\verb!---------                     -------!\newline
+input2:\verb! 46310985                     3 files!\newline
+input2:\verb!$ unzip -p example.zip tmp/cat.c >mycat.c!\newline
+input2:\verb!$ unzip -o example.zip!\newline
+input2:\verb!Archive:  example.zip!\newline
+input2:\verb!  inflating: tmp/cat                 !\newline
+input2:\verb!  inflating: tmp/cat.c               !\newline
+input2:\verb!  inflating: tmp/tento6.txt          !\newline
+input2:\normalsize
+input2:\end{adjustwidth}
+input2:
+input2:
+input2:\section{Summary}
+input2:\label{sec:ch2summary}
+input2:as experienced by a user.
+input2:
+input2:how commands are initiated and provided arguments,
+input2:and presented a number of basic commands that will
+input2:As we discuss C programming in a later chapter,
+input2:we will introduce additional programs that are needed
+input2:to develop software written in C for use on Linux
+input2:
+input2:file system for a software developer.
+input2:
+input2:
+input2:users, both in uncompressed and compressed formats.

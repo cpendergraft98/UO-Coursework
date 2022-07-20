@@ -1,0 +1,317 @@
+Project 2 Non-Coding Problems
+Authored by Cole Pendergraft
+
+Problem 4: Convert the following hex values to decimal assuming that they are stored as 32-bit 2s compliment integers.
+
+a. 0xC6
+
+We start by computing the unsigned value of this hex code, which we can do in the followint way:
+
+We have 6 in position 0, so we do 6 * (16^0) = 6. We raise 16 to the power of zero because 6 is in the zeroth position
+We have C in position 1, and C = 12, so we do 12 * (16 ^ 1) = 192
+
+Now we just have to sum those two values to get our unsigned value:
+192 + 6 = 198
+
+So C6 unsigned is 198, but now we need to make it signed, which is also pretty straightforward.
+
+To sign our value, we simply take the unsigned value and subtract 2 raised to the bit length of the value we want to compute. We only have 1 byte here, so that means we have 8 bits, and thus to sign our value we do 198 - 2^8 = -58
+
+So C6 as a signed decimal value is -58
+
+---------------------------------------------------------------
+
+b. 0xFFFFFEC4
+
+Using the method from the previous part, we have:
+
+position 0 is 4, so we have 4 * (16^0) = 4
+position 1 is C = 12, so we have 12 * (16^1) = 192
+position 2 is E = 14, so we have 14 * (16^2) = 3584
+position 3 is F = 15, so we have 15 * (16^3) = 61440
+position 4 is F = 15, so we have 15 * (16^4) = 983040
+position 5 is F = 15, so we have 15 * (16^5) = 15728640
+position 6 is F = 15, so we have 15 * (16^6) = 251658240
+position 7 is F = 15, so we have 15 * (16^7) = 4026531840
+
+now we sum them up:
+4 + 192 + 3584 + 61440 + 983040 + 15728640 + 251658240 + 4026531840 = 4294966980
+
+This time we are accessing all 8 bytes, which means we have 32 bits, and instead of subtracting by 2^16 we want to do 2^32 to find our signed value
+
+4294966980 - 2^32 = -316
+
+So 0xFFFFFEC4 as a signed decimal value is -316
+
+-----------------------------------------------------------------------------
+
+c. 0xFFFFFFFF
+
+I think my method is pretty well documented by this point, and I will not be changing the procedure for this part, so I won't be writing as much on part c.
+
+First we sum up the individual parts of our hex value:
+
+(15 * 16^0) + (15 * 16^1) + (15 * 16^2) + (15 * 16^3) + (15 * 16^4) + (15 * 16^5) + (15 * 16^6) + (15 * 16^7) = 4294967295
+
+And now we convert from unsigned to a signed int, again using a 32 bit value:
+
+4294967295 - 2^32 = -1
+
+So 0xFFFFFFFF as a signed decimal value is -1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Problem 5: Convert the following hex values to decimal assuming that they are encoded as IEEE 754 single-precision floating-point numbers.
+
+a. 0x80000000
+
+First, we need to write this out in its 32 bit format, which would be:
+
+1000 0000 0000 0000 0000 0000 0000 0000
+
+Our sign bit is 1, so our decimal equivalent will be negative
+
+The next 8 bits following the sign bit are our exponential bits, in this case we have
+
+0000 0000
+
+Now we want to convert these 8 exponential bits into their decimal format, which we do by multiplying the bit value in position n by 2^n and summing those values for n in the range 0 to 7:
+
+(0 * 2^0) + (0 * 2^1) + (0 * 2^2) + (0 * 2^3) + (0 * 2^4) + (0 * 2^5) + (0 * 2^6) + (0 * 2^7) = 0
+
+Now we want to make sure to subtract our exponential bias from this value, with the exponenetial bias for single precision floating points being 127, so we have
+
+0 - 127 = -127
+
+So now we have the exponent to attach to 2 in our scientific notation form.
+
+The remaining 23 bits are our fractional bits
+
+000 0000 0000 0000 0000 0000
+
+We need to use these 23 bits to construct our mantissa, which we do in the exact same way we would if converting binary to decimal, but instead we use negative exponents:
+
+(0 * 2^-1) + (0 * 2^-2) + (0 * 2^-3) + (0 * 2^-4) + (0 * 2^-5) + (0 * 2^-6) + (0 * 2^-7) + (0 * 2^-8) + (0 * 2^ -9).... = 0 in this case
+
+We construct our value in the following way:
+
+(-1)^(sign bit) * (1 + mantissa) * 2^(exponential value)
+
+So in this case we have -1^1 * 1 * 2^(-127)
+
+And our decimal answer is 
+
+-1 * (1 + 0) * 2^(-127) = -1 * 2^(-127) which is basically 0
+
+------------------------------------------------------------------------------------------------------
+
+b. 0x3FC00000
+
+I'm running really short on time here and these problems are very algorithmic, this problem and the next will be done in the exact same way, so I will be shaving off some explanation since it is all detailed above and I need to get this done.
+
+Convert to binary:
+
+0011 1111 1100 0000 0000 0000 0000 0000
+
+Sign bit is 0 so our value will be positive
+
+Exponential bits are 0111 1111
+
+Convert exponential bits to decimal form
+
+(1 * 2^0) + (1 * 2^1) + (1 * 2^2) + (1 * 2^3) + (1 * 2^4) + (1 * 2^5) + (1 * 2^6) + (0 * 2^7) = 127
+
+Apply exponential bias:
+
+127 -127 = 0
+
+Fractional bits:
+
+100 0000 0000 0000 0000 0000 
+
+Convert fractional bits to decimal:
+
+(1 * 2^-1) + (0 * 2^-2) + (0 * 2^-3) + (0 * 2^-4) + (0 * 2^-5) + (0 * 2^-6) + (0 * 2^-7) + (0 * 2^-8) + (0 * 2^ -9).... = .5
+
+Assemble via the formula from part a:
+
+1 * (1 + 0.5) * 2^0 = 1.5 * 2^0 = 1.5
+
+-------------------------------------------------------------------
+
+c. 0xC1340000
+
+Convert to binary:
+
+1100 0001 0011 0100 0000 0000 0000 0000
+
+Sign bit is 1 so our value will be negative.
+
+Exponential bits are:
+
+1000 0010
+
+Convert exponential bits to decimal:
+
+(0 * 2^0) + (1 * 2^1) + (0 * 2^2) + (0 * 2^3) + (0 * 2^4) + (0 * 2^5) + (0 * 2^6) + (1 * 2^7) = 129
+
+Apply the exponential bias:
+
+127 - 129 = -2
+
+Remaining 23 bits are fractional bits:
+
+011 0100 0000 0000 0000 0000
+
+Convert fractional bits to decimal:
+(0 * 2^-1) + (1 * 2^-2) + (1 * 2^-3) + (0 * 2^-4) + (1 * 2^-5) + (0 * 2^-6) + (0 * 2^-7) + (0 * 2^-8) + (0 * 2^ -9).... = 0.40652
+
+assemble using the method from part a:
+
+-1 * (1 + 0.40652) * 2^(-2) = -1.40652 * 2^(-2)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Problem 6: Convert the following decimal numbers to hex encoded as IEEE 754 single-precision floating point numbers.
+
+a. 1.0
+
+Our first step is to convert our decimal representation into binary, which we can typically do by repeatedly dividing by 2 and tracking our remainder, but 1 is pretty straightforward as a binary value: 0001 (I will use the method I described in the next two parts). 
+
+Now we need to represent .0 as a decimal value. We normally could do this by repeatedly multiplying by two and tracking our leading value before the decimal place, and subtracting by 1 if we ever reach a value > 1 (I do this in the next two parts). However, in this situation, .0 will just be a series of endlessly repeating zeros, so .0 in binary is
+
+.000000000000...
+
+and 1.0 in binary is
+
+0001.00000...
+
+Normally here, we would want to convert our value into scientific notation, but this is actually already in scientific notation, we couldn't simplify it further.
+
+So now we determine what our sign bit will be. Since 1.0 is positive, our sign bit will be 0.
+
+The next 8 bits are our 8 exponential bits, and to find these we first need to note that the exponential bias for a single precision value is 127. If our exponent is negative, we subtract it from 127. If it is positive, we add. Our exponent is 0, so we have 0 + 127 = 127. Now, we need to convert 127 to binary, and we will have the next 8 bits following the sign bits. We convert 127 to binary by repeatedly dividing by two and tracking our remainders:
+
+127/2 = 63, remainder 1
+63/2 = 31, remainder 1
+31/2 = 15, remainder 1
+15/2 = 7, remainder 1
+7/2 = 3, remainder 1
+3/2 = 1, remainder 1
+1/2 = 0 (floor division), remainder 1
+
+Now we assemble the binary representation from the remainders by the bottom up, so 127 in binary is 01111111.  Now all we need to do is figure out the fractional bit after the decimal place. The fraction bits are simply the first 23 bits in the mantissa, which is the string of numbers following our decimal point in the scientific notation format (our mantissa is .00000000000000...) so we just need to count up the first 23 of those and assemble everything!
+
+Our fractional bits are 00000000000000000000000
+
+So now we have 1 signed bit, 8 exponential bits, and 23 fractional bits, which totals to 32 bits! This means we just need to assemble everything and we are done!
+
+1.0 in its IEEE format is 0011 1111 1000 0000 0000 0000 0000 0000
+
+-------------------------------------------------------------------------------------------------------
+
+b. 16.5
+
+Our first step is to convert our decimal representation into binary by repeatedly dividing by two and tracking our remainders:
+
+16/2 = 8, remainder = 0
+8/2 = 4, remainder = 0
+4/2 = 2, remainder = 0
+2/2 = 1, remainder = 0
+1/2 = 0 (floor division), remainder = 1
+
+Now we assemble our binary value from the bottom up, so 16 in binary is 10000.
+
+Now we have to deal with 0.5, which we can do by repeatedly multiplying by two and tracking our leading value before the decimal place, and subtracting by 1 if we ever reach a value > 1. It is a difficult process to explain by words, so hopefully the demonstration below will make more sense:
+
+0.5 * 2 = 1.0, we track the value immediately before the decimal (1). Now we subtract 1 to once again make the value < 1 and repeat the process
+0.0 *2 = 0.0, we track the value immediately before the decimal (0). 0.0 is less than 1, so we could repeat the procedure again, but we can see continuing to repeat this process will only yield more 0's.
+
+Thus, 0.5 in binary is 0.1000000000....
+
+and 16.5 in binary is 10000.100000000000000000...
+
+Now we want to convert our binary representation into scientific notation, which we can do by shifting the decimal point to the left until there is only a single value in front, i.e. 1.00001000000000000...
+
+We need to shift our decimal over 4 places, so in scientific notation we have:
+
+1.000010000000000... * 2^4
+
+Now all we have left is to write this value in scientific notation in IEEE 754 floating point representation
+
+First, we have to identify what our sign bit will be. This is dependent on our input value, if it is positive then our sign bit is 0, and if it is  negative then our sign bit is 1. 16.5 is a positive number, so our sign bit is 0.
+
+The next 8 bits are our 8 exponential bits, and to find these we first need to note that the exponential bias for a single precision value is 127. If our exponent is negative, we subtract it from 127. If it is positive, we add. Our exponent is positive, so we have 4 + 127 = 131. Now, we need to convert 131 to binary, and we will have the next 8 bits following the sign bits.
+
+131/2 = 65, remainder 1
+65/2 = 32, remainder 1
+32/2 = 16, remainder 0
+16/2 = 8, remainder 0
+8/2 = 4, remainder 0
+4/2 = 2, remainder 0
+2/2 = 1, remainder 0
+1/2 = 0, remainder 1
+
+So 131 in binary is 10000011. As it stands, we currently have 110000011, and all we need to do is figure out the fractional bit after the decimal place. The fraction bits are simply the first 23 bits in the mantissa, which is the string of numbers following our decimal point in the scientific notation format (our mantissa is .00001000000000...) so we just need to count up the first 23 of those!
+
+First 23 bits = 00001000000000000000000
+
+So now we have 1 signed bit, 8 exponential bits, and 23 fractional bits, which totals to 32 bits! This means we just need to assemble everything and we are done!
+
+And thus, the IEEE representation of 16.5 is 0100 0001 1000 0100 0000 0000 0000 0000
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+c. -314.75
+
+I feel like my method is pretty well established at this point, so I will be moving quicker through this part.
+
+Negative value so sign bit is 1
+
+Convert 314 to binary:
+314/2 = 157, remainder = 0
+157/2 = 78, remainder = 1
+78/2 = 39, remainder = 0
+39/2 = 19, remainder = 1
+19/2 = 9, remainder = 1
+9/2 = 4, remainder = 1
+4/2 = 2. remainder = 0
+2/2 = 1, remainder = 0
+1/2 = 0, remainder 1
+
+So 314 in binary is 100111010.
+
+Now we convert 0.75 to binary:
+
+2 * 0.75 = 1.5, track the 1
+2 * 0.5 = 1.0, track the 1
+2 * 0.0 = 0.0, track the 0
+
+Now we stop because the remaining values will all be zero, so .75 in binary is .11000000000...
+
+And 314.75 in binary is 100111010.11000000000000000
+
+Convert binary value to scientific notation:
+1.00111010110000000000... * 2^8
+
+Compute exponential bits using exponential bias of 127:
+127+8 = 135
+
+Conver 135 to binary:
+135/2 = 67, remainder 1
+67/2 = 33, remainder 1
+33/2 = 16, remainder 1
+16/2 = 8, remainder 0
+8/2 = 4, remainder 0
+4/2 = 2, remainder 0
+2/2 = 1, remainder 0
+1/2 = 0, remainder 1
+
+So 135 in binary is 1000 0111 and we have our 8 exponential bits.
+
+Now we select the first 23 bits from our mantissa to get our fractional bits, which I have already explained:
+
+fractional bits are 001 1101 0110 0000 0000 0000
+
+Now we have our 1 sign bit, 8 exponential bits, and 23 fractional bits, and can assemble them.
+
+So -314.75 in its IEEE  format is 1100 0011 1001 1101 0110 0000 0000 0000

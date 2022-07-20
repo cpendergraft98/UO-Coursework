@@ -1,0 +1,11 @@
+Cole Pendergraft
+
+cpenderg
+
+Project attempted solo
+
+First, I'd like to apologize for the incomplete nature of this project, as I'm sure it can be insulting when students turn in blatantly incomplete assignments. In short, some personal events took place this week that I allowed to distract me from my work, and as such I got a late start on this project, which led to me not completing it. I don't expect any of what I'm saying to impact my grade on this assignment, I just wanted to take this opportunity to explain myself.
+
+I feel I came close to finishing exerciseStack.c, but ultimately there are still missing pieces. I believe I managed to get the methods for pop() and push() implemented correctly, but I couldn't figure out a way to properly print everything from the Stack. I eventually determined that I must pop each element out from the stack, print it, and then add it back to the stack in the same order after printing everything beneath it. I was able to accomplish the former, pop each element from the stack and print it, but my issue is that I could never figure out a means to properly reassmble the stack after popping elements out. I ended up deleting all this code on the assumption that I was approaching the print method incorrectly, but after trying multiple ideas I think that my original plan was correct, and that I just needed to find the correct way to reassemble the stack. There was another error in this method that I was unable to figure out, which was that I get extra outputs from my print statement for reasons I can't determine. I have my print method commented out in my submission so that the rest of the processes work correctly, but it is in there still.
+
+I unfortunately did not even reach balanceCheck.c

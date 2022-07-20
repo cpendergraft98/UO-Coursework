@@ -1,0 +1,172 @@
+# Part 1
+
+Direct Mapped:
+tag set offset
+xxx xx  xxx
+
+2-way set associative:
+tag  set offset
+xxxx x   xxx
+
+A. 0x02
+0b0000 0010
+
+
+tag  set offset
+0000 0   010
+
+cold miss
+
+set v tag  data
+0   1 0000 M[0-7]
+
+B. 0x24
+0b0010 0100
+
+tag  set offset
+0010 0   100
+
+cold miss
+
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+C. 0x07
+0b0000 0111
+
+tag  set offset
+0000 0   111
+
+hit!
+
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+D. 0x04
+0b0000 0100
+
+hit!
+
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+E. 0x22
+0b0010 0010
+
+hit!
+
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+F. 0x06
+0b0000 0110
+
+hit!
+
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+G. 0x02
+0b0000 0010
+
+hit!
+
+set v tag  data
+0   1 0000 M[0-7]
+0   1 0010 M[32-39]
+
+# Part 2
+
+tag set offset
+xxx x   xxxx
+
+A. 0x00
+0b0000 0000
+
+tag set offset
+000 0   0000
+
+cold miss
+
+set v tag data
+0   1 000 M[0-15]
+
+B. 0x46
+0b0100 0110
+
+tag set offset
+010 0   0110
+
+cold miss
+
+set v tag data
+0   1 000 M[0-15]
+0   1 010 M[64-79]
+
+C. 0x06
+0b0000 0110
+
+tag set offset
+000 0   0110
+
+hit!
+
+set v tag data
+0   1 000 M[0-15]
+0   1 010 M[64-79]
+
+D. 0x40
+0b0100 0000
+
+tag set offset
+010 0   0000
+
+hit!
+
+set v tag data
+0   1 000 M[0-15]
+0   1 010 M[64-79]
+
+E. 0x12
+0b0001 0010
+
+tag set offset
+000 1   0010
+
+cold miss
+
+set v tag data
+0   1 000 M[0-15]
+0   1 010 M[64-79]
+1   1 000 M[16-31]
+
+F. 0x0c
+0b0000 1100
+
+tag set offset
+000 0   1100
+
+hit!
+
+set v tag data
+0   1 000 M[0-15]
+0   1 010 M[64-79]
+1   1 000 M[16-31]
+
+G. 0x00
+0b0000 0000
+
+tag set offset
+000 0   0000
+
+hit!
+
+set v tag data
+0   1 000 M[0-15]
+0   1 010 M[64-79]
+1   1 000 M[16-31]

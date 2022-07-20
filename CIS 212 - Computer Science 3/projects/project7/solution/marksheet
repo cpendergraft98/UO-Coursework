@@ -1,0 +1,41 @@
+student name: pendergraftcole
+total marks: 49
+penalty(%): 0
+final mark: 49
+
+ 5 report is consistent with behavior of scripts
+   exerciseQueue
+   =============
+ 1 exerciseQueue.c successfully compiles
+ 1 exerciseQueue.c compiles with no warnings
+ 1 the link phase to create exerciseQueue is successful
+ 2 the link phase to create exerciseQueue is successful with no warnings
+ 1 exerciseQueue works correctly with EQsmall.in
+ 2 exerciseQueue works correctly with EQmedium.in
+ 3 exerciseQueue works correctly with unseen medium-sized file (N ~ 10^3)
+ 3 exerciseQueue works correctly with unseen large-sized file (N ~ 10^5)
+ 3 valgrind reports no memory leaks or errors
+ 6 the code could have worked with minor modification to the source
+
+   llistqueue.c
+   ============
+ 2 llistqueue.c successfully compiles
+ 0 llistqueue.c compiles with no warnings
+ 1 the link with my exerciseQueue.o is successful
+ 2 resulting program works correctly with EQmedium.in
+ 5 valgrind reports no memory leaks or errors
+11 the code could have worked with minor modification to the source
+
+ 0 corrections described below
+
+comments
+* I don't know how you managed to get things to work having both of these in
+  your main()
+  const Queue *q = Queue_create(NULL);
+  q = LListQueue(NULL);
+  This should have led to an error from the linker, since Queue_create may
+  have been matched in arrayqueue.o in the library, and when you invoked
+  LListQueue(), that would have been matched by llistqueue.o in the library,
+  which also contains code for Queue_create(). I commented out the 2nd line
+  above, and the log shows the results of executing that exerciseQueue.
+* too bad that you did not eliminate the compiler warnings on llistqueue.c

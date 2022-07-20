@@ -1,0 +1,3 @@
+#!/bin/bash
+
+tr '[:punct:]' '\n' | tr '[:upper:]' '[:lower:]' | tr -s '[:blank:]' '\n' | sort | uniq -c | sort -g -r

@@ -1,0 +1,9 @@
+Cole Pendergraft
+
+cpenderg
+
+Project attempted solo
+
+I attempted to utilize a hash table for this
+
+My project is definitely a mess and doesn't pass all the tests, but I'm still fairly proud of what I have. I have been ridiulously busy this week because of upcoming finals, and was only able to dedicate something like 4 hours to this particular project. To get as far as I did in just a few hours makes me very happy. At the time of writing, my code fails longtests 15 and 16, and it fails stringtests 10, 15, and 16. I'm at a bit of a loss as to why itCreate and toArray are failing, but knowing myself it is likely a very simple fix.  Everything else passes. 
