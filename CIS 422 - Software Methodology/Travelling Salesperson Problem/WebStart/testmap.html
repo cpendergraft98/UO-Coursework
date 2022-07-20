@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <!-- Values required by bootstrap -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- need for chevron icon for collapsable card -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/2.4.85/css/materialdesignicons.css" rel="stylesheet" />
+
+    <!-- Name of web app -->
+    <title>Prescient Path</title>
+
+    <!-- Bootstrap stylesheet import.  Must be above any custom style sheet -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- CSS stylesheet. Open it in same directory -->
+    <link rel="stylesheet" type="text/css" href="./style.css"/>
+    <!-- Javascript file containing support functions for map init., geocoding, and more (add here or make new one) -->
+    <script src="./index.js"></script>
+    <!-- Javascript file containing Google API functions formerly found in db.js -->
+    <script src="./gapi.js"></script>
+    <!-- AXIOS library import. Used for retreiving promises from google servers. See JS file. -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  </head>
+  <body>
+
+    <!-- JQuery, Popper, and Bootstrap import.  All Required by Bootsrtap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!--- Makes infowindows do infowindow things -->
+    <title>Info Windows</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" type="text/css" href = "./style.css" />
+    <script src="./index.js"></script>
+
+    <!-- Code that implements autocomplete -->
+    <title>Place Autocomplete</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script src="./index.js"></script>
+  </head>
+  <body>
+
+    <!-- Bootstrap implementation of text input and submit button. Not done and dynamic sizing can be implemented -->
+    <div id="searchdiv">
+        <div class="form-group mx-sm-3 mb-2" id="addressdiv">
+          <input type="text" class="form-control" id="autocomplete" name="autocomplete" placeholder="Address">
+        </div>
+        <div id="submitdiv">
+          <button type="submit" class="btn btn-primary mb-2" id="addressSearch" name="addressSearch">Search</button>
+        </div>
+    </div>
+
+    <!-- Assigne jquery on click listener to search button above. showInput can be found in index.js -->
+    <script language="JavaScript">
+      $("#addressSearch").click(
+         function(e) {
+            showInput();
+      });
+      
+    </script>
+
+    <!-- Upload file prompt for adding addresses to list -->
+    <div id="file-upload" class="input-group mb-3">
+      <form method="post" enctype="multipart/form-data" id="fileupload" name="fileupload">
+        <input type="file" class=fileInput name="file" id="file">
+        <div id="upload-btn">
+          <button class="btn btn-secondary btn-sm" id="submitfile">Upload</button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Jquery function handles file upload. Attached to above fileupload and submitfile html elements. --> 
+    <script language="JavaScript">
+      $("#fileupload").submit(
+         function(e) {
+             // prevents the submission from doing default HTML behavior
+             e.preventDefault();
+             var formdata = new FormData();
+             // go through each file and append it to formdata (this should only be one)
+             $.each($('#file')[0].files, function(index, file) {
+                formdata.append("file", file);
+             });
+             // ajax request to upload file without refreshing webpage
+             $.ajax({
+                url: 'send_file',
+                type: 'POST',
+                data: formdata,
+                // processData defaults to true, and that makes multer not work
+                processData: false,
+                contentType: false,
+                cache: false,
+                // if the ajax POST request succeeded (code == 200) then add to list
+                success: function(data) {
+                  // this is a small snippet from the showInput() function above
+
+                  // get size of DB 
+                  var curr_size = 0;
+                  $.get('db_size').done(function(size) {
+                      curr_size = parseInt(size);
+                  }); 
+                  // Time out set for geocoding of each address in the file.
+                  setTimeout(() => {
+                    // Loop through addesses in the input file.
+                    for (const address of data) {
+                      // Check the address is not null and check that less than 10 addresses have been added.
+                      if (address != "" && curr_size < 10) {
+                        // geocodeAddress can be found in index.js
+                        console.log(address, curr_size > 0 ? 0 : 1);
+                        // Give geocodeAddress the address and a boolean indicating if it is the first address.
+                        geocodeAddress(address, curr_size > 0 ? 0 : 1);
+                        curr_size++;
+                        //Call addItem to add the address to the address list.
+                        addItem(document.getElementById("the_list"), address); 
+                      //Send error if more than 10 addresses.
+                      } else if (curr_size >= 10) {
+                        alert("ERROR: The maximum amount of addresses is 10.");
+                        return;
+                      }
+                    }
+                  // Time out for 400 msecs to wait for above async geocoding calls to finish.
+                  }, 400);
+                  console.log("Done with file upload");
+                  // reset the fileupload form to defaults
+                  $("#fileupload")[0].reset();
+                },
+                // otherwise alert with the error
+                error: function(err) {
+                  var message = err['responseJSON']['message'];
+                  if (message === undefined) {
+                    message = err.responseJSON;
+                  }
+                  alert("ERROR: " + message);
+                }
+             });
+        });
+    </script>
+
+    <!-- A list html object that holds address items -->
+    <div id = "list-container" class="card">
+      <div id="cardheader-div" class="card-header">
+        <button class="btn btn-light text-left" data-toggle="collapse" data-target="#collapse1" aria-expanded="true">
+          <i id="chevy" class="mdi mdi-chevron-up float-right"></i>
+          Addresses Submitted
+        </button>
+        <!-- Optimize button run the optimize function, triggering TSP algorithm and route display -->
+        <button id="optimize_button" name="optimize_button" type="button" class="btn btn-secondary btn-sm" onclick="doOptimize();">
+          Optimize Route
+        </button>
+        <!-- Reset button remove all items from the display list, resets map and db. -->
+        <button id="reset_button" name="reset_button" type="button" class="btn btn-secondary btn-sm" onclick="removeAll(document.getElementById('the_list'));">
+          Clear All
+        </button>
+        <!-- Assign jquery onclick listener to the reset button above. -->
+        <script>
+          $("#reset_button").click(
+            function(e) {
+              e.preventDefault();
+              $.post('reset', function(data) {
+                initMap();
+            });
+          });
+        </script>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse show"> 
+        <ul id = "the_list" class = "list-group"></ul>
+      </div>
+    </div>
+
+
+    <!-- Map div and call to google api initializing map. Uses iniMap() function from JS file. -->
+    <div id="map"></div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfdE0CN_y7ZVL2EtxJLVsW7kIhZK_FcNo&libraries=places&callback=initMap&v=weekly"
+      async
+    ></script>
+
+  </body>
+</html>

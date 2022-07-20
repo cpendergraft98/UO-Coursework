@@ -1,0 +1,170 @@
+/*  
+CSS file controls styling of HTML elements.
+Position, interaction, appearance, interaction and more.
+Other styling and interaction is handled by Javascript.
+
+Absolute position removes element from the conrmal flow of html page.
+Relative position positions an element relative to its parent element.
+With z-index we set the layer of an item. z-index greater than the map means an item sits ontop of the map.
+Left and right position which side of a container and element will float to.
+Width informs html how large a element will be.
+Margins tell html to provide space on the outside of an element or container.
+Flex and flex-direction help in scaling the size of an html element.
+Border detrmines border attributes.
+Mid-width or max-height pose limits on the size of an element, allowing it to scroll.
+*/
+
+
+
+
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+/* Map CSS values */
+#map {
+  height: 100%;
+  /* z-index determines front-back layer of view */
+  z-index:4;
+  position: relative;
+}
+
+
+/* Div that holds search and submit bootstrap elements */
+/* Flexible automargins. Centers input bar and search button while scaling with the width of the browser window */
+#searchdiv {
+  position: absolute;
+  margin:0 auto;
+  z-index: 5;
+  top:2%;
+  left:0;
+  right:0;
+  margin-left:auto;
+  margin-right:auto;
+  width:50%;
+  display: flex;
+  flex-direction:row;
+}
+
+/* Text input box CSS*/
+#autocomplete {
+  width:100%;
+}
+
+/* Div around the search button*/
+#addressdiv {
+  position:relative;
+  display: inline-block;
+  left:0;
+  right:0;
+  flex:1;
+}
+
+/* Div around the search button*/
+#submitdiv {
+  position:relative;
+  display: inline-block;
+  left:0;
+  right:0;
+  float:right;
+}
+
+/* File upload container div */
+#file-upload{
+  z-index:6;
+  position: absolute;
+  left:63.5%;
+  top: 21%;
+  display: flex;
+  flex-direction: row;
+  max-width: 36vw;
+}
+
+/* Submit file upload button */
+#upload-btn {
+  z-index: 7;
+  position:relative;
+  float: right;
+  width: 15%;
+  flex: 1;
+}
+
+/* Upload file button */ 
+#file{
+  z-index:6;
+  position: relative; 
+  display: inline-block;
+  left: 2%;
+  background-color: white;
+  border-radius: .25rem;
+  border: solid grey 1px;
+  max-height: 99%;
+  flex: 1;
+  width: 80%;
+}
+
+/* Address list container div */
+#list-container{
+  z-index:6;
+  position: absolute;
+  border-radius: .25rem;
+  border: solid #000 1px;
+  left:64%;
+  top: 26%;
+  display: flex;
+  min-width: 25vw;
+  flex-direction: row, column;
+}
+
+/* List container div */
+.list-group{
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* General styling for all buttons */
+button {
+  font-size: 10px;
+  display: inline-block;
+  position: relative;
+  right: -1%;
+  cursor: pointer;
+}
+
+/* List element styling */
+#cardheader-div{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+/* Optimize button above list. */
+#optimize_button{
+  font-size: 12px;
+  display: inline-flexbox;
+  float: right;
+  flex: 1;
+}
+
+/* Affects the text input field associated with autocomplete */
+#locationField,
+#controls {
+  position: relative;
+  left: 30%;
+  width: 480px;
+}
+
+/* Affects whitespace at the top of the screen*/
+#locationField {
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+
+/* Documnet and Body CSS*/
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
