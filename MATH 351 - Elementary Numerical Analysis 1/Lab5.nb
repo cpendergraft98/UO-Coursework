@@ -1,0 +1,360 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     14697,        352]
+NotebookOptionsPosition[     12724,        301]
+NotebookOutlinePosition[     13456,        327]
+CellTagsIndexPosition[     13413,        324]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[StyleBox["Swap and Secant Method",
+ FontColor->RGBColor[0, 0, 1]]], "Title",
+ CellChangeTimes->{{3.431609798263876*^9, 3.4316098011443663`*^9}, {
+  3.747488363348585*^9, 3.747488415906847*^9}, {3.7474939365671*^9, 
+  3.7474939369710093`*^9}, {3.811090039638591*^9, 3.811090065337469*^9}, {
+  3.8110901520694447`*^9, 3.8110901528359013`*^9}, {3.811090590135434*^9, 
+  3.811090595801222*^9}, {3.81125926573765*^9, 3.811259273786038*^9}, {
+  3.8116923511986723`*^9, 3.811692361959235*^9}, {3.812125923680859*^9, 
+  3.812125929671544*^9}},ExpressionUUID->"4e4ebb21-3c7d-429b-b027-\
+caa1cb83ea80"],
+
+Cell["Swap:", "Section",
+ CellChangeTimes->{{3.747488439393674*^9, 3.747488470595742*^9}, {
+  3.8110901577371902`*^9, 3.811090163228754*^9}, {3.811259278097172*^9, 
+  3.811259286635171*^9}, {3.81169236848472*^9, 3.8116923754978533`*^9}, {
+  3.812121651547862*^9, 
+  3.8121216522974873`*^9}},ExpressionUUID->"118751be-72cc-4c7e-b7cd-\
+22a41e3b1fa6"],
+
+Cell["\<\
+We\[CloseCurlyQuote]re going to be (potentially) switching the order of the \
+points, so lets define a quick swapping function:\
+\>", "Text",
+ CellChangeTimes->{{3.747488554613214*^9, 3.747488593345091*^9}, {
+   3.74748865343511*^9, 3.747488683928808*^9}, {3.747488717465259*^9, 
+   3.747488749834737*^9}, {3.747488809948482*^9, 3.747488809948629*^9}, {
+   3.7474889809679203`*^9, 3.747489234348877*^9}, {3.747489280939591*^9, 
+   3.747489366116881*^9}, {3.810653816974585*^9, 3.810653886347776*^9}, {
+   3.810653937486102*^9, 3.810653985831469*^9}, 3.810655299826169*^9, {
+   3.8106560410112047`*^9, 3.810656041549601*^9}, {3.811090261778709*^9, 
+   3.811090389388233*^9}, {3.8112592906752987`*^9, 3.8112593053751307`*^9}, {
+   3.811259337822567*^9, 3.811259412060944*^9}, {3.8116923799040203`*^9, 
+   3.811692419041059*^9}, {3.812121656475716*^9, 
+   3.812121713173848*^9}},ExpressionUUID->"055cbe1a-c98a-47bf-b63f-\
+fb9b65bc48e2"],
+
+Cell["Secant Algorithm:", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+  3.811090393538105*^9, 3.8110903974852953`*^9}, {3.811259479987322*^9, 
+  3.811259491300291*^9}, {3.811692589138609*^9, 3.811692593136594*^9}, {
+  3.812121727249013*^9, 
+  3.8121217388956738`*^9}},ExpressionUUID->"123f7f85-9285-434d-be91-\
+2164c424439b"],
+
+Cell["Let\[CloseCurlyQuote]s have a look, and stress test it a bit:", "Text",
+ CellChangeTimes->{{3.747492797809181*^9, 3.747492825361656*^9}, {
+  3.747492987321673*^9, 3.747493008065263*^9}, {3.747493574267953*^9, 
+  3.747493605993268*^9}, {3.8106540723784637`*^9, 3.810654181890005*^9}, {
+  3.811090402977035*^9, 3.811090448449452*^9}, {3.811259494717498*^9, 
+  3.811259498649246*^9}, {3.8112595571448793`*^9, 
+  3.811259561462315*^9}},ExpressionUUID->"f40badf6-4f71-45a3-91ee-\
+2d424d658c86"],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "x", "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"secant", "[", 
+    RowBox[{"f_", ",", "x0_", ",", "x1_", ",", "max_", ",", "delta_"}], "]"}],
+    ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"k", "=", "0"}], ",", 
+       RowBox[{"p0", "=", 
+        RowBox[{"N", "[", "x0", "]"}]}], ",", 
+       RowBox[{"p1", "=", 
+        RowBox[{"N", "[", "x1", "]"}]}], ",", "m"}], "}"}], ",", " ", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{"k", "=", "0"}], ",", 
+        RowBox[{"k", "<", "max"}], ",", 
+        RowBox[{"k", "++"}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Abs", "[", 
+             RowBox[{"f", "/.", 
+              RowBox[{"x", "\[Rule]", "p0"}]}], "]"}], "<", 
+            RowBox[{"Abs", "[", 
+             RowBox[{"f", "/.", 
+              RowBox[{"x", "\[Rule]", "p1"}]}], "]"}]}], ",", 
+           RowBox[{"swap", "[", 
+            RowBox[{"p0", ",", "p1"}], "]"}]}], "]"}], ";", " ", 
+         RowBox[{"(*", 
+          RowBox[{
+          "We", " ", "always", " ", "want", " ", "p1", " ", "to", " ", "be", 
+           " ", "\"\<better\>\""}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"m", "=", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"f", "/.", 
+               RowBox[{"x", "\[Rule]", "p1"}]}], ")"}], "-", 
+             RowBox[{"(", 
+              RowBox[{"f", "/.", 
+               RowBox[{"x", "\[Rule]", "p0"}]}], ")"}]}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"p1", "-", "p0"}], ")"}]}]}], ";", 
+         RowBox[{"(*", 
+          RowBox[{"Slope", " ", "of", " ", "Secant"}], "*)"}], 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"m", "==", "0"}], ",", 
+           RowBox[{
+            RowBox[{"Print", "[", 
+             RowBox[{
+             "\"\<Found a horizontal secant at xi =\>\"", ",", " ", "p0", 
+              ",", "\"\< xi+1 =\>\"", ",", "p1"}], "]"}], ";", 
+            RowBox[{"Return", "[", "p1", "]"}]}]}], "]"}], ";", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"Let", "'"}], "s", " ", "not", " ", "divide", " ", "by", 
+           " ", "zero", " ", "in", " ", "the", " ", "next", " ", 
+           RowBox[{"step", "!"}]}], "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"p0", "=", " ", "p1"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"p1", "=", 
+          RowBox[{"p1", "-", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"f", "/.", 
+              RowBox[{"x", "\[Rule]", "p1"}]}], ")"}], "/", "m"}]}]}], ";", 
+         "\[IndentingNewLine]", " ", 
+         RowBox[{"Print", "[", 
+          RowBox[{"\"\<p = \>\"", ",", 
+           RowBox[{"N", "[", "p1", "]"}], ",", "\"\< and y= \>\"", ",", 
+           RowBox[{"N", "[", 
+            RowBox[{"f", "/.", 
+             RowBox[{"x", "\[Rule]", "p1"}]}], "]"}], ",", "\"\< dp = \>\"", 
+           ",", 
+           RowBox[{"N", "[", 
+            RowBox[{"p1", "-", "p0"}], "]"}]}], "]"}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Abs", "[", 
+             RowBox[{"p1", "-", "p0"}], "]"}], "<", "delta"}], ",", 
+           RowBox[{
+            RowBox[{"Print", "[", 
+             RowBox[{
+             "\"\<Accuracy attained since delta is\>\"", ",", " ", "delta", 
+              ",", "\"\<and dp is:\>\"", ",", 
+              RowBox[{"N", "[", 
+               RowBox[{"p1", "-", "p0"}], "]"}]}], "]"}], ";", " ", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Return", "[", "p1", "]"}]}]}], "]"}], ";"}]}], 
+       RowBox[{"(*", 
+        RowBox[{"Have", " ", "we", " ", "acheived", " ", 
+         RowBox[{"accuracy", "?"}]}], "*)"}], "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Return", "[", "p1", "]"}], ";"}]}], "\[IndentingNewLine]", 
+    "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{
+  3.811692614225052*^9, {3.812121774922475*^9, 3.812121871982295*^9}, {
+   3.8121219149620953`*^9, 3.812121916188869*^9}, {3.812122008448119*^9, 
+   3.8121221395283003`*^9}, {3.812122195703884*^9, 3.812122380176875*^9}, {
+   3.812122427291316*^9, 3.812122591647194*^9}, {3.812122639179904*^9, 
+   3.8121226858925343`*^9}, {3.812122717840803*^9, 3.81212278367972*^9}, {
+   3.812123080788188*^9, 3.8121231779288483`*^9}, {3.8121232988929768`*^9, 
+   3.8121233914775877`*^9}, {3.8121236222884912`*^9, 3.81212362980802*^9}, {
+   3.812123670487884*^9, 3.8121236743024387`*^9}, {3.8121237177564697`*^9, 
+   3.812123718317986*^9}, {3.81212377191092*^9, 
+   3.8121238797579823`*^9}},ExpressionUUID->"2872a9dd-c8a4-4a12-bf88-\
+a8cbb0b8ee5f"],
+
+Cell["First Pass at approximating:", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+  3.811090393538105*^9, 3.8110903974852953`*^9}, {3.81109057140378*^9, 
+  3.811090580384987*^9}, {3.811259570386963*^9, 
+  3.811259581853074*^9}},ExpressionUUID->"376dbb4f-0e67-4530-bc11-\
+4156321c4163"],
+
+Cell[TextData[{
+ "Lets approximate ",
+ Cell[BoxData[
+  SqrtBox["2"]],
+  CellChangeTimes->{3.811259609937553*^9},ExpressionUUID->
+  "9699266e-2cf7-43c6-8b42-0942aeca130d"],
+ " (this should look familiar from lecture just now):"
+}], "Text",
+ CellChangeTimes->{{3.747492797809181*^9, 3.747492825361656*^9}, {
+   3.747492987321673*^9, 3.747493008065263*^9}, {3.747493574267953*^9, 
+   3.747493605993268*^9}, {3.8106540723784637`*^9, 3.810654181890005*^9}, {
+   3.811090402977035*^9, 3.811090521403553*^9}, 3.811090557798985*^9, {
+   3.8112595860143137`*^9, 3.811259617670092*^9}, {3.811692638439062*^9, 
+   3.811692646638893*^9}, {3.812123937438033*^9, 
+   3.8121239416966*^9}},ExpressionUUID->"479fdd55-0a4a-40f0-a329-\
+feb501850b11"],
+
+Cell["Pi to 7 digits", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+  3.811090393538105*^9, 3.8110903974852953`*^9}, {3.811090610882833*^9, 
+  3.8110906274966097`*^9}, {3.811259622148604*^9, 
+  3.811259626066105*^9}},ExpressionUUID->"ac7f78dd-b42f-4137-983c-\
+8f553e2cc44e"],
+
+Cell["\<\
+Recall we needed 24 bisections to get this accuracy. Let\[CloseCurlyQuote]s \
+see how Secant does:\
+\>", "Text",
+ CellChangeTimes->{{3.747492797809181*^9, 3.747492825361656*^9}, {
+  3.747492987321673*^9, 3.747493008065263*^9}, {3.747493574267953*^9, 
+  3.747493605993268*^9}, {3.8106540723784637`*^9, 3.810654181890005*^9}, {
+  3.811090402977035*^9, 3.811090448449452*^9}, {3.81109063390836*^9, 
+  3.81109066840625*^9}, {3.811090718509941*^9, 3.811090733910178*^9}, {
+  3.811259638363985*^9, 3.811259664763879*^9}, {3.811692686396188*^9, 
+  3.8116926887855177`*^9}, {3.8116927245569983`*^9, 3.8116927555645103`*^9}, {
+  3.812125995981292*^9, 
+  3.812125999001019*^9}},ExpressionUUID->"5fb41f5f-5bdb-4b3c-beed-\
+255ed792a582"],
+
+Cell["Your Turn!", "Section",
+ CellChangeTimes->{{3.747488516049613*^9, 3.747488519791026*^9}, {
+  3.747494948902792*^9, 3.747494949331627*^9}, {3.811090815901167*^9, 
+  3.811090818438438*^9}},ExpressionUUID->"c88a2b6c-5bc0-4c37-b903-\
+a9ab58fa5e7a"],
+
+Cell[TextData[{
+ StyleBox["Exercise 1: ",
+  FontWeight->"Bold"],
+ "Graph ",
+ Cell[BoxData[
+  RowBox[{
+   RowBox[{"f", 
+    RowBox[{"(", "x", ")"}]}], "=", 
+   RowBox[{"1", "-", 
+    SuperscriptBox["\[ExponentialE]", "x"], "+", "x", "+", 
+    FractionBox[
+     SuperscriptBox["x", "2"], "2"]}]}]],
+  CellChangeTimes->{3.7483539296755466`*^9},ExpressionUUID->
+  "4863ec29-7f94-43b5-b015-b977f2d963fe"],
+ " (use the Plot[] function) and use the code to find the unique zero \
+starting at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["x", "0"], "=", "10"}], ",", 
+    RowBox[{
+     SubscriptBox["x", "1"], "=", "9"}]}], TraditionalForm]],ExpressionUUID->
+  "3d615616-beae-4a72-9705-64d4fbadbb06"],
+ ". How much precision do you have after 10 steps? 15? How many steps does it \
+take to get with .1 of the root? "
+}], "Text",
+ Evaluatable->False,
+ CellGroupingRules->"OutputGrouping",
+ CellChangeTimes->{{3.7474939600776873`*^9, 3.7474940319205523`*^9}, {
+  3.747494081687859*^9, 3.747494113907243*^9}, {3.810654351601015*^9, 
+  3.810654393100607*^9}, {3.811090826137731*^9, 3.8110908737154512`*^9}, {
+  3.8112596958280087`*^9, 3.811259914574368*^9}, {3.8116927887977467`*^9, 
+  3.81169280076128*^9}, {3.811695199613377*^9, 3.8116952086888123`*^9}, {
+  3.812124135731955*^9, 3.812124143737308*^9}},
+ AspectRatioFixed->
+  True,ExpressionUUID->"3bdfc9b7-7fb1-4227-9323-f3c75511c8f7"],
+
+Cell[TextData[{
+ StyleBox["Exercise 2: ",
+  FontWeight->"Bold"],
+ StyleBox[" ",
+  FontWeight->"Bold",
+  FontSlant->"Plain"],
+ StyleBox["Find the solutions to the equation  x^3 - 12 x^2 + 3x +1=0. A \
+graph may help!",
+  FontSlant->"Plain"]
+}], "Text",
+ CellChangeTimes->{{3.748354285082735*^9, 3.748354310970777*^9}, {
+  3.7483543582540817`*^9, 3.748354369170755*^9}, {3.748354433244031*^9, 
+  3.748354442224222*^9}, {3.748354498038639*^9, 3.7483545442901*^9}, {
+  3.7483546060302563`*^9, 3.748354611035734*^9}, {3.748354660041008*^9, 
+  3.7483546695940437`*^9}, {3.812124173026085*^9, 3.812124179675288*^9}, {
+  3.812126007176833*^9, 
+  3.812126013743279*^9}},ExpressionUUID->"11d19fd8-779b-4fc6-9efa-\
+a9e564fc32ee"]
+},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{1024, 720},
+WindowMargins->{{Automatic, 1}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+ShowCellLabel->True,
+ShowCellTags->False,
+FrontEndVersion->"11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 27, \
+2017)",
+StyleDefinitions->"Default.nb",
+PrivateNotebookOptions -> {"ColorPalette" -> {RGBColor, 128}},
+RenderingOptions -> {"ObjectDithering" -> True},
+RenderingOptions -> {"RasterDithering" -> False}
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[545, 20, 606, 9, 92, "Title", "ExpressionUUID" -> \
+"4e4ebb21-3c7d-429b-b027-caa1cb83ea80"],
+Cell[1154, 31, 348, 6, 64, "Section", "ExpressionUUID" -> \
+"fcb6b52f-0bea-44a7-9eb9-82a53ef4c928"],
+Cell[1505, 39, 943, 15, 27, "Text", "ExpressionUUID" -> \
+"50b1f6ed-f033-47cf-a803-14950c362e02"],
+Cell[2451, 56, 359, 6, 64, "Section", "ExpressionUUID" -> \
+"f955b896-0239-4d01-83d3-f0c2704b6569"],
+Cell[2813, 64, 495, 7, 27, "Text", "ExpressionUUID" -> \
+"412ae438-da94-46fe-91c1-2c630c2d9573"],
+Cell[3311, 73, 4926, 117, 369, "Input", "ExpressionUUID" -> \
+"2872a9dd-c8a4-4a12-bf88-a8cbb0b8ee5f"],
+Cell[8240, 192, 318, 5, 64, "Section", "ExpressionUUID" -> \
+"acae5fd2-6e3c-4546-9859-63a5e4391c28"],
+Cell[8561, 199, 731, 15, 30, "Text", "ExpressionUUID" -> \
+"ecbe8c45-5713-4f00-b023-7bb4a766a02d"],
+Cell[9295, 216, 307, 5, 64, "Section", "ExpressionUUID" -> \
+"e97920e4-3a6c-409a-a699-efaab7b5d001"],
+Cell[9605, 223, 735, 13, 27, "Text", "ExpressionUUID" -> \
+"5fb41f5f-5bdb-4b3c-beed-255ed792a582"],
+Cell[10343, 238, 250, 4, 64, "Section", "ExpressionUUID" -> \
+"bf2b4af7-662c-4b55-97c4-3eccc407e33e"],
+Cell[10596, 244, 1403, 36, 57, "Text", "ExpressionUUID" -> \
+"f44bc5f1-a2f0-4ccb-84d6-87cb02836094",
+ Evaluatable->False,
+ CellGroupingRules->"OutputGrouping"],
+Cell[12002, 282, 718, 17, 30, "Text", "ExpressionUUID" -> \
+"11d19fd8-779b-4fc6-9efa-a9e564fc32ee"]
+}
+]
+*)
+

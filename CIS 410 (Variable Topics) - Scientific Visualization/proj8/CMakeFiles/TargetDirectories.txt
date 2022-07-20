@@ -1,0 +1,3 @@
+/home/cole/Desktop/cis410/proj8/CMakeFiles/edit_cache.dir
+/home/cole/Desktop/cis410/proj8/CMakeFiles/rebuild_cache.dir
+/home/cole/Desktop/cis410/proj8/CMakeFiles/proj8G.dir

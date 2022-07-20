@@ -1,0 +1,398 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     13218,        390]
+NotebookOptionsPosition[     12568,        371]
+NotebookOutlinePosition[     12944,        387]
+CellTagsIndexPosition[     12901,        384]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[{
+ "Points: (1, 1), (2, 5), (5, 41)\n\nGroup 4, Problem 1:\n\n\tUse the points \
+to construct a divided differences table, and use your table to find the \
+interpolating polynomial in Newton\[CloseCurlyQuote]s form.\n\t\n\tWe \
+construct the first degree term of the divided difference table as follows:\n\
+\t\n\t\t\t\t\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "(", 
+    RowBox[{
+     SubscriptBox["x", "i"], ",", " ", 
+     SubscriptBox["x", 
+      RowBox[{"i", " ", "+", " ", "1"}]]}], ")"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"135f4cb0-46aa-4e5e-903a-9aaf91b9db6b"],
+ StyleBox[" = ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   FractionBox[
+    RowBox[{
+     RowBox[{"f", "(", 
+      SubscriptBox["x", 
+       RowBox[{"i", " ", "+", " ", "1"}]], ")"}], " ", "-", " ", 
+     RowBox[{"f", "(", 
+      SubscriptBox["x", "i"], ")"}]}], 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"i", " ", "+", " ", "1"}]], " ", "-", " ", 
+     SubscriptBox["x", "i"], " "}]], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"ee5b7846-b9c1-486e-80b2-41f84993cbc7"],
+ "\n\t\t\t\t\t\t\n\tThus, the two first degree terms of the divided \
+differences table are:\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"f", "(", 
+     RowBox[{
+      SubscriptBox["x", "0"], ",", " ", 
+      SubscriptBox["x", "1"]}], ")"}], " ", "=", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"f", "(", 
+       SubscriptBox["x", "1"], ")"}], " ", "-", " ", 
+      RowBox[{"f", "(", 
+       SubscriptBox["x", "0"], ")"}]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "65e6aefa-1904-4300-994e-e23672ac9f14"],
+ StyleBox[") / ",
+  FontColor->RGBColor[0, 0, 1]],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["x", "1"], " ", "-", " ", 
+     SubscriptBox["x", "0"]}], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "1473e2fc-9ef1-48b8-b5a6-7280bcb3cce1"],
+ "\n\tf(1, 2) = (5 - 1) / (2 - 1) = 4\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "(", 
+    SubscriptBox["x", "1"]}], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "d6faeff0-e17a-4a96-8c1a-4500372d4184"],
+ StyleBox[",  ",
+  FontColor->RGBColor[0, 0, 1]],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "2"], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "6875def5-99f4-46c7-ae8f-56900381fd23"],
+ StyleBox[") = ",
+  FontColor->RGBColor[0, 0, 1]],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"f", "(", 
+      SubscriptBox["x", "2"], ")"}], " ", "-", " ", 
+     RowBox[{"f", "(", 
+      SubscriptBox["x", "1"], ")"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "935f6e59-f090-4156-8222-8a2c129c426f"],
+ StyleBox[") / ",
+  FontColor->RGBColor[0, 0, 1]],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["x", "2"], " ", "-", " ", 
+     SubscriptBox["x", "1"]}], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "1f6b8bd9-1434-497f-b826-3fecccb04d2d"],
+ "\n\tf(2, 5) = (41 - 5) / (5 - 2) = 12\n\t\n\tNow we can construct the 2nd \
+degree term as follows:\n\t\n\t\t\t\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"f", "(", 
+     RowBox[{
+      SubscriptBox["x", "i"], ",", " ", 
+      SubscriptBox["x", 
+       RowBox[{"i", " ", "+", " ", "1"}]], ",", " ", 
+      SubscriptBox["x", 
+       RowBox[{"i", " ", "+", " ", "2"}]]}], ")"}], " "}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"ca0f436e-f709-46d1-9a49-8ed9d119be7e"],
+ StyleBox[" = ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   FractionBox[
+    RowBox[{
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", 
+        RowBox[{"i", " ", "+", " ", "1"}]], ",", " ", 
+       SubscriptBox["x", 
+        RowBox[{"i", " ", "+", " ", "2"}]]}], ")"}], " ", "-", " ", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", "i"], ",", " ", 
+       SubscriptBox["x", 
+        RowBox[{"i", " ", "+", " ", "1"}]]}], ")"}]}], 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"i", " ", "+", " ", "2"}]], " ", "-", " ", 
+     SubscriptBox["x", "i"]}]], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"20dbd978-9503-4132-bb00-71980035137f"],
+ "\n\t\t\t\t\t\n\tThus, the 2nd degree term of the divided differences table \
+is as follows:\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"f", "(", 
+     RowBox[{
+      SubscriptBox["x", "0"], ",", " ", 
+      SubscriptBox["x", "1"], ",", " ", 
+      SubscriptBox["x", "2"]}], ")"}], " ", "=", " ", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"f", "(", 
+        RowBox[{
+         SubscriptBox["x", "1"], ",", " ", 
+         SubscriptBox["x", "2"]}], ")"}], " ", "-", " ", 
+       RowBox[{"f", "(", 
+        RowBox[{
+         SubscriptBox["x", "0"], ",", " ", 
+         SubscriptBox["x", "1"]}], ")"}]}], ")"}], " ", "/", " ", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["x", "2"], " ", "-", " ", 
+       SubscriptBox["x", "0"]}]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",
+  FontColor->RGBColor[0, 0, 1],ExpressionUUID->
+  "0cb2c396-821a-46cd-b1eb-7d81a78a062c"],
+ StyleBox[")",
+  FontColor->RGBColor[0, 0, 1]],
+ "\n\tf(1, 2, 5) = (12 - 4) / (5 - 1) = 2\n\t\n\tAnd our divided differences \
+table is:\n\t\n\t\t\t\t\t",
+ Cell[BoxData[
+  FormBox[GridBox[{
+     {"x", 
+      RowBox[{"f", "(", "x", ")"}], 
+      RowBox[{"f", "(", 
+       RowBox[{
+        SubscriptBox["x", "i"], ",", " ", 
+        SubscriptBox["x", 
+         RowBox[{"i", " ", "+", " ", "1"}]]}], ")"}], 
+      RowBox[{"f", "(", 
+       RowBox[{
+        SubscriptBox["x", "i"], ",", " ", 
+        SubscriptBox["x", 
+         RowBox[{"i", " ", "+", " ", "1"}]], ",", " ", 
+        SubscriptBox["x", 
+         RowBox[{"i", " ", "+", " ", "2"}]]}], ")"}]},
+     {"1", "1", " ", " "},
+     {"2", "5", "4", " "},
+     {"5", "41", "12", "2"}
+    }], TraditionalForm]],ExpressionUUID->
+  "1e829783-af5a-405b-9426-615df505d6d8"],
+ "\n\t\t\t\t\t\n\tWe can use the following equation to construct a Newton \
+interpolating polynomial:\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["P", "n"], "(", "x", ")"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"37e90e98-769f-44ca-9800-9eae6b77955d"],
+ StyleBox[" = ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    SubscriptBox["x", "0"], "]"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"75b0ecf8-e22b-44fb-bb42-6b46ff22f255"],
+ StyleBox[" + ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{
+     SubscriptBox["x", "0"], ",", " ", 
+     SubscriptBox["x", "1"]}]}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"ad230ece-d404-4dd9-8fa5-d7caa926df3d"],
+ StyleBox["](x - ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "0"], ")"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"f4c58f00-4a3f-4061-8d44-8e49c0ff513e"],
+ StyleBox[" + ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{
+     SubscriptBox["x", "0"], ",", " ", 
+     SubscriptBox["x", "1"], ",", " ", 
+     SubscriptBox["x", "2"]}], "]"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"6d38bc63-5212-4b54-a320-53a865bcfdd4"],
+ StyleBox["(x - ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["x", "0"], ")"}], 
+    RowBox[{"(", 
+     RowBox[{"x", " ", "-", " ", 
+      SubscriptBox["x", "1"]}], ")"}]}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"d31a3b5b-a7e2-4981-860b-01d630ec27f3"],
+ StyleBox[" + ... + ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{
+     SubscriptBox["x", "0"], ",", " ", 
+     SubscriptBox["x", "1"], ",", " ", 
+     SubscriptBox["x", "2"], ",", " ", "...", " ", ",", " ", 
+     SubscriptBox["x", "n"]}], "]"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"71346234-0f41-4e70-b28c-f1acb1691b5f"],
+ StyleBox["(x - ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "0"], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"7ae13cd1-3e3b-45eb-9ba4-5f029c46df98"],
+ StyleBox[")(x - ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "1"], ")"}], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"ee869df2-ac3d-4075-8a4f-53650a07649a"],
+ StyleBox[" ... (x - ",
+  FontSize->24],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", " ", "-", " ", "1"}]], TraditionalForm]],
+  FontSize->24,ExpressionUUID->"9f96c841-c7c9-4c6f-833a-714a29cebbae"],
+ StyleBox[")",
+  FontSize->24],
+ "\n\t\n\tSo our equation is:\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["P", "2"], TraditionalForm]],
+  FontSize->18,ExpressionUUID->"85b3fb3b-d929-487e-a2cc-9c022e169f5e"],
+ StyleBox["(x) = 1 + 4(x - 1) + 2(x - 1)(x - 2)",
+  FontSize->18],
+ "\n\t\n\tAnd we can confirm this by constructing the Newton interpolating \
+polynomial through Newton\[CloseCurlyQuote]s method:"
+}], "Text",
+ CellChangeTimes->{{3.813417926880237*^9, 3.813417961227127*^9}, {
+   3.813418076749999*^9, 3.8134180899958906`*^9}, {3.8134187927978897`*^9, 
+   3.813419310959638*^9}, {3.813419345187595*^9, 3.8134195688176355`*^9}, {
+   3.8134196821853156`*^9, 3.8134198412377367`*^9}, {3.8134228368666754`*^9, 
+   3.8134234571583385`*^9}, 3.8134451874408407`*^9, {3.8135149821912885`*^9, 
+   3.813515049482465*^9}, {3.813516033503771*^9, 3.8135160990927453`*^9}, {
+   3.81351615587923*^9, 3.8135161967231464`*^9}, {3.813516277169634*^9, 
+   3.813516284066017*^9}, {3.8135163566613045`*^9, 3.813516358948167*^9}, {
+   3.8135164510735874`*^9, 3.813516456554592*^9}, {3.8135168811582355`*^9, 
+   3.813516881854924*^9}, {3.8135169511484203`*^9, 3.813516970245223*^9}, {
+   3.813517009473732*^9, 3.8135170318733835`*^9}, {3.8135172566018896`*^9, 
+   3.813517510631032*^9}},ExpressionUUID->"6cc96b2b-3f00-4987-8360-\
+853a8d4710a9"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"p1", "[", "x_", "]"}], " ", "=", " ", 
+   RowBox[{"1", " ", "+", " ", 
+    RowBox[{"4", 
+     RowBox[{"(", 
+      RowBox[{"x", " ", "-", "1"}], " ", ")"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p2", "[", "x_", "]"}], " ", "=", " ", 
+  RowBox[{
+   RowBox[{"p1", "[", "x", "]"}], " ", "+", " ", 
+   RowBox[{"2", 
+    RowBox[{"(", 
+     RowBox[{"x", " ", "-", " ", "1"}], ")"}], 
+    RowBox[{"(", 
+     RowBox[{"x", " ", "-", " ", "2"}], ")"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"Simplify", "[", 
+  RowBox[{"p2", "[", "x", "]"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.8134220059454203`*^9, 3.8134220491678505`*^9}, {
+   3.8134221003554564`*^9, 3.8134221627878995`*^9}, {3.813422205870597*^9, 
+   3.813422230378318*^9}, {3.8134222928583417`*^9, 3.8134223187828765`*^9}, 
+   3.8135173668224907`*^9, {3.813517402947684*^9, 3.813517409268725*^9}, {
+   3.8135180224194717`*^9, 3.813518034304859*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"f3912e98-02ad-4314-9d27-068f4d91b1ec"],
+
+Cell[BoxData[
+ RowBox[{"1", "+", 
+  RowBox[{"4", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", "x"}], ")"}]}], "+", 
+  RowBox[{"2", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "2"}], "+", "x"}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", "x"}], ")"}]}]}]], "Output",
+ CellChangeTimes->{{3.8134223091457357`*^9, 3.8134223204456882`*^9}, 
+   3.813445163562933*^9, 3.813518034814315*^9},
+ CellLabel->"Out[2]=",ExpressionUUID->"fae3c755-3ce3-4323-a30e-6de306af4824"],
+
+Cell[BoxData[
+ RowBox[{"1", "-", 
+  RowBox[{"2", " ", "x"}], "+", 
+  RowBox[{"2", " ", 
+   SuperscriptBox["x", "2"]}]}]], "Output",
+ CellChangeTimes->{{3.8134223091457357`*^9, 3.8134223204456882`*^9}, 
+   3.813445163562933*^9, 3.813518034820303*^9},
+ CellLabel->"Out[3]=",ExpressionUUID->"fb911fd3-624c-4f81-85d5-095cca4e10c7"]
+}, Open  ]]
+},
+WindowSize->{1280, 637},
+WindowMargins->{{Automatic, -2312}, {Automatic, -8}},
+Magnification:>0.8 Inherited,
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 10066, 293, 803, "Text",ExpressionUUID->"6cc96b2b-3f00-4987-8360-853a8d4710a9"],
+Cell[CellGroupData[{
+Cell[10649, 317, 1048, 25, 53, "Input",ExpressionUUID->"f3912e98-02ad-4314-9d27-068f4d91b1ec"],
+Cell[11700, 344, 522, 15, 26, "Output",ExpressionUUID->"fae3c755-3ce3-4323-a30e-6de306af4824"],
+Cell[12225, 361, 327, 7, 28, "Output",ExpressionUUID->"fb911fd3-624c-4f81-85d5-095cca4e10c7"]
+}, Open  ]]
+}
+]
+*)
+

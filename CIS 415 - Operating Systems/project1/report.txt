@@ -1,0 +1,14 @@
+CIS 415 Project 1 
+
+Name: Cole Pendergraft
+Duckid: cpenderg
+
+uspsv1 : Working, no mem leaks/mem errors
+
+uspsv2 : Working, no mem leaks/mem errors
+
+uspsv3 : Working, no mem leaks/mem errors
+
+uspsv4 : This is why my project is late. I wrote a pretty simple function that just pulls information from the proc files and displays it, and it just casued my parent to hang after all the process executions. Nick (TA) helped me discover that it seems like through my information display function, namely the calls to open() relevant files, my code was attempting to put dead processes back on the cpu. This was dealt with by adding a check to see if either or both active file descriptors are -1 and, if so, return from the function instead of proceeding. After implementing this check my parent now successfully terminates after all the child processes.
+
+While I am disappointed this is late, I am quite pleased with outcome as it is the sum of many hours of hard work. Seeing my processes run, my information display, and everything work as expected is extremely satisfying after so much work. 

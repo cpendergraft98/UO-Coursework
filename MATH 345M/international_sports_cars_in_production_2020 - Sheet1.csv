@@ -1,0 +1,124 @@
+Model,Manufacturer,First Year,Style,Country,Horsepower,Weight(kg),0-60 Time(sec),Top Speed(mph),Price($),Years In Production
+595,Abarth,2008,Coupe,Italy,151,1070,7,120,28990,12
+378 GT Zagato,AC Cars,2012,Coupe,England,437,1465,4,185,145000,8
+NSX,Acura/Honda,2016,Coupe,Japan,573,1725,2.9,191,157500,4
+Giulia Quadrifoglio,Alfa Romeo,2015,Sports Sedan,Italy,505,1726,3.8,176,74800,5
+A110,Alpine,2017,Coupe,France,300,1103,4.5,155,72926,3
+AF8,Arash,2014,Coupe,England,505,1200,3.5,200,275000,6
+AF10,Arash,2008,Coupe,Englad,2080,1360,2.8,201,1555700,12
+Atom 500 V8,Ariel,2000,Open Body Roadster,England,500,612,2.9,249,50000,20
+Hussarya,Arrinera,2013,Coupe,Poland,789,1300,3,218,229000,7
+Aspid GT-21 Invictus,Aspid,2013,Coupe,Spain,450,990,3,187,100000,7
+IFR Aspid,Aspid,2008,Coupe,Spain,270,740,3.9,155,75000,12
+Vantage,Aston Martin,1977,Roadster Coupe,United Kingdom,503,1530,3.4,190,150086,43
+DBS Superleggera,Aston Martin,2018,Volante Coupe,United Kingdom,715,1860,3.2,211,314186,2
+DB11,Aston Martin,2016,Volante Coupe,United Kingdom,503,1870,4,188,205600,4
+Vanquish,Aston Martin,2001,Volante Coupe,United Kingdom,565,1739,3.6,201,919385,19
+S3,Audi,1999,Sedan,Germany,288,1570,4.8,155,43000,21
+S4,Audi,1991,Sedan,Germany,227,1730,6.2,155,49900,29
+S5,Audi,2007,Coupe,Germany,349,1750,4.4,155,52500,13
+S6,Audi,1994,Sedan,Germany,286,2034,4,155,74895,26
+S7,Audi,2012,Sportback,Germany,444,2104,4.1,155,84895,8
+R8,Audi,2006,Coupe,Germany,406,1678,3,201,172850,14
+BAC Mono,Briggs Automotive Company,2011,Single Seater Open Body Roadster,England,304,540,2.8,170,130000,9
+Continental GT,Bently,2003,Coupe,England,626,2293,3.3,207,275325,17
+M2,BMW,2014,Coupe,Germany,405,1645,4,174,62795,6
+M3,BMW,1985,Coupe,Germany,473,1742,4.1,155,69900,35
+M4,BMW,2014,Coupe,Germany,473,1737,4.1,155,71800,6
+M5,BMW,1985,Coupe,Germany,617,1933,2.8,162,129595,35
+M8,BMW,2019,Coupe,Germany,600,1948,3,189,134995,1
+Z4,BMW,2002,Roadster ,Germany,255,1491,3.8,165,49700,18
+Chiron,Bugatti,2016,Coupe,France,1479,2061,2.4,261,3273000,4
+T1,Caparo,2008,Roadster,England,575,470,2.5,205,327981,12
+7,Caterham,1973,Roadster,England,200,545,3.1,155,45400,47
+620R,Caterham,2013,Roadster,England,311,545,2.8,155,69781,7
+Moroder V16T,Cizeta,1991,Roadster,Italy,547,1700,4.3,204,300000,29
+Stradale,Dallara,2017,Roadster,Italy,395,855,3.2,174,175000,3
+Speedback GT,David Brown Automotive,2014,Coupe,United Kingdom,510,1976,4.8,155,722000,6
+DC Avanti,DC Design,2012,Coupe,India,250,1562,7.5,160,50000,8
+D8 GTO,Donkervoot,2013,Roadster,Dutch,340,730,2.8,170,182000,7
+MS8 Streamliner,Elfin Sports Cars,2006,Roadster,Australia,328,1100,5,180,92752,14
+458 Italia,Ferrari,2009,Coupe,Italy,570,1565,3.1,210,219000,11
+Portofino,Ferrari,2017,Roadster,Italy,591,1664,3.5,199,215000,3
+Roma,Ferrari,2020,Coupe,Italy,612,1570,3.4,199,222630,0
+488 GTB,Ferrari,2015,Coupe,Italy,711,1794,3,205,330000,5
+F8 Tributo,Ferrari,2020,Coupe,Italy,710,1435,2.9,211,274280,0
+SF90 Stradale,Ferrari,2020,Coupe,Italy,986,1570,2.5,211,625000,0
+812 Superfast,Ferrari,2018,Coupe,Italy,788,1744,2.8,211,335000,2
+124 Spider,Fiat,2017,Roadster,Italy,160,1104,6.7,144,26840,3
+Vertigo,Gillet,1992,Coupe,Belgium,360,997,4.5,155,140000,28
+G40R,Ginetta,2010,Coupe,United Kingdom,173,795,5.8,140,41804,10
+Akula,Ginetta,2019,Coupe,United Kingdom,600,1150,3,200,532000,1
+GTA,Spano,2010,Coupe,Spain,780,1350,2.9,230,1500000,10
+S660,Honda,2015,Roadster,Japan,63,830,13.2,87,27773,5
+Vulcano,Icona,2013,Coupe,China,670,1595,2.7,220,2780000,7
+Zerouno,Italdesign,2017,Coupe,Italy,610,1360,3.2,205,2400000,3
+F-Type,Jaguar,2013,Coupe,England,296,1520,5.4,155,61600,7
+XE SV Project 8,Jaguar,2017,Sedan,England,592,1745,3.2,200,188495,3
+Agera,Koenigsegg,2011,Targa,Sweden,947,1435,2.9,285,2100000,9
+Regera,Koenigsegg,2015,Targa,Sweden,1500,1628,2.8,255,1900000,5
+X-Bow,KTM,2008,Roadster,Austria,660,790,3.6,135,103500,12
+Huracan,Lamborghini,2015,Coupe,Italy,610,1553,2.5,201,208571,5
+Aventador S,Lamborghini,2017,Coupe,Italy,729,1740,2.9,217,417826,3
+LC 500,Lexus,2016,Coupe,Japan,471,1969,4.8,168,93050,4
+RC F,Lexus,2014,Coupe,Japan,241,1695,4.3,176,42220,6
+Elise,Lotus,1994,Roadster,United Kingdom,189,912,5.1,154,644999,26
+Exige,Lotus,2000,Roadster,United Kingdom,240,942,3.5,178,169990,20
+Evora,Lotus,2009,Coupe,United Kingdom,416,1440,3.8,188,96950,11
+3-Eleven,Lotus,2015,Speedster,United Kingdom,430,925,3.1,180,140000,5
+Evija,Lotus,2020,Coupe,United Kingdom,1973,1680,3,200,2000000,0
+Ghibli,Maserati,2013,Coupe,Italy,424,1875,4.9,175,75000,7
+MC20,Maserati,2020,Coupe,Italy,621,1500,2.9,202,438000,0
+MX-5,Mazda,1989,Roadster,Japan,181,1062,5.7,135,26580,31
+Evantra,Mazzanti,2013,Coupe,Italy,1000,1300,2.7,217,1200000,7
+570S,McLaren,2016,Coupe,United Kingdom,562,1457,2.7,204,192500,4
+600LT,McLaren,2018,Coupe,United Kingdom,592,1406,2.9,204,256500,2
+620R,McLaren,2020,Coupe,United Kingdom,610,1282,2.8,204,299000,0
+720S,McLaren,2017,Coupe,United Kingdom,710,1424,2.9,212,299000,3
+Senna,McLaren,2018,Coupe,United Kingdom,789,1374,2.7,211,1430000,2
+Speedtail,McLaren,2020,Coupe,United Kingdom,1035,1430,2.9,250,2250000,0
+GT,McLaren,2019,Coupe,United Kingdom,612,1530,3,203,210000,1
+C63,Mercedes-AMG,2016,Coupe,Germany,255,1575,3.7,155,41600,4
+CLS 53,Mercedes-AMG,2018,Sedan,Germany,429,2550,4,168,81200,2
+E53,Mercedes-AMG,2018,Coupe,Germany,429,2495,3.8,158,77300,2
+E63,Mercedes-AMG,2017,Sedan,Germany,603,2132,2.8,186,105000,3
+GT,Mercedes-AMG,2015,Coupe,Germany,523,1663,3.7,196,89900,5
+E43,Mercedes-AMG,2017,Sedan,Germany,396,2415,4.6,155,70000,3
+Aero 8,Morgan,2015,Roadster,England,376,1180,4.1,170,95000,5
+Roadster,Morgan,2004,Roadster,England,225,939,5.5,140,79995,16
+Plus Six,Morgan,2019,Roadster,England,335,1134,4.1,166,102135,1
+Plus Four,Morgan,2020,Roadster,England,255,838,4.7,149,69995,0
+EP9,NIO,2016,Coupe,China,1341,1735,2.7,195,1200000,4
+370Z,Nissan,2009,Coupe,Japan,332,1466,5,155,30090,11
+GT-R,Nissan,2007,Coupe,Japan,565,1753,2.9,205,113540,13
+M600,Noble,2010,Coupe,England,650,1250,3.7,223,279263,10
+Huayra,Pagani,2012,Coupe ,Italy,764,1280,3,230,2600000,8
+Imola,Pagani,2020,Coupe,Italy,827,1246,3,240,5400000,0
+308 GTi,Peugeot,2015,Hatchback,France,250,1205,6,155,36100,5
+208 GTi,Peugeot,2014,Hatchback,France,200,1160,5.9,144,18900,6
+Battista,Pininfarina,2020,Electric Supercar,Italy,1877,2041,2,217,2900000,0
+1,Polestar,2019,Coupe,Sweden,619,2345,3.8,163,155000,1
+911 Carrera,Porsche,1964,Coupe,Germany,379,1521,3.6,190,99200,56
+718 Boxster,Porsche,2016,Roadster,Germany,300,1370,3.7,177,62000,4
+Panamera,Porsche,2010,Hatchback,Germany,330,1886,3.6,190,87200,10
+Taycan,Porsche,2019,Coupe,Germany,429,2164,2.4,162,103800,1
+Berlinetta Hybrid,Puritalia,2019,Coupe,Italy,740,1410,2.9,214,625000,1
+K50,Qiantu Motor,2017,Coupe,China,375,1900,4.3,124,125000,3
+RXC GT,Radical,2014,Coupe,United Kingdom,400,1010,2.7,185,171280,6
+Megan RS,Renault,2004,Hatchback,France,276,1355,5.9,149,53900,16
+Roadyacht GTS,Savage Rivale,2009,Coupe,Netherlands,670,1280,3.4,205,547000,11
+Scion FR-S,Scion,2012,Coupe,Japan,200,1259,6.2,136,27060,8
+Codatronca,Spada,2008,Coupe,Italy,630,1360,3,208,279263,12
+C8,Spyker,2000,Coupe,Dutch,400,1247,4.5,186,385000,20
+BRZ,Subaru,2012,Coupe,Japan,200,1269,6.3,140,28845,8
+TaMo Racemo,Tata Motors,2017,Coupe,India,186,1040,6.1,124,41329,3
+Sciadipersia,Touring Superleggera,2018,Coupe,Italy,460,1700,4.6,187,200000,2
+86,Toyota,2012,Coupe,Japan,200,1259,6.4,140,27060,8
+GR Supra,Toyota,2019,Coupe,Japan,382,1542,3.9,155,43000,1
+Griffith,TVR,2017,Coupe,England,500,1250,4,200,123685,3
+Evolution,Ultima,2015,Coupe,United Kingdom,480,950,2.3,240,100000,5
+RS,Ultima,2019,Coupe,United Kingdom,800,930,2.3,250,120000,1
+Sarthe,Vencer,2015,Coupe,Netherlands,622,1390,3.6,210,348000,5
+Fenyr Super Sport,W Motors,2018,Coupe,Lebanon,799,1350,2.7,249,1900000,2
+TS1 GT,Zenvo,2016,Coupe,Denmark,1163,1580,2.8,233,1900000,4
+TSR-S,Zenvo,2018,Coupe,Denmark,1177,1580,2.9,202,1600000,2

@@ -1,0 +1,48 @@
+Name: Cole Pendergraft
+DuckID: cpenderg
+
+Implemented using a hashset.
+
+I was not helped by any classmates, but in 212 we did this same assignment
+as an extra credit and I referenced that code for writing this
+assignment.
+
+Current state of submission - Longtest:
+	1 - Success, 0 bytes in use on exit.
+	2 - Success, 0 bytes in use on exit.
+	3 - Success, 0 bytes in use on exit.
+	4 - Success, 0 bytes in use on exit.
+	5 - Success, 0 bytes in use on exit.
+	6 - Success, 0 bytes in use on exit.
+	7 - Success, 0 bytes in use on exit.
+	8 - Success, 0 bytes in use on exit.
+	9 - Success, 0 bytes in use on exit.
+	10 - Success, 0 bytes in use on exit.
+	11 - Success, 0 bytes in use on exit.
+	12 - Success, 0 bytes in use on exit.
+	13 - Success, 0 bytes in use on exit.
+	14 - Success, 0 bytes in use on exit.
+	15 - Success, 0 bytes in use on exit.
+	16 - Success, 0 bytes in use on exit.
+	17 - Success, 0 bytes in use on exit.
+
+Current state of submission - Stringtest:
+	1 - Success, 0 bytes in use on exit.
+	2 - Success, 0 bytes in use on exit.
+	3 - Success, 0 bytes in use on exit.
+	4 - Success, 0 bytes in use on exit.
+	5 - Success, 0 bytes in use on exit.
+	6 - Success, 0 bytes in use on exit.
+	7 - Success, 0 bytes in use on exit.
+	8 - Success, 0 bytes in use on exit.
+	9 - Success, 0 bytes in use on exit.
+	10 - Success, 0 bytes in use on exit.
+	11 - Success, 0 bytes in use on exit.
+	12 - Success, 0 bytes in use on exit.
+	13 - Success, 0 bytes in use on exit.
+	14 - Success, 0 bytes in use on exit.
+	15 - Success, 0 bytes in use on exit.
+	16 - Success, 0 bytes in use on exit.
+	17 - Success, 0 bytes in use on exit.
+
+As you can see above, I was able to pass every test.

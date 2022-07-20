@@ -1,0 +1,11 @@
+CIS 415 Project 3 Report
+
+Cole Pendergraft, cpenderg, 951544267
+
+dtsv1 : Works as intended, and when running Valgrind both definitely lost and indirectly lost remain at 0 as they should. I do, however, have quite a few memory errors relating to unitialized values that seem to be stemming from my thread. I tried to find the source and correct them, but was unable to. Given that section 7.2 of the handout only discusses directly and indirectly lost memory and doesn't mention anything about memorry errors, nor does the rubic indicate that memory errors will be factored into the grade, I'm tentaively assuming that memory errors, just like the "possibly lost" memory leaks, are expected to be nonzero in part 1.
+
+dtsv2 : Works as intended, and when running Valgrind both definitely lost and indirectly lost remain at 0 as they should. However, like in part 1, I have many memory errors, though I still believe these to be expected in part 2.
+
+dtsv3 :
+
+dtsv4 : Did not complete

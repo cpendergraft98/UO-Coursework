@@ -1,0 +1,19 @@
+CIS 415 Project 2 - Packet Driver
+Name: Cole Pendergraft
+DuckID: cpenderg
+
+I discussed code logic with Joe Cates and Thomas Joyce.
+
+I think my code works pretty well, I do occasionally fail to send packets, moreso on the 
+nonblocking calls than the blocking calls, but I believe the amount lost is within 
+expectations.
+
+Thankfully, I don't leak any FPDs. The sum consistently stays at 36, so I'm comfortable 
+knowing that I'm not leaking there. 
+While I know that some varaition in the FPDS out|free|total is expected, I do feel like mine
+might vary just a tad too much. On the high end, I've seen something like 23|13|36 and on 
+the low end I've seen 15|21|36 (this is ignorng the first time it prints where I have 
+04|32|36). I'm not sure where the variation is coming from as I feel like my code is 
+fairly close to the pseud-code we've received in lab and office hours, but I haven't been 
+able to get the output any tighter. This level of variation could also be totally expected 
+and I could be concerned over nothing.

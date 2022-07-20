@@ -1,0 +1,447 @@
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[         0,          0]
+NotebookDataLength[     19214,        446]
+NotebookOptionsPosition[     16970,        401]
+NotebookOutlinePosition[     17689,        426]
+CellTagsIndexPosition[     17646,        423]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[StyleBox["Divided Differences and Newton\[CloseCurlyQuote]s \
+Form.",
+ FontColor->RGBColor[0, 0, 1]]], "Title",
+ CellChangeTimes->{{3.431609798263876*^9, 3.4316098011443663`*^9}, {
+  3.747488363348585*^9, 3.747488415906847*^9}, {3.7474939365671*^9, 
+  3.7474939369710093`*^9}, {3.811090039638591*^9, 3.811090065337469*^9}, {
+  3.8110901520694447`*^9, 3.8110901528359013`*^9}, {3.811090590135434*^9, 
+  3.811090595801222*^9}, {3.81125926573765*^9, 3.811259273786038*^9}, {
+  3.8116923511986723`*^9, 3.811692361959235*^9}, {3.812125923680859*^9, 
+  3.812125929671544*^9}, {3.812318161254279*^9, 3.812318177595023*^9}, {
+  3.812815186122558*^9, 
+  3.812815196626031*^9}},ExpressionUUID->"4e4ebb21-3c7d-429b-b027-\
+caa1cb83ea80"],
+
+Cell["\<\
+Let\[CloseCurlyQuote]s build up some interpolation methods from \
+\[OpenCurlyDoubleQuote]scratch\[CloseCurlyDoubleQuote], starting with table \
+manipulation and divided differences.\
+\>", "Text",
+ CellChangeTimes->{{3.812318186185493*^9, 3.8123182315184298`*^9}, 
+   3.812318418675169*^9, {3.812815208219613*^9, 
+   3.812815233906434*^9}},ExpressionUUID->"f4d60d4d-7f8d-4dff-be64-\
+d8b0c9f0b32b"],
+
+Cell["Matrices, or: tables of tables", "Section",
+ CellChangeTimes->{{3.747488439393674*^9, 3.747488470595742*^9}, {
+  3.8110901577371902`*^9, 3.811090163228754*^9}, {3.811259278097172*^9, 
+  3.811259286635171*^9}, {3.81169236848472*^9, 3.8116923754978533`*^9}, {
+  3.812121651547862*^9, 3.8121216522974873`*^9}, {3.812318239334447*^9, 
+  3.812318243335739*^9}, {3.812815242177701*^9, 
+  3.812815250435996*^9}},ExpressionUUID->"118751be-72cc-4c7e-b7cd-\
+22a41e3b1fa6"],
+
+Cell["\<\
+Last time we looked at entering a list of x-y pairs. We can use the matrix \
+operation \[OpenCurlyDoubleQuote]transpose\[CloseCurlyDoubleQuote] to extract \
+the x\[CloseCurlyQuote]s and y\[CloseCurlyQuote]s as separate lists:\
+\>", "Text",
+ CellChangeTimes->{{3.747488554613214*^9, 3.747488593345091*^9}, {
+   3.74748865343511*^9, 3.747488683928808*^9}, {3.747488717465259*^9, 
+   3.747488749834737*^9}, {3.747488809948482*^9, 3.747488809948629*^9}, {
+   3.7474889809679203`*^9, 3.747489234348877*^9}, {3.747489280939591*^9, 
+   3.747489366116881*^9}, {3.810653816974585*^9, 3.810653886347776*^9}, {
+   3.810653937486102*^9, 3.810653985831469*^9}, 3.810655299826169*^9, {
+   3.8106560410112047`*^9, 3.810656041549601*^9}, {3.811090261778709*^9, 
+   3.811090389388233*^9}, {3.8112592906752987`*^9, 3.8112593053751307`*^9}, {
+   3.811259337822567*^9, 3.811259412060944*^9}, {3.8116923799040203`*^9, 
+   3.811692419041059*^9}, {3.812121656475716*^9, 3.812121713173848*^9}, {
+   3.812318247979875*^9, 3.8123183094812603`*^9}, {3.812815259569646*^9, 
+   3.812815312065864*^9}},ExpressionUUID->"055cbe1a-c98a-47bf-b63f-\
+fb9b65bc48e2"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "data1", "]"}], ";"}], "\n", 
+ RowBox[{"data1", "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0.5`", ",", "2"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "0"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"1.5`", ",", 
+      RowBox[{"-", "1"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"2", ",", "1"}], "}"}]}], 
+   "}"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.812318319267737*^9, 3.812318326718082*^9}, {
+  3.812815318874106*^9, 3.8128153349609528`*^9}, {3.8128157012523537`*^9, 
+  3.8128157226234818`*^9}, {3.812892856345195*^9, 
+  3.812892863136093*^9}},ExpressionUUID->"05fcf0db-067e-4b85-8771-\
+259b3e738205"],
+
+Cell["\<\
+Also, we\[CloseCurlyQuote]ll need an array to hold the entries of our divided \
+difference table, and extract them (or replace them). Let\[CloseCurlyQuote]s \
+start with a 5x5 array of 0\[CloseCurlyQuote]s, replace some entries and \
+extract some others:\
+\>", "Text",
+ CellChangeTimes->{{3.81281539669523*^9, 3.8128154635576982`*^9}, {
+  3.812815507822528*^9, 
+  3.812815519188067*^9}},ExpressionUUID->"133662e8-8b5c-4c11-9007-\
+8b477fa48fc0"],
+
+Cell["Divided Differences", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+   3.811090393538105*^9, 3.8110903974852953`*^9}, {3.811259479987322*^9, 
+   3.811259491300291*^9}, {3.811692589138609*^9, 3.811692593136594*^9}, {
+   3.812121727249013*^9, 3.8121217388956738`*^9}, {3.812318336845202*^9, 
+   3.812318340823443*^9}, 3.8123184660416193`*^9, {3.812815838073168*^9, 
+   3.812815843103647*^9}},ExpressionUUID->"123f7f85-9285-434d-be91-\
+2164c424439b"],
+
+Cell["\<\
+This gives us enough tools to create the divided differences table:\
+\>", "Text",
+ CellChangeTimes->{{3.747492797809181*^9, 3.747492825361656*^9}, {
+  3.747492987321673*^9, 3.747493008065263*^9}, {3.747493574267953*^9, 
+  3.747493605993268*^9}, {3.8106540723784637`*^9, 3.810654181890005*^9}, {
+  3.811090402977035*^9, 3.811090448449452*^9}, {3.811259494717498*^9, 
+  3.811259498649246*^9}, {3.8112595571448793`*^9, 3.811259561462315*^9}, {
+  3.81231834580011*^9, 3.8123183858749313`*^9}, {3.812815848574273*^9, 
+  3.812815863102591*^9}},ExpressionUUID->"f40badf6-4f71-45a3-91ee-\
+2d424d658c86"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"dividedDifference", "[", "t_", "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"m", ",", "xData", ",", "yData", ",", "n"}], "}"}], ",", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"We", "'"}], "ll", " ", "locally", " ", "hold", " ", "a", " ",
+         "matrix"}], ",", " ", 
+       RowBox[{"the", " ", "x"}], ",", 
+       RowBox[{"y", " ", "data"}], ",", " ", 
+       RowBox[{"and", " ", "the", " ", "length", " ", "of", " ", "t"}]}], 
+      "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"n", "=", 
+       RowBox[{"Length", "[", "t", "]"}]}], ";", " ", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"Indexing", " ", "is", " ", "always", " ", "confusing"}], ",",
+         " ", 
+        RowBox[{
+         RowBox[{"this", " ", "\"\<should be\>\"", " ", "n"}], "+", "1"}], 
+        ",", " ", 
+        RowBox[{"but", " ", "bear", " ", "with", " ", "me"}]}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"m", "=", 
+       RowBox[{"Table", "[", 
+        RowBox[{"0", ",", 
+         RowBox[{"{", "n", "}"}], ",", 
+         RowBox[{"{", "n", "}"}]}], "]"}]}], ";", " ", 
+      RowBox[{"(*", 
+       RowBox[{
+       "This", " ", "is", " ", "where", " ", "the", " ", "table", " ", "will",
+         " ", "live"}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"xData", "=", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "t", "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", 
+      RowBox[{"yData", "=", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "t", "]"}], "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], ";", " ", 
+      RowBox[{"(*", 
+       RowBox[{"grab", " ", "the", " ", 
+        RowBox[{"x", "'"}], "s", " ", "and", " ", 
+        RowBox[{"y", "'"}], "s"}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"m", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], "=", "yData"}], ";", " ", 
+      RowBox[{"m", "=", 
+       RowBox[{"Transpose", "[", "m", "]"}]}], ";", " ", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"The", " ", "first", " ", "column", " ", "of", " ", 
+         RowBox[{"dd", "'"}], "s", " ", "is", " ", "the", " ", "y"}], "-", 
+        "values"}], "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{"col", "=", "2"}], ",", 
+        RowBox[{"col", "\[LessEqual]", "n"}], ",", 
+        RowBox[{"col", "++"}], ",", 
+        RowBox[{"(*", 
+         RowBox[{"First", " ", "iterate", " ", "through", " ", "columns"}], 
+         "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"For", "[", 
+         RowBox[{
+          RowBox[{"entry", "=", "col"}], ",", 
+          RowBox[{"entry", "\[LessEqual]", "n"}], ",", 
+          RowBox[{"entry", "++"}], ",", 
+          RowBox[{"(*", 
+           RowBox[{
+            RowBox[{"In", " ", "a", " ", "column"}], ",", " ", 
+            RowBox[{
+            "start", " ", "at", " ", "the", " ", "diagonal", " ", "and", " ", 
+             "iterate", " ", "DOWN"}]}], "*)"}], "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"m", "[", 
+             RowBox[{"[", "entry", "]"}], "]"}], "[", 
+            RowBox[{"[", "col", "]"}], "]"}], "=", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"m", "[", 
+                RowBox[{"[", "entry", "]"}], "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"col", "-", "1"}], "]"}], "]"}], "-", 
+              RowBox[{
+               RowBox[{"m", "[", 
+                RowBox[{"[", 
+                 RowBox[{"entry", "-", "1"}], "]"}], "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"col", "-", "1"}], "]"}], "]"}]}], ")"}], "/", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"xData", "[", 
+               RowBox[{"[", "entry", "]"}], "]"}], "-", 
+              RowBox[{"xData", "[", 
+               RowBox[{"[", 
+                RowBox[{"entry", "-", "col", "+", "1"}], "]"}], "]"}]}], 
+             ")"}]}]}]}], "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"The", " ", "indexing", " ", "is", " ", "tricky"}], ",", 
+           " ", 
+           RowBox[{
+           "and", " ", "would", " ", "be", " ", "easier", " ", "if", " ", 
+            "the", " ", "first", " ", "column", " ", "was", " ", "the", " ", 
+            "\"\<0\>\"", " ", "column"}]}], "*)"}], "]"}]}], 
+       "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Return", "[", "m", "]"}]}]}], "]"}]}], 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.8128158702401047`*^9, 3.812816142919799*^9}, {
+  3.812816300896289*^9, 3.812816344953601*^9}, {3.812816500835835*^9, 
+  3.812816516660171*^9}, {3.812816567196411*^9, 3.812816662192896*^9}, {
+  3.8128167212608*^9, 3.8128167633229628`*^9}, {3.8128167956805162`*^9, 
+  3.812816947886669*^9}, {3.812818525178732*^9, 
+  3.8128185256218023`*^9}},ExpressionUUID->"d539bee5-4312-42f1-a272-\
+4593eec219c4"],
+
+Cell["Newton\[CloseCurlyQuote]s Form", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+   3.811090393538105*^9, 3.8110903974852953`*^9}, {3.81109057140378*^9, 
+   3.811090580384987*^9}, {3.811259570386963*^9, 3.811259581853074*^9}, {
+   3.812318401525236*^9, 3.812318415332659*^9}, 3.812318464070609*^9, {
+   3.81281781909591*^9, 
+   3.8128178403168097`*^9}},ExpressionUUID->"376dbb4f-0e67-4530-bc11-\
+4156321c4163"],
+
+Cell["\<\
+Now we extract the diagonal elements from the divided difference table to \
+build the polynomial\
+\>", "Text",
+ CellChangeTimes->{{3.747492797809181*^9, 3.747492825361656*^9}, {
+   3.747492987321673*^9, 3.747493008065263*^9}, {3.747493574267953*^9, 
+   3.747493605993268*^9}, {3.8106540723784637`*^9, 3.810654181890005*^9}, {
+   3.811090402977035*^9, 3.811090521403553*^9}, 3.811090557798985*^9, {
+   3.8112595860143137`*^9, 3.811259617670092*^9}, {3.811692638439062*^9, 
+   3.811692646638893*^9}, {3.812123937438033*^9, 3.8121239416966*^9}, {
+   3.81231842566525*^9, 3.812318444917253*^9}, {3.81281784934968*^9, 
+   3.812817870107099*^9}},ExpressionUUID->"479fdd55-0a4a-40f0-a329-\
+feb501850b11"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"newtonForm", "[", "t_", "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "coeffs", ",", "xData", ",", " ", "sum", ",", "prod", ",", "n"}], "}"}],
+      ",", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"We", "'"}], "ll", " ", "need", " ", "to", " ", "grab", " ", 
+        "the", " ", "xData", " ", "again", " ", "for", " ", "the", " ", 
+        "roots"}], ",", " ", 
+       RowBox[{
+       "and", " ", "then", " ", "keep", " ", "a", " ", "table", " ", "of", 
+        " ", "coefficients"}]}], "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"n", "=", 
+       RowBox[{"Length", "[", "t", "]"}]}], ";", 
+      RowBox[{"xData", "=", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "t", "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"coeffs", "=", 
+       RowBox[{"Diagonal", "[", 
+        RowBox[{"dividedDifference", "[", "t", "]"}], "]"}]}], ";", 
+      RowBox[{"sum", "=", 
+       RowBox[{"coeffs", "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], ";", 
+      RowBox[{"(*", 
+       RowBox[{
+       "Initialize", " ", "with", " ", "the", " ", "constant", " ", "term"}], 
+       "*)"}], "\[IndentingNewLine]", 
+      RowBox[{"prod", "=", "1"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"For", "[", 
+       RowBox[{
+        RowBox[{"term", "=", "1"}], ",", 
+        RowBox[{"term", "<", "n"}], ",", 
+        RowBox[{"term", "++"}], ",", 
+        RowBox[{"(*", 
+         RowBox[{"Remember", ",", " ", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"we", "'"}], "re", " ", "building", " ", "a", " ", 
+            "degree", " ", "n"}], "-", 
+           RowBox[{"1", " ", "poly"}]}]}], "*)"}], "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"prod", "*=", 
+          RowBox[{"(", 
+           RowBox[{"x", "-", 
+            RowBox[{"xData", "[", 
+             RowBox[{"[", "term", "]"}], "]"}]}], ")"}]}], ";", 
+         "\[IndentingNewLine]", 
+         RowBox[{"sum", "+=", 
+          RowBox[{
+           RowBox[{"coeffs", "[", 
+            RowBox[{"[", 
+             RowBox[{"term", "+", "1"}], "]"}], "]"}], "*", "prod"}]}]}]}], 
+       " ", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{
+         "1", "st", " ", "coefficient", " ", "is", " ", "already", " ", 
+          "there"}], ",", " ", 
+         RowBox[{"so", " ", 
+          RowBox[{"we", "'"}], "re", " ", "going", " ", "from", " ", "2", " ",
+           "to", " ", "n"}]}], "*)"}], "\[IndentingNewLine]", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Return", "[", "sum", "]"}], ";"}]}], "\[IndentingNewLine]", 
+    "]"}]}], "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.812817877272807*^9, 3.8128182092743797`*^9}, {
+  3.8128182729464684`*^9, 3.812818495643066*^9}, {3.8128186107188168`*^9, 
+  3.812818724508339*^9}},ExpressionUUID->"f32ef3a0-7da7-4d13-8329-\
+3bcf7af67b72"],
+
+Cell["Sum of Squares example:", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+  3.811090393538105*^9, 3.8110903974852953`*^9}, {3.811090610882833*^9, 
+  3.8110906274966097`*^9}, {3.811259622148604*^9, 3.811259626066105*^9}, {
+  3.812318449188677*^9, 3.812318459879402*^9}, {3.812819110958256*^9, 
+  3.8128191178902607`*^9}},ExpressionUUID->"da5c6e45-0e73-4687-8e5a-\
+d48b47669615"],
+
+Cell["Your turn!", "Section",
+ CellChangeTimes->{{3.747488490519298*^9, 3.747488495020643*^9}, {
+  3.811090393538105*^9, 3.8110903974852953`*^9}, {3.811090610882833*^9, 
+  3.8110906274966097`*^9}, {3.811259622148604*^9, 3.811259626066105*^9}, {
+  3.812318449188677*^9, 3.812318459879402*^9}, {3.812318530444281*^9, 
+  3.8123185315904512`*^9}, {3.8128193976696663`*^9, 
+  3.8128194000025597`*^9}},ExpressionUUID->"38841434-2b2a-4f25-8da0-\
+b1f0b8171592"],
+
+Cell["\<\
+1. Derive the sum of cubes formula. Be sure to use at least 6 terms to make \
+sure you see some 0\[CloseCurlyQuote]s in the difference table.\
+\>", "Text",
+ CellChangeTimes->{{3.749565990781011*^9, 
+  3.7495660436170807`*^9}},ExpressionUUID->"c4f2aa2d-08f1-42cb-a501-\
+c954f7979cc9"],
+
+Cell[TextData[{
+ "2. Using 21 equally spaced points on the interval ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"[", 
+    RowBox[{
+     RowBox[{"-", "5"}], ",", "5"}], "]"}], TraditionalForm]],ExpressionUUID->
+  "91936c07-3b3d-41c5-9404-93f75dade313"],
+ " find an interpolating polynomial of degree 20 for the function ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"f", "(", "x", ")"}], "=", 
+    FractionBox["1", 
+     RowBox[{
+      SuperscriptBox["x", "2"], "+", "1"}]]}], TraditionalForm]],
+  ExpressionUUID->"a3eed5bd-9b56-4423-bc0a-ca317bc4fd77"],
+ " Graph the function and the polynomial. Finally, plot the values of ",
+ Cell[BoxData[
+  FormBox["f", TraditionalForm]],ExpressionUUID->
+  "485b207c-0880-4f3d-a50a-cf2d4d3a1c62"],
+ " and  the polynomial for 41 evenly spaced values in the interval, including \
+the 21 roots. Observe the differences and their distribution."
+}], "Text",
+ CellChangeTimes->{{3.749566054416808*^9, 3.7495660554517393`*^9}, {
+  3.749566340185198*^9, 
+  3.749566529973042*^9}},ExpressionUUID->"e25a5273-ef87-4357-990f-\
+4db67b661a96"]
+},
+WindowToolbars->{},
+CellGrouping->Manual,
+WindowSize->{766, 772},
+WindowMargins->{{Automatic, -7}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+PrivateNotebookOptions->{"VersionedStylesheet"->{"Default.nb"[8.] -> False}},
+ShowCellLabel->True,
+ShowCellTags->False,
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb",
+PrivateNotebookOptions -> {"ColorPalette" -> {RGBColor, 128}},
+RenderingOptions -> {"ObjectDithering" -> True},
+RenderingOptions -> {"RasterDithering" -> False}
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[400, 13, 739, 12, 156, "Title",ExpressionUUID->"4e4ebb21-3c7d-429b-b027-caa1cb83ea80"],
+Cell[1142, 27, 406, 8, 56, "Text",ExpressionUUID->"f4d60d4d-7f8d-4dff-be64-d8b0c9f0b32b"],
+Cell[1551, 37, 468, 7, 67, "Section",ExpressionUUID->"118751be-72cc-4c7e-b7cd-22a41e3b1fa6"],
+Cell[2022, 46, 1139, 17, 52, "Text",ExpressionUUID->"055cbe1a-c98a-47bf-b63f-fb9b65bc48e2"],
+Cell[3164, 65, 782, 22, 67, "Input",ExpressionUUID->"05fcf0db-067e-4b85-8771-259b3e738205"],
+Cell[3949, 89, 454, 9, 56, "Text",ExpressionUUID->"133662e8-8b5c-4c11-9007-8b477fa48fc0"],
+Cell[4406, 100, 485, 7, 67, "Section",ExpressionUUID->"123f7f85-9285-434d-be91-2164c424439b"],
+Cell[4894, 109, 605, 10, 30, "Text",ExpressionUUID->"f40badf6-4f71-45a3-91ee-2d424d658c86"],
+Cell[5502, 121, 5071, 123, 333, "Input",ExpressionUUID->"d539bee5-4312-42f1-a272-4593eec219c4"],
+Cell[10576, 246, 446, 7, 67, "Section",ExpressionUUID->"376dbb4f-0e67-4530-bc11-4156321c4163"],
+Cell[11025, 255, 707, 12, 30, "Text",ExpressionUUID->"479fdd55-0a4a-40f0-a329-feb501850b11"],
+Cell[11735, 269, 2991, 76, 314, "Input",ExpressionUUID->"f32ef3a0-7da7-4d13-8329-3bcf7af67b72"],
+Cell[14729, 347, 413, 6, 67, "Section",ExpressionUUID->"da5c6e45-0e73-4687-8e5a-d48b47669615"],
+Cell[15145, 355, 453, 7, 53, "Section",ExpressionUUID->"38841434-2b2a-4f25-8da0-b1f0b8171592"],
+Cell[15601, 364, 293, 6, 52, "Text",ExpressionUUID->"c4f2aa2d-08f1-42cb-a501-c954f7979cc9"],
+Cell[15897, 372, 1069, 27, 106, "Text",ExpressionUUID->"e25a5273-ef87-4357-990f-4db67b661a96"]
+}
+]
+*)
+

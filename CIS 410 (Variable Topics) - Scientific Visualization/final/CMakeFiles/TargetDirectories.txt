@@ -1,0 +1,3 @@
+/home/cole/Desktop/cis410/final/CMakeFiles/rebuild_cache.dir
+/home/cole/Desktop/cis410/final/CMakeFiles/edit_cache.dir
+/home/cole/Desktop/cis410/final/CMakeFiles/astro.dir
